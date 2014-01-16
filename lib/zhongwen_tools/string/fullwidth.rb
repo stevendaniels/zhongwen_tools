@@ -1,5 +1,5 @@
 # encoding: utf-8
-module CJKTools
+module ZhongwenTools
   FW_HW ={
     "０" => "0",
     "１" => "1",
