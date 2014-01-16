@@ -34,13 +34,25 @@ module ZhongwenTools
       end
 
     else 
+      def chars(str = nil)
+        (str || self).chars
+      end
+
       def to_utf8(str = nil)
         (str || self).force_encoding('utf-8')
         #TODO: better conversion functions available in categorize
       end
+
+      def size(str = nil)
+        (str || self).size
+      end
+
+      def reverse(str = nil)
+        (str || self).reverse
+      end
     end
 
-    def self.uri_encode
+    def uri_encode
       URI.escape(self, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
     end
 
@@ -49,16 +61,18 @@ module ZhongwenTools
       str.size == str.bytes.size
     end
 
-    def multibyte(str = nil)
+    def multibyte?(str = nil)
       !(str || self).ascii?
     end
 
-    def halfwidth?
-      self[/[０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞]/].nil?
+    def halfwidth?(str = nil)
+      str ||= self
+      str[/[０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞]/].nil?
     end
 
-    def fullwidth?
-      !self.halfwidth?
+    def fullwidth?(str = nil)
+      str ||= self
+      !self.halfwidth?(str)
     end
 
     def to_halfwidth(str = nil, debug = false)
@@ -75,5 +89,42 @@ module ZhongwenTools
       end
       str
     end
+
+
+    class Basement #:nodoc:
+      include ZhongwenTools::String
+    end
+
+    def self.chars(*args)
+      Basement.new.chars(*args)
+    end
+    def self.size(*args)
+      Basement.new.size(*args)
+    end
+    def self.reverse(*args)
+      Basement.new.reverse(*args)
+    end
+    def self.to_utf8(*args)
+      Basement.new.to_utf8(*args)
+    end
+    def self.uri_encode(*args)
+      Basement.new.uri_encode(*args)
+    end
+    def self.ascii?(*args)
+      Basement.new.ascii?(*args)
+    end
+    def self.multibyte?(*args)
+      Basement.new.multibyte?(*args)
+    end
+    def self.halfwidth?(*args)
+      Basement.new.halfwidth?(*args)
+    end
+    def self.fullwidth?(*args)
+      Basement.new.fullwidth?(*args)
+    end
+    def self.to_halfwidth(*args)
+      Basement.new.to_halfwidth(*args)
+    end
+
   end
 end
