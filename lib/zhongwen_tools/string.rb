@@ -1,8 +1,9 @@
 # encoding: utf-8
+#$:.unshift File.join(File.dirname(__FILE__),'..','lib','zhongwen_tools', 'string')
 require 'uri'
-require './string/fullwidth'
+require './lib/zhongwen_tools/string/fullwidth'
 
-module CJKTools
+module ZhongwenTools 
   module String
 
     if RUBY_VERSION < '1.9'
@@ -34,8 +35,8 @@ module CJKTools
 
     else 
       def to_utf8(str = nil)
-        str || self).force_encoding('utf-8')
-        #TODO: better functions available in categorize
+        (str || self).force_encoding('utf-8')
+        #TODO: better conversion functions available in categorize
       end
     end
 
@@ -43,8 +44,13 @@ module CJKTools
       URI.escape(self, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
     end
 
-    def latin?
-      size(str) == str.bytes.count
+    def ascii?(str = nil)
+      str ||= self
+      str.size == str.bytes.size
+    end
+
+    def multibyte(str = nil)
+      !(str || self).ascii?
     end
 
     def halfwidth?
@@ -61,7 +67,7 @@ module CJKTools
       puts matches.inspect if debug === true
 
       matches.each do |match|
-        replacement = CJKTools::FW_HW[match]
+        replacement = FW_HW[match]
         puts replacement if debug === true
         puts str if debug === true
         puts match if debug === true

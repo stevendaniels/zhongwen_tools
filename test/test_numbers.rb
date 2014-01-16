@@ -1,19 +1,7 @@
 #encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
-#require 'rubygems'
-  #gem 'guard'
-  #gem 'guard-bundler'
-  #gem 'guard-minitest'
-  #gem 'pry'
-  #gem 'pry-rescue'
-  #gem 'pry-stack_explorer'
-  #gem 'rb-fsevent', :require => false
-
-#require 'bundler'
-#Bundler.require :default, 'test'
 
 require 'test/unit'
-
 require 'zhongwen_tools/numbers.rb'
 
 class TestCJKTools < Test::Unit::TestCase
@@ -62,5 +50,3 @@ class TestCJKTools < Test::Unit::TestCase
     ]
   end
 end
-
-
