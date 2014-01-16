@@ -23,19 +23,19 @@ Add the ZhongwenTools component you need to your classes as a module.
     mzd.to_pinyin   #=> Mao Zedong
 
 Or you can require the components you want
-    require zhongwen 'tools/numbers'
-    ZhongwenTools::Numbers.to_pinyin '一百二十'
+    require 'zhongwen_tools/numbers'
+    ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
 
 ZhongwenTools includes the following modules:
 1. ZhongwenTools::String => some useful string functions and functions for identifying Chinese scripts and romanizations.
-2. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
-3. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
-4. ZhongwenTools::Numbers => functions for identifying and converting numbers.
-5. ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
-6. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
-7. ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
-8. ZhongwenTools::Integer => some useful integer functions for Chinese:
+2. ZhongwenTools::Numbers => functions for identifying and converting numbers.
+3. ZhongwenTools::Integer => some useful integer functions for Chinese:
    e.g. 12.to_pinyin 12.to_zht
+4. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
+5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
+6. ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
+7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
+8. ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
   
   
 ### ZhongwenTools::String: useful string functions for ZhongwenTools language
@@ -61,6 +61,12 @@ ZhongwenTools includes the following modules:
     ZhongwenTools::String.size '中文'  #=> 2
     ZhongwenTools::String.reverse '中文' #=> '文中'
     ZhongwenTools::Unicode.to_utf8 '\x{D6D0}\x{CEC4}' => '中文'
+
+
+###Numbers
+Functions for converting to and from Chinese numbers.
+
+###Integers
 
 ### Romanization
 ZhongwenTools::Chinese has tools for converting between Chinese language romanization systems and
@@ -106,11 +112,6 @@ ZhongwenTools::Conversion.to_zhhk
 ZhongwenTools::Conversion.to_zhmc
 ZhongwenTools::Conversion.to_zhsg
 ZhongwenTools::Conversion.to_zhprc
-
-
-###Numbers
-Functions for converting to and from Chinese numbers.
-####TODO
 
 
 ###Tone Sandhi
