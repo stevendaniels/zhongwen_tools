@@ -7,3 +7,20 @@ rvm:
   - 2.0.0
   - 2.1.0
   - ruby-head
+
+matrix:
+  include:
+    - rvm: 1.8.7
+      gemfile: Gemfile.1.8.7
+    - rvm: ree
+      gemfile: Gemfile1.8.7
+    - rvm: 1.9.2
+      gemfile: Gemfile
+    - rvm: 1.9.3
+      gemfile: Gemfile
+    - rvm: 2.0.0
+      gemfile: Gemfile
+    - rvm: 2.1.0
+      gemfile: Gemfile
+    - rvm: ruby-head
+      gemfile: Gemfile
