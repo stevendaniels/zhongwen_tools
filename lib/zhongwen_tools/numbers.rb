@@ -125,50 +125,59 @@ module ZhongwenTools
       convert_number_to :pyn, type.to_sym, number, '-'
     end
 
+
+    def check_wan(wan, i)
+      wan ||= 0
+      wan += 1 if (i + 1) % 5 == 0
+    end
+
+    def convert_from_zh number, to
+      converted_number = number.chars.map do |digit|
+        convert(digit).fetch(to){ digit }
+      end
+    end
+
+    def convert_from_num number, to
+      #TODO: this will fail for numbers over 1 billion. grr.
+      str = number.to_s
+      len = str.length
+      converted_number = []
+
+      len.times do |i|
+        wan = check_wan(wan, i)
+        num = str[(len - 1 - i),1].to_i
+
+        if i == 0
+          replacement = NUMBERS_TABLE.find{|x| x[:num] == num}.fetch(to){0}
+
+          converted_number << replacement unless num == 0
+        else
+          replacement = (NUMBERS_TABLE.find{|x| x[:num] == (10**(i))} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000)} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000**2)} )[to]
+          converted_number << replacement
+
+          #checks the wan level and ...
+          if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
+            replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+            converted_number << replacement
+            #elsif num != 1
+            #replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+            #converted_number << replacement
+          end
+        end
+      end
+    end
+
     def convert_number_to(to, from, number, separator = '')
       return number unless [:zh_t, :zh_s, :num, :pyn].include? to
 
-      converted_number = []
 
       if from == :num
-        #TODO: this will fail for numbers over 1 billion. grr.
-        str = number.to_s
-        len = str.length
-        wan = 0
+         converted_number = convert_from_num(number, to).reverse!
+      #end
 
-        len.times do |i|
-          wan += 1 if (i + 1) % 5 == 0
-          num = str[(len - 1 - i),1].to_i
-          if i == 0
-             begin
-               replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-             rescue => e
-               #binding.pry
-               raise e
-             end
-            converted_number << replacement unless num == 0
-          else
-            replacement = (NUMBERS_TABLE.find{|x| x[:num] == (10**(i))} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000)} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000**2)} )[to]
-            converted_number << replacement
-
-            #checks the wan level and ...
-            if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
-              replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-              converted_number << replacement
-            #elsif num != 1
-              #replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-              #converted_number << replacement
-            end
-
-          end
-        end
-
-        converted_number.reverse!
+        #converted_number.reverse!
       else
-        number.chars.each do |digit|
-          replacement = convert(digit)
-          converted_number << (replacement[to] || digit)
-        end
+        converted_number = convert_from_zh number, to
       end
       converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
       #liang rules are tough...
