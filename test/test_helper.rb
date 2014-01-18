@@ -1,6 +1,7 @@
 require 'test/unit'
-require 'coveralls'
 require 'pry'
 
-Coveralls.wear!
-
+if RUBY_VERSION > '1.8'
+  require 'coveralls' 
+  Coveralls.wear!
+end
