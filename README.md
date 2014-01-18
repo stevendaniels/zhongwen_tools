@@ -27,6 +27,7 @@ Or you can require the components you want
     ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
 
 ZhongwenTools includes the following modules:
+
 1. ZhongwenTools::String => some useful string functions and functions for identifying Chinese scripts and romanizations.
 2. ZhongwenTools::Numbers => functions for identifying and converting numbers.
 3. ZhongwenTools::Integer => some useful integer functions for Chinese:

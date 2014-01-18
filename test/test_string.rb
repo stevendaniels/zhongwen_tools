@@ -1,25 +1,25 @@
 #encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
-#require 'rubygems'
-  #gem 'guard'
-  #gem 'guard-bundler'
-  #gem 'guard-minitest'
-  #gem 'pry'
-  #gem 'pry-rescue'
-  #gem 'pry-stack_explorer'
-  #gem 'rb-fsevent', :require => false
-
-#require 'bundler'
-#Bundler.require :default, 'test'
 
 require 'test/unit'
+#require 'pry'
 
 require 'zhongwen_tools/string.rb'
 
 class String
   include ZhongwenTools::String
 end
+
+if RUBY_VERSION < '1.9'
+  class Test::Unit::TestCase
+    def refute(statement, message = '')
+      assert !statement, message
+    end
+  end
+end
+
 class TestString < Test::Unit::TestCase
+
   def test_size
     assert_equal 2, @str.size
     assert_equal 2, ZhongwenTools::String.size(@str)
@@ -32,12 +32,13 @@ class TestString < Test::Unit::TestCase
   end
 
   def test_reverse
+    
     assert_equal '文中', '中文'.reverse
     
     assert_equal '文中', ZhongwenTools::String.reverse('中文')
   end
 
-  def test_latin
+  def test_ascii
     refute @str.ascii?
     assert 'zhongwen'.ascii?
     assert @str.multibyte?
@@ -63,6 +64,7 @@ class TestString < Test::Unit::TestCase
   def test_fullwidth
     str = 'hellｏ'
     assert str.fullwidth?
+    refute @str.fullwidth?
 
     assert  ZhongwenTools::String.fullwidth? str
   end

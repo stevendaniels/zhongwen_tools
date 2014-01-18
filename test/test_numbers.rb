@@ -2,6 +2,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
+require 'pry'
 require 'zhongwen_tools/numbers.rb'
 
 class TestCJKTools < Test::Unit::TestCase
@@ -11,6 +12,7 @@ class TestCJKTools < Test::Unit::TestCase
     #your function sucks dick man
       @numbers.each do |num|
         number = convert_chinese_numbers_to_numbers num[:zh]
+        binding.pry if num[:en] != number
         assert_equal num[:en], number
       end
   end
@@ -25,8 +27,9 @@ class TestCJKTools < Test::Unit::TestCase
   def test_convert_to_simplified_from_number
     #skip
    num = @numbers[0][:en]
-    zht = convert_number_to_traditional :num, num
+   zht = convert_number_to_traditional :num, num
 
+#adds garbage!!
     assert_equal '一萬二千七', zht
   end
 
@@ -41,12 +44,12 @@ class TestCJKTools < Test::Unit::TestCase
   def setup
     
     @numbers = [
-      {zh: '一万两千七', en: 12007},
-      {zh: '三千六十三', en: 3063},
-      {zh: '一百五十',en: 150 },
-      {zh: '三千亿', en: 300000000000},
-      {zh: '一九六六', en: 1966},
-      {zh: '二零零八', en: 2008},
+      {:zh =>'一万两千七', :en => 12007},
+      {:zh => '三千六十三', :en => 3063},
+      {:zh => '一百五十', :en => 150 },
+      {:zh => '三千亿', :en => 300000000000},
+      {:zh => '一九六六', :en => 1966},
+      {:zh => '二零零八', :en => 2008},
     ]
   end
 end

@@ -59,21 +59,21 @@ module ZhongwenTools
           i += 1
         end
 
-        #if it's a year, or a odly formatted number
-        return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/].nil? 
+        #if it's a year, or an oddly formatted number
+        return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil? 
 
         number = 0
         length = numbers.length
-        skip = false
+        skipped = false
 
         length.times do |i|
-          unless skip == i
+          unless skipped == i
             curr_num = numbers[i] || 0
             if (i+2) <= length
               next_number = numbers[i+1]
               if is_number_multiplier? next_number
                 number += next_number * curr_num 
-                skip = i+1
+                skipped = i+1
               end
             else
               number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
@@ -112,9 +112,14 @@ module ZhongwenTools
 
         len.times do |i|
           wan += 1 if (i + 1) % 5 == 0
-          num = str[len - 1 - i].to_i
+          num = str[(len - 1 - i),1].to_i
           if i == 0
+             begin
             replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+             rescue => e
+               #binding.pry
+               raise e
+             end
             converted_number << replacement unless num == 0
           else
             replacement = (NUMBERS_TABLE.find{|x| x[:num] == (10**(i))} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000)} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000**2)} )[to]
@@ -139,7 +144,7 @@ module ZhongwenTools
           converted_number << (replacement[to] || digit)
         end
       end
-      converted_number.join(separator).gsub(/零[拾十百佰千仟仟万萬亿億]/,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
+      converted_number.join(separator).gsub(/零[拾十百佰千仟仟万萬亿億]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
       #liang rules are tough... 
     end
   end
