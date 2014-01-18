@@ -1,4 +1,5 @@
-#Zhongwen Tools: tools and methods for dealing with Chinese.
+#Zhongwen Tools:
+Tools and methods for dealing with Chinese.
 [![Build
 Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://gemnasium.com/stevendaniels/zhongwen_tools.png)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://coveralls.io/repos/stevendaniels/zhongwen_tools/badge.png)](https://coveralls.io/r/stevendaniels/zhongwen_tools)
 ##INSTALLATION
@@ -12,7 +13,7 @@ Install as a gem
 Add the ZhongwenTools component you need to your classes as a module.
 
     class String
-      include ZhongwenToolsRomanization
+      include ZhongwenTools::Romanization
     end
 
     str = "ni3 hao3"  #pinyin with numbers
@@ -20,9 +21,10 @@ Add the ZhongwenTools component you need to your classes as a module.
     str.to_zhuyinfuhao  #=>
 
     mzd = "Mao Tse-tung"
-    mzd.to_pinyin   #=> Mao Zedong
+    mzd.to_pinyin   #=> "Mao Zedong"
 
 Or you can require the components you want
+
     require 'zhongwen_tools/numbers'
     ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
 
@@ -32,14 +34,14 @@ ZhongwenTools includes the following modules:
 2. ZhongwenTools::Numbers => functions for identifying and converting numbers.
 3. ZhongwenTools::Integer => some useful integer functions for Chinese:
    e.g. 12.to_pinyin 12.to_zht
-4. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
-5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
-6. ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
+4. [TODO] ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
+5. [TODO] ZhongwenTools::Conversion => functions for converting between Chinese scripts.
+6. [TODO] ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
 7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
-8. ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
+8. [TODO] ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
   
   
-### ZhongwenTools::String: useful string functions for ZhongwenTools language
+### ZhongwenTools::String: useful string functions for Chinese.
     ZhongwenTools::String.ascii? 'hello'    #=> true #non-multibyle strings
     ZhongwenTools::String.multibyte? '中文'  #=> true #multibtye strings
     ZhongwenTools::String.halfwidth? 
@@ -57,7 +59,7 @@ ZhongwenTools includes the following modules:
     ZhongwenTools::String.is_zhs? '中国'    #=> true
     ZhongwenTools::String.is_zht? '中国'    #=> false
 
-#### ruby 1.8 safe methods 
+#### Ruby 1.8 safe methods 
     ZhongwenTools::String.chars '中文' #=> ['中','文']
     ZhongwenTools::String.size '中文'  #=> 2
     ZhongwenTools::String.reverse '中文' #=> '文中'
@@ -68,13 +70,17 @@ ZhongwenTools includes the following modules:
 Functions for converting to and from Chinese numbers.
 
 ###Integers
+Monkey Patch your integers for Chinese.
+
+    12.to_pinyin #=> 'shi2-er4'
+    12.to_zht    #=> '十二'
 
 ### Romanization
 ZhongwenTools::Chinese has tools for converting between Chinese language romanization systems and
 scripts.
 
     class String
-      include ZhongwenToolsRomanization
+      include ZhongwenTools::Romanization
     end
 
 
@@ -106,13 +112,13 @@ Functions for converting between scripts (e.g. traditional Chinese to
 simplified Chinese) and between chinese and romanization systems (e.g.
 Chinese to pinyin).
 
-ZhongwenTools::Conversion.to_zhs
-ZhongwenTools::Conversion.to_zht
-ZhongwenTools::Conversion.to_zhtw
-ZhongwenTools::Conversion.to_zhhk
-ZhongwenTools::Conversion.to_zhmc
-ZhongwenTools::Conversion.to_zhsg
-ZhongwenTools::Conversion.to_zhprc
+    ZhongwenTools::Conversion.to_zhs ‘華語'
+    ZhongwenTools::Conversion.to_zht '华语'
+    ZhongwenTools::Conversion.to_zhtw '方便面'
+    ZhongwenTools::Conversion.to_zhhk '方便面'
+    ZhongwenTools::Conversion.to_zhmc 
+    ZhongwenTools::Conversion.to_zhsg 
+    ZhongwenTools::Conversion.to_zhprc '马铃薯'
 
 
 ###Tone Sandhi
@@ -125,4 +131,3 @@ that requires an external dependency is packaged as a separate gem.
 ## TODO
 1. A trad/simp script converter
 2. A character -> pinyin converter
-3. A language detector
