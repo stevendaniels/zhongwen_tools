@@ -1,5 +1,6 @@
 #Zhongwen Tools: tools and methods for dealing with Chinese.
-[![Build Status](https://secure.travis-ci.org/stevendaniels/zhongwen_tools.png)](http://travis-ci.org/stevendaniels/zhongwen_tools) 
+[![Build
+Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools)
 
 ##INSTALLATION
 

@@ -1,8 +1,7 @@
 #encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
-require 'test/unit'
-require 'pry'
+require 'test/test_helper'
 require 'zhongwen_tools/numbers.rb'
 
 class TestCJKTools < Test::Unit::TestCase
