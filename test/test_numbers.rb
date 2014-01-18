@@ -1,25 +1,13 @@
 #encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
-#require 'rubygems'
-  #gem 'guard'
-  #gem 'guard-bundler'
-  #gem 'guard-minitest'
-  #gem 'pry'
-  #gem 'pry-rescue'
-  #gem 'pry-stack_explorer'
-  #gem 'rb-fsevent', :require => false
-
-#require 'bundler'
-#Bundler.require :default, 'test'
 
 require 'test/unit'
-
 require 'zhongwen_tools/numbers.rb'
 
 class TestCJKTools < Test::Unit::TestCase
   include ZhongwenTools::Numbers
   def test_convert_to_numbers
-    skip 
+    #skip 
     #your function sucks dick man
       @numbers.each do |num|
         number = convert_chinese_numbers_to_numbers num[:zh]
@@ -35,11 +23,11 @@ class TestCJKTools < Test::Unit::TestCase
   end
 
   def test_convert_to_simplified_from_number
-    skip
+    #skip
    num = @numbers[0][:en]
     zht = convert_number_to_traditional :num, num
 
-    assert_equal '一萬兩千七', zht
+    assert_equal '一萬二千七', zht
   end
 
   def test_convert_number_to_pyn
@@ -62,5 +50,3 @@ class TestCJKTools < Test::Unit::TestCase
     ]
   end
 end
-
-

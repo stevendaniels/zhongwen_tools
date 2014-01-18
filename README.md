@@ -23,58 +23,50 @@ Add the ZhongwenTools component you need to your classes as a module.
     mzd.to_pinyin   #=> Mao Zedong
 
 Or you can require the components you want
-    require zhongwen 'tools/numbers'
-    ZhongwenTools::Numbers.to_pinyin '一百二十'
+    require 'zhongwen_tools/numbers'
+    ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
 
 ZhongwenTools includes the following modules:
 1. ZhongwenTools::String => some useful string functions and functions for identifying Chinese scripts and romanizations.
-2. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
-3. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
-4. ZhongwenTools::Numbers => functions for identifying and converting numbers.
-5. ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
-6. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
-7. ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
-
-
-### ZhongwenTools::Chinese
-
+2. ZhongwenTools::Numbers => functions for identifying and converting numbers.
+3. ZhongwenTools::Integer => some useful integer functions for Chinese:
+   e.g. 12.to_pinyin 12.to_zht
+4. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
+5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
+6. ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
+7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
+8. ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
+  
+  
 ### ZhongwenTools::String: useful string functions for ZhongwenTools language
+    ZhongwenTools::String.ascii? 'hello'    #=> true #non-multibyle strings
+    ZhongwenTools::String.multibyte? '中文'  #=> true #multibtye strings
+    ZhongwenTools::String.halfwidth? 
+    ZhongwenTools::String.fullwidth?
+    ZhongwenTools::String.to_halfwidth
+    ZhongwenTools::String.uri_encode  #=> just because I'm lazy
+    ZhongwenTools::Unicode.to_codepoint
+    ZhongwenTools::Unicode.to_unicode --> converts from unicode codepoint.
+    ZhongwenTools::String.downcase --> does pinyin/ lowercase
+    ZhongwenTools::String.upcase --> does pinyin uppercase
+    ZhongwenTools::String.capitalize ---> does pinyin / fullwidth capitalization
 
-ZhongwenTools::String.latin? #=> non-multibyle strings
-ZhongwenTools::String.multibyte?
-ZhTools::String.has_zh? --> might be mixed
-ZhTools::String.is_zh? --> can't be mixed.
-ZhTools::String.is_zhs?
-ZhTools::String.is_zht?
-
-ZhongwenTools::String.halfwidth?
-ZhongwenTools::String.fullwidth?
-ZhongwenTools::String.to_halfwidth
-ZhongwenTools::String.uri_encode  #=> just because I'm lazy
-ZhongwenTools::String.downcase --> does pinyin lowercase
-ZhongwenTools::String.upcase --> does uppsercase
-
-
-ZhongwenTools::String.to_zhs
-ZhongwenTools::String.to_zht
-ZhongwenTools::String.to_zhtw
-ZhongwenTools::String.to_zhhk
-ZhongwenTools::String.to_zhmc
-ZhongwenTools::String.to_zhsg
-ZhongwenTools::String.to_zhprc
-ZhongwenTools::Unicode.to_codepoint
-ZhongwenTools::Unicode.to_unicode --> converts from unicode codepoint.
+    ZhongwenTools::String.has_zh? '1月'     #=> true 
+    ZhongwenTools::String.is_zh? '1月'      #=> false can't be mixed.
+    ZhongwenTools::String.is_zhs? '中国'    #=> true
+    ZhongwenTools::String.is_zht? '中国'    #=> false
 
 #### ruby 1.8 safe methods 
-ZhongwenTools::String.split
-ZhongwenTools::String.length
-ZhongwenTools::String.reverse
-
-ZhongwenTools::Unicode.to_s
-
+    ZhongwenTools::String.chars '中文' #=> ['中','文']
+    ZhongwenTools::String.size '中文'  #=> 2
+    ZhongwenTools::String.reverse '中文' #=> '文中'
+    ZhongwenTools::Unicode.to_utf8 '\x{D6D0}\x{CEC4}' => '中文'
 
 
+###Numbers
+Functions for converting to and from Chinese numbers.
 
+###Integers
 
 ### Romanization
 ZhongwenTools::Chinese has tools for converting between Chinese language romanization systems and
@@ -113,8 +105,14 @@ Functions for converting between scripts (e.g. traditional Chinese to
 simplified Chinese) and between chinese and romanization systems (e.g.
 Chinese to pinyin).
 
-###Numbers
-Functions for converting to and from Chinese numbers.
+ZhongwenTools::Conversion.to_zhs
+ZhongwenTools::Conversion.to_zht
+ZhongwenTools::Conversion.to_zhtw
+ZhongwenTools::Conversion.to_zhhk
+ZhongwenTools::Conversion.to_zhmc
+ZhongwenTools::Conversion.to_zhsg
+ZhongwenTools::Conversion.to_zhprc
+
 
 ###Tone Sandhi
 Some functions for predicting / converting to tone sandhi
