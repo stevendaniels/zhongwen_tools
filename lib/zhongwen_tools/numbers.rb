@@ -46,7 +46,7 @@ module ZhongwenTools
 
     def convert_date(zh)
       #if it's a year, or an oddly formatted number
-      zh_numbers = zh.to_s.scan(/./mu)
+      zh_numbers = ZhongwenTools::String.chars zh
       numbers = [];
       i = 0
 
@@ -59,24 +59,28 @@ module ZhongwenTools
         i += 1
       end
 
-      return numbers.join('').to_i
+      return numbers
     end
 
     def convert_chinese_numbers_to_numbers(zh_number)
-      return convert_date(zh_number) if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil?
+      zh_number = zh_number.to_s
+      numbers = convert_date(zh_number)
+
+      #if it's a year, or a odly formatted number
+      return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil? 
 
       number = 0
       length = numbers.length
-      skipped = false
+      skip = false
 
       length.times do |i|
-        unless skipped == i
+        unless skip == i
           curr_num = numbers[i] || 0
           if (i+2) <= length
             next_number = numbers[i+1]
             if is_number_multiplier? next_number
               number += next_number * curr_num 
-              skipped = i+1
+              skip = i+1
             end
           else
             number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
@@ -86,6 +90,7 @@ module ZhongwenTools
 
       number
     end
+
     def is_number_multiplier?(number)
       [10,100,1000,10000,100000000].include? number
     end
