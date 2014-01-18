@@ -2,6 +2,7 @@
 module ZhongwenTools
   module Numbers
 
+    NUMBER_MULTIPLES = '拾十百佰千仟仟万萬亿億'
 
     NUMBERS_TABLE = [
       { :zh_s => '零', :zh_t => '零', :num => 0, :pyn => 'ling2'},
@@ -62,25 +63,19 @@ module ZhongwenTools
       return numbers
     end
 
-    def convert_chinese_numbers_to_numbers(zh_number)
-      zh_number = zh_number.to_s
-      numbers = convert_date(zh_number)
-
-      #if it's a year, or an oddly formatted number
-      return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil? 
-
+    def convert_numbers(numbers)
       number = 0
       length = numbers.length
-      skip = false
+      skipped = false
 
       length.times do |i|
-        unless skip == i
+        unless skipped == i
           curr_num = numbers[i] || 0
           if (i+2) <= length
             next_number = numbers[i+1]
             if is_number_multiplier? next_number
-              number += next_number * curr_num 
-              skip = i+1
+              number += next_number * curr_num
+              skipped = i + 1
             end
           else
             number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
@@ -89,6 +84,16 @@ module ZhongwenTools
       end
 
       number
+    end
+
+    def convert_chinese_numbers_to_numbers(zh_number)
+      zh_number = zh_number.to_s
+      numbers = convert_date(zh_number)
+
+      #if it's a year, or an oddly formatted number
+      return numbers.join('').to_i if zh_number[/[#{NUMBER_MULTIPLES}]/u].nil?
+
+      convert_numbers numbers
     end
 
     def is_number_multiplier?(number)
@@ -123,7 +128,7 @@ module ZhongwenTools
           num = str[(len - 1 - i),1].to_i
           if i == 0
              begin
-            replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+               replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
              rescue => e
                #binding.pry
                raise e
@@ -152,8 +157,8 @@ module ZhongwenTools
           converted_number << (replacement[to] || digit)
         end
       end
-      converted_number.join(separator).gsub(/零[拾十百佰千仟仟万萬亿億]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
-      #liang rules are tough... 
+      converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
+      #liang rules are tough...
     end
   end
 end

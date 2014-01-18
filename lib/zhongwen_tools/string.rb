@@ -18,8 +18,9 @@ module ZhongwenTools
     def has_zh?(str = nil)
       str ||= self
 
-      !str[UNICODE_REGEX[:zh]].nil? || !str[UNICODE_REGEX[:punc]].nil?
+      !str[/(#{UNICODE_REGEX[:zh]}|#{UNICODE_REGEX[:punc]})/].nil?
     end
+
     def zh?(str = nil)
       str ||= self
 
@@ -76,25 +77,22 @@ module ZhongwenTools
       !self.halfwidth?(str) && self.to_halfwidth(str) != str
     end
 
-    def to_halfwidth(str = nil, debug = false)
+    def to_halfwidth(str = nil)
       str ||= self
       matches = str.scan(/([０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞])/u).uniq.flatten
-      puts matches.inspect if debug === true
 
       matches.each do |match|
         replacement = FW_HW[match]
-        puts replacement if debug === true
-        puts str if debug === true
-        puts match if debug === true
         str = str.gsub(match, replacement) #unless str.nil?
       end
+
       str
     end
 
     def to_codepoint(str = nil)
       str ||= self
-      chars = (self.class.to_s == 'String')? self.chars : self.chars(str)
-      codepoints = chars.map{|c| "\\u%04x" % c.unpack("U")[0]}
+      #chars = (self.class.to_s == 'String')? self.chars : self.chars(str)
+      codepoints = str.chars.map{|c| "\\u%04x" % c.unpack("U")[0]}
 
       codepoints.join
     end
