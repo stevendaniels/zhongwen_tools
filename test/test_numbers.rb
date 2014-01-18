@@ -12,6 +12,7 @@ class TestCJKTools < Test::Unit::TestCase
     #your function sucks dick man
       @numbers.each do |num|
         number = convert_chinese_numbers_to_numbers num[:zh]
+        binding.pry if num[:en] != number
         assert_equal num[:en], number
       end
   end

@@ -64,6 +64,7 @@ class TestString < Test::Unit::TestCase
   def test_fullwidth
     str = 'hellｏ'
     assert str.fullwidth?
+    refute @str.fullwidth?
 
     assert  ZhongwenTools::String.fullwidth? str
   end
