@@ -59,7 +59,13 @@ module ZhongwenTools
 
     def uri_encode(str = nil)
       str ||= self
-      URI.escape(str, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      URI.encode str
+    end
+
+    def uri_escape(str = nil)
+      str ||= self
+
+      URI.escape(str, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))      
     end
 
     def ascii?(str = nil)
@@ -103,11 +109,30 @@ module ZhongwenTools
     end
 
     def zh?(str = nil)
-      str ||=self
+      str ||= self
 
       str.scan(/#{UNICODE_REGEX[:zh]}|#{UNICODE_REGEX[:punc]}|\s/).join == str
     end
 
+    def has_zh_punctuation?(str = nil)
+      str ||= self
+
+      !str[UNICODE_REGEX[:punc]].nil?
+    end
+
+    def to_codepoint(str = nil)
+      str ||= self
+      chars = (self.class.to_s == 'String')? self.chars : self.chars(str)
+      codepoints = chars.map{|c| "\\u%04x" % c.unpack("U")[0]}
+
+      codepoints.join
+    end
+
+    def from_codepoint(str = nil)
+      str ||= self
+
+      [str.sub(/\\?u/,'').hex].pack("U")
+    end
 
     class Basement #:nodoc:
       include ZhongwenTools::String
@@ -127,6 +152,9 @@ module ZhongwenTools
     def self.uri_encode(*args)
       Basement.new.uri_encode(*args)
     end
+    def self.uri_escape(*args)
+      Basement.new.uri_escape(*args)
+    end
     def self.ascii?(*args)
       Basement.new.ascii?(*args)
     end
@@ -145,8 +173,17 @@ module ZhongwenTools
     def self.has_zh?(*args)
       Basement.new.has_zh?(*args)
     end
+    def self.has_zh_punctuation?(*args)
+      Basement.new.has_zh_punctuation?(*args)
+    end
     def self.zh?(*args)
       Basement.new.zh?(*args)
+    end
+    def self.to_codepoint(*args)
+      Basement.new.to_codepoint(*args)
+    end
+    def self.from_codepoint(*args)
+      Basement.new.from_codepoint(*args)
     end
   end
 end
