@@ -165,22 +165,21 @@ module ZhongwenTools
           end
         end
       end
+
+      converted_number.reverse!
     end
 
     def convert_number_to(to, from, number, separator = '')
       return number unless [:zh_t, :zh_s, :num, :pyn].include? to
 
-
       if from == :num
-         converted_number = convert_from_num(number, to).reverse!
-      #end
-
-        #converted_number.reverse!
+        converted_number = convert_from_num(number, to)
       else
         converted_number = convert_from_zh number, to
       end
-      converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
+
       #liang rules are tough...
+      converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
     end
   end
 end
