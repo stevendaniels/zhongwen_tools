@@ -55,12 +55,16 @@ module ZhongwenTools
         curr_number = zh_numbers[i]
 
         #x[:num] == curr_number.to_i is a kludge; any string will == 0
-        num = NUMBERS_TABLE.find{|x|  x[:zh_s] == curr_number || x[:zh_t] == curr_number  || x[:num].to_s == curr_number}[:num]
+        num = convert(curr_number)[:num]
         numbers << num
         i += 1
       end
 
       return numbers
+    end
+
+    def convert(number)
+      NUMBERS_TABLE.find{|x|  x[:zh_s] == number || x[:zh_t] == number  || x[:num].to_s == number}
     end
 
     def convert_numbers(numbers)
@@ -72,18 +76,27 @@ module ZhongwenTools
         unless skipped == i
           curr_num = numbers[i] || 0
           if (i+2) <= length
-            next_number = numbers[i+1]
-            if is_number_multiplier? next_number
-              number += next_number * curr_num
-              skipped = i + 1
-            end
+            number, i = convert_current_number(numbers, number, curr_num, i)
+            skipped = i + 1
           else
-            number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
+            number = adjust_number(number, curr_num)
           end
         end
       end
 
       number
+    end
+
+    def convert_current_number numbers, number, curr_num, i
+      next_number = numbers[i + 1]
+      if is_number_multiplier? next_number
+        number += next_number * curr_num
+      end
+
+      [number, i]
+    end
+    def adjust_number(number, curr_num)
+      is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
     end
 
     def convert_chinese_numbers_to_numbers(zh_number)
@@ -139,12 +152,12 @@ module ZhongwenTools
             converted_number << replacement
 
             #checks the wan level and ...
-            if num == 1 && (10**(i) / 10000 ** wan) != 10
+            if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
               replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
               converted_number << replacement
-            elsif num != 1
-              replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-              converted_number << replacement
+            #elsif num != 1
+              #replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+              #converted_number << replacement
             end
 
           end
@@ -153,7 +166,7 @@ module ZhongwenTools
         converted_number.reverse!
       else
         number.chars.each do |digit|
-          replacement = NUMBERS_TABLE.find{|x| x[:zh_t] == digit || x[:zh_s] == digit || x[:num].to_s == digit}
+          replacement = convert(digit)
           converted_number << (replacement[to] || digit)
         end
       end

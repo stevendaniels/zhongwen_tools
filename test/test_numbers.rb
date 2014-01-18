@@ -2,7 +2,8 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require './test/test_helper'
-require 'zhongwen_tools/numbers.rb'
+require 'zhongwen_tools/string'
+require 'zhongwen_tools/numbers'
 
 class TestCJKTools < Test::Unit::TestCase
   include ZhongwenTools::Numbers
@@ -33,7 +34,6 @@ class TestCJKTools < Test::Unit::TestCase
   end
 
   def test_convert_number_to_pyn
-    
     num = '一百三十六'
     pyn = self.convert_number_to_pyn num
 
@@ -41,7 +41,6 @@ class TestCJKTools < Test::Unit::TestCase
   end
 
   def setup
-    
     @numbers = [
       {:zh =>'一万两千七', :en => 12007},
       {:zh => '三千六十三', :en => 3063},
