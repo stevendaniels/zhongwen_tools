@@ -3,10 +3,11 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "zhongwen_tools"
+  s.license     = "MIT"
   s.version     = "0.0.6"
   s.authors     = ["Steven Daniels"]
   s.email       = ["steven@tastymantou.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/stevendaniels/zhongwen_tools"
   s.summary     = %q{Zhongwen Tools provide romanization conversions and helper methods for Chinese.}
   s.description = %q{Chinese tools for romanization conversions and other helpful string functions for Chinese.}
 
