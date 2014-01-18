@@ -66,7 +66,7 @@ module ZhongwenTools
       zh_number = zh_number.to_s
       numbers = convert_date(zh_number)
 
-      #if it's a year, or a odly formatted number
+      #if it's a year, or an oddly formatted number
       return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil? 
 
       number = 0
