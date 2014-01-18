@@ -67,6 +67,22 @@ class TestString < Test::Unit::TestCase
     assert  ZhongwenTools::String.fullwidth? str
   end
 
+  def test_uri_encode
+    url = 'http://www.3000hanzi.com/chinese-to-english/definition/好'
+    assert_equal URI.encode('好'), '好'.uri_encode
+
+    assert_equal "http://www.3000hanzi.com/chinese-to-english/definition/#{URI.encode '好'}", ZhongwenTools::String.uri_encode(url)
+    assert_equal "http://www.3000hanzi.com/chinese-to-english/definition/#{URI.encode '好'}", url.uri_encode
+  end
+
+  def test_uri_encode
+    url = 'http://www.3000hanzi.com/chinese-to-english/definition/好'
+    regex = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
+
+    assert_equal URI.escape(url, regex), ZhongwenTools::String.uri_escape(url)
+    assert_equal URI.escape(url, regex), url.uri_escape
+  end
+
   def test_has_zh
     assert @str.has_zh?
     refute @hw.has_zh?
@@ -78,18 +94,34 @@ class TestString < Test::Unit::TestCase
   end
 
   def test_is_zh
-    str = '不错吧！'
     assert @str.zh?
-    assert str.zh?
+    assert @zh_punc.zh?
 
     assert ZhongwenTools::String.zh? @str
-    assert ZhongwenTools::String.zh? str
+    assert ZhongwenTools::String.zh? @zh_punc
   end
-  
+
+  def test_codepoint
+    assert_equal "\\u4e2d\\u6587", @str.to_codepoint
+    assert_equal '羊', 'u7f8a'.from_codepoint
+    assert_equal '羊', '\\u7f8a'.from_codepoint
+
+    assert_equal "\\u4e2d\\u6587", ZhongwenTools::String.to_codepoint(@str)
+    assert_equal '羊', ZhongwenTools::String.from_codepoint('u7f8a')
+    assert_equal '羊', ZhongwenTools::String.from_codepoint('\\u7f8a')
+  end
+
+  def test_punctuation
+    assert ZhongwenTools::String.has_zh_punctuation?(@zh_punc)
+
+    assert @zh_punc.has_zh_punctuation?
+  end
+
   def setup
     @str = '中文'
     @fw = 'ｈｅｌｌｏ'
     @hw = 'hello'
+    @zh_punc = '不错吧！'
   end
 
 end
