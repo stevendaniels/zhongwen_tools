@@ -40,7 +40,7 @@ ZhongwenTools includes the following modules:
   
 ### ZhongwenTools::String: useful string functions for ZhongwenTools language
     ZhongwenTools::String.ascii? 'hello'    #=> true #non-multibyle strings
-    ZhongwenTools::String.multibyte? '中文  #=> true #multibtye strings
+    ZhongwenTools::String.multibyte? '中文'  #=> true #multibtye strings
     ZhongwenTools::String.halfwidth? 
     ZhongwenTools::String.fullwidth?
     ZhongwenTools::String.to_halfwidth

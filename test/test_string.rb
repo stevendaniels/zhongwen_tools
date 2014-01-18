@@ -66,9 +66,30 @@ class TestString < Test::Unit::TestCase
 
     assert  ZhongwenTools::String.fullwidth? str
   end
+
+  def test_has_zh
+    assert @str.has_zh?
+    refute @hw.has_zh?
+    refute @fw.has_zh?
+
+    assert ZhongwenTools::String.has_zh? @str
+    refute ZhongwenTools::String.has_zh? @hw
+    refute ZhongwenTools::String.has_zh? @fw
+  end
+
+  def test_is_zh
+    str = '不错吧！'
+    assert @str.zh?
+    assert str.zh?
+
+    assert ZhongwenTools::String.zh? @str
+    assert ZhongwenTools::String.zh? str
+  end
   
   def setup
     @str = '中文'
+    @fw = 'ｈｅｌｌｏ'
+    @hw = 'hello'
   end
 
 end
