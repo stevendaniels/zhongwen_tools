@@ -75,7 +75,7 @@ class TestString < Test::Unit::TestCase
     assert_equal "http://www.3000hanzi.com/chinese-to-english/definition/#{URI.encode '好'}", url.uri_encode
   end
 
-  def test_uri_encode
+  def test_uri_escape
     url = 'http://www.3000hanzi.com/chinese-to-english/definition/好'
     regex = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
 
