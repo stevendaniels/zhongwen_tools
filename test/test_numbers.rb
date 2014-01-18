@@ -2,6 +2,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
+require 'pry'
 require 'zhongwen_tools/numbers.rb'
 
 class TestCJKTools < Test::Unit::TestCase
@@ -25,8 +26,9 @@ class TestCJKTools < Test::Unit::TestCase
   def test_convert_to_simplified_from_number
     #skip
    num = @numbers[0][:en]
-    zht = convert_number_to_traditional :num, num
+   zht = convert_number_to_traditional :num, num
 
+#adds garbage!!
     assert_equal '一萬二千七', zht
   end
 

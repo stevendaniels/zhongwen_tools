@@ -112,9 +112,13 @@ module ZhongwenTools
 
         len.times do |i|
           wan += 1 if (i + 1) % 5 == 0
-          num = str[len - 1 - i].to_i
+          num = str[(len - 1 - i),1].to_i
           if i == 0
+             begin
             replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
+             rescue => e
+               binding.pry
+             end
             converted_number << replacement unless num == 0
           else
             replacement = (NUMBERS_TABLE.find{|x| x[:num] == (10**(i))} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000)} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000**2)} )[to]
