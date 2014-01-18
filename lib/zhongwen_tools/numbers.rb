@@ -43,43 +43,46 @@ module ZhongwenTools
       #垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
       "#{word}".gsub(/([\d]|[一二三四五六七八九十百千萬万億亿]){2,}/,'') == ''
     end
+
+    def convert_date(zh)
+      #if it's a year, or an oddly formatted number
+      zh_numbers = zh.to_s.scan(/./mu)
+      numbers = [];
+      i = 0
+
+      while( i < zh_numbers.length)
+        curr_number = zh_numbers[i]
+
+        #x[:num] == curr_number.to_i is a kludge; any string will == 0
+        num = NUMBERS_TABLE.find{|x|  x[:zh_s] == curr_number || x[:zh_t] == curr_number  || x[:num].to_s == curr_number}[:num]
+        numbers << num
+        i += 1
+      end
+
+      return numbers.join('').to_i
+    end
+
     def convert_chinese_numbers_to_numbers(zh_number)
+      return convert_date(zh_number) if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil?
 
-      #return convert_number_to :num, :zh_s, zh_number
+      number = 0
+      length = numbers.length
+      skipped = false
 
-        zh_numbers = zh_number.to_s.scan(/./mu)
-        numbers = [];
-        i = 0
-
-        while( i < zh_numbers.length)
-          curr_number = zh_numbers[i]
-          #x[:num] == curr_number.to_i is a kludge; any string will == 0
-          num = NUMBERS_TABLE.find{|x|  x[:zh_s] == curr_number || x[:zh_t] == curr_number  || x[:num].to_s == curr_number}[:num]
-          numbers << num
-          i += 1
-        end
-
-        #if it's a year, or an oddly formatted number
-        return numbers.join('').to_i if zh_number[/[拾十百佰千仟仟万萬亿億]/u].nil? 
-
-        number = 0
-        length = numbers.length
-        skipped = false
-
-        length.times do |i|
-          unless skipped == i
-            curr_num = numbers[i] || 0
-            if (i+2) <= length
-              next_number = numbers[i+1]
-              if is_number_multiplier? next_number
-                number += next_number * curr_num 
-                skipped = i+1
-              end
-            else
-              number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
+      length.times do |i|
+        unless skipped == i
+          curr_num = numbers[i] || 0
+          if (i+2) <= length
+            next_number = numbers[i+1]
+            if is_number_multiplier? next_number
+              number += next_number * curr_num 
+              skipped = i+1
             end
+          else
+            number = is_number_multiplier?(curr_num) ? number * curr_num : number + curr_num
           end
         end
+      end
 
       number
     end
