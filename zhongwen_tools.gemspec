@@ -19,5 +19,4 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('rake', "~> 10.1")
   s.add_development_dependency('pry', "~> 0.9.0")
-  s.add_development_dependency('coveralls', "~> 0.7.0")
 end
