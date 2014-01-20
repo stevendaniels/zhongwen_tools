@@ -5,10 +5,10 @@ require './test/test_helper'
 require 'zhongwen_tools/string'
 require 'zhongwen_tools/numbers'
 
-class TestCJKTools < Test::Unit::TestCase
+class TestNumbers < Test::Unit::TestCase
   include ZhongwenTools::Numbers
   def test_convert_to_numbers
-    #skip 
+    #skip
     #your function sucks dick man
       @numbers.each do |num|
         number = convert_chinese_numbers_to_numbers num[:zh]

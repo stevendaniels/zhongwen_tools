@@ -7,14 +7,6 @@ class String
   include ZhongwenTools::String
 end
 
-if RUBY_VERSION < '1.9'
-  class Test::Unit::TestCase
-    def refute(statement, message = '')
-      assert !statement, message
-    end
-  end
-end
-
 class TestString < Test::Unit::TestCase
 
   def test_size
