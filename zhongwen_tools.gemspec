@@ -4,7 +4,7 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
   s.name        = "zhongwen_tools"
   s.license     = "MIT"
-  s.version     = "0.0.6"
+  s.version     = "0.1.0"
   s.authors     = ["Steven Daniels"]
   s.email       = ["steven@tastymantou.com"]
   s.homepage    = "https://github.com/stevendaniels/zhongwen_tools"
