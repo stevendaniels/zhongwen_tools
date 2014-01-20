@@ -129,6 +129,8 @@ module ZhongwenTools
     def check_wan(wan, i)
       wan ||= 0
       wan += 1 if (i + 1) % 5 == 0
+
+      wan
     end
 
     def convert_from_zh number, to

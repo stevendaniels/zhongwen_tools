@@ -12,3 +12,11 @@ rescue LoadError
 end
 
 require 'test/unit'
+
+if RUBY_VERSION < '1.9'
+  class Test::Unit::TestCase
+    def refute(statement, message = '')
+      assert !statement, message
+    end
+  end
+end
