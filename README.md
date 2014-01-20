@@ -27,7 +27,7 @@ Add the ZhongwenTools component you need to your classes as a module.
 Or you can require the components you want
 
     require 'zhongwen_tools/numbers'
-    ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
+    ZhongwenTools::Numbers.to_pyn '一百二十' #=> 'yi1-bai2-er4-shi2'
 
 ZhongwenTools includes the following modules:
 
