@@ -11,17 +11,17 @@ module ZhongwenTools
 
     def to_zhs(int = nil)
       int ||= self
-      convert_number_to_simplified :num, int.to_s
+      number_to_zhs :num, int.to_s
     end
 
     def to_zht(int = nil)
       int ||= self
-      convert_number_to_traditional :num, int.to_s
+      number_to_zht :num, int.to_s
     end
 
     def to_pyn(int = nil)
       int ||= self
-      convert_number_to_pyn int.to_s, :num
+      number_to_pyn int.to_s, :num
     end
 
     class Basement
