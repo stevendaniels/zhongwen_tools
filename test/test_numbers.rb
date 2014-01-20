@@ -5,37 +5,35 @@ require './test/test_helper'
 require 'zhongwen_tools/string'
 require 'zhongwen_tools/numbers'
 
-class TestCJKTools < Test::Unit::TestCase
+class TestNumbers < Test::Unit::TestCase
   include ZhongwenTools::Numbers
   def test_convert_to_numbers
-    #skip 
+    #skip
     #your function sucks dick man
-      @numbers.each do |num|
-        number = convert_chinese_numbers_to_numbers num[:zh]
-        binding.pry if num[:en] != number
-        assert_equal num[:en], number
-      end
+    @numbers.each do |num|
+      number = zh_number_to_number num[:zh]
+      binding.pry if num[:en] != number
+      assert_equal num[:en], number
+    end
   end
 
   def test_convert_to_traditional_number
     zhs = @numbers[0][:zh]
-    zht = convert_number_to_traditional :zh_s, zhs
+    zht = number_to_zht :zht, zhs
 
     assert_equal '一萬兩千七', zht
   end
 
   def test_convert_to_simplified_from_number
-    #skip
-   num = @numbers[0][:en]
-   zht = convert_number_to_traditional :num, num
+    num = @numbers[0][:en]
+    zhs = number_to_zhs :num, num
 
-#adds garbage!!
-    assert_equal '一萬二千七', zht
+    assert_equal '一万二千七', zhs
   end
 
   def test_convert_number_to_pyn
     num = '一百三十六'
-    pyn = self.convert_number_to_pyn num
+    pyn = self.number_to_pyn num
 
     assert_equal 'yi1-bai2-san1-shi2-liu4', pyn
   end

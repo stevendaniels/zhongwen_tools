@@ -1,7 +1,7 @@
 #Zhongwen Tools:
 Tools and methods for dealing with Chinese.
 [![Build
-Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://gemnasium.com/stevendaniels/zhongwen_tools.png)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://coveralls.io/repos/stevendaniels/zhongwen_tools/badge.png)](https://coveralls.io/r/stevendaniels/zhongwen_tools) 
+Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://gemnasium.com/stevendaniels/zhongwen_tools.png)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://coveralls.io/repos/stevendaniels/zhongwen_tools/badge.png)](https://coveralls.io/r/stevendaniels/zhongwen_tools)
 [![GitHub version](https://badge.fury.io/gh/stevendaniels%2Fzhongwen_tools.png)](http://badge.fury.io/gh/stevendaniels%2Fzhongwen_tools)
 ##INSTALLATION
 
@@ -27,7 +27,7 @@ Add the ZhongwenTools component you need to your classes as a module.
 Or you can require the components you want
 
     require 'zhongwen_tools/numbers'
-    ZhongwenTools::Numbers.to_pinyin '一百二十' #=> 'yi1-bai2-er4-shi2'
+    ZhongwenTools::Numbers.to_pyn '一百二十' #=> 'yi1-bai2-er4-shi2'
 
 ZhongwenTools includes the following modules:
 
@@ -40,12 +40,12 @@ ZhongwenTools includes the following modules:
 6. [TODO] ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
 7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
 8. [TODO] ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
-  
-  
+
+
 ### ZhongwenTools::String: useful string functions for Chinese.
     ZhongwenTools::String.ascii? 'hello'    #=> true #non-multibyle strings
     ZhongwenTools::String.multibyte? '中文'  #=> true #multibtye strings
-    ZhongwenTools::String.halfwidth? 
+    ZhongwenTools::String.halfwidth?
     ZhongwenTools::String.fullwidth?
     ZhongwenTools::String.to_halfwidth
     ZhongwenTools::String.uri_encode  #=> just because I'm lazy
@@ -55,12 +55,12 @@ ZhongwenTools includes the following modules:
     ZhongwenTools::String.upcase --> does pinyin uppercase
     ZhongwenTools::String.capitalize ---> does pinyin / fullwidth capitalization
 
-    ZhongwenTools::String.has_zh? '1月'     #=> true 
+    ZhongwenTools::String.has_zh? '1月'     #=> true
     ZhongwenTools::String.is_zh? '1月'      #=> false can't be mixed.
     ZhongwenTools::String.is_zhs? '中国'    #=> true
     ZhongwenTools::String.is_zht? '中国'    #=> false
 
-#### Ruby 1.8 safe methods 
+#### Ruby 1.8 safe methods
     ZhongwenTools::String.chars '中文' #=> ['中','文']
     ZhongwenTools::String.size '中文'  #=> 2
     ZhongwenTools::String.reverse '中文' #=> '文中'
@@ -70,11 +70,22 @@ ZhongwenTools includes the following modules:
 ###Numbers
 Functions for converting to and from Chinese numbers.
 
+    ZhongwenTools::Number.number_zht 12000        #=> '一萬二千'
+    ZhongwenTools::Number.number_zhs 42           #=> '四十二'
+    ZhongwenTools::Number.number_to_pyn 42        #=> 'si4-shi2-er4'
+    ZhongwenTools::Number.number_to_int '四十二'  #=> 42
+    ZhongwenTools::Number.number? '四十二'        #=> true
+
 ###Integers
-Monkey Patch your integers for Chinese.
+Monkey-patch your integers for Chinese.
+
+    class Integer
+      include ZhongwenTools::Integer
+    end
 
     12.to_pinyin #=> 'shi2-er4'
     12.to_zht    #=> '十二'
+
 
 ### Romanization
 ZhongwenTools::Chinese has tools for converting between Chinese language romanization systems and
@@ -88,7 +99,7 @@ scripts.
     str = "ni3 hao3"
     romanization_system = "pyn" #pyn|wg|yale|bpmf|zhyfh|wade-giles|bopomofo
 
-    str.to_pinyin romanization_system   
+    str.to_pinyin romanization_system
     #=> "nǐ hǎo"
 
     str.to_py romanization_system
@@ -117,8 +128,8 @@ Chinese to pinyin).
     ZhongwenTools::Conversion.to_zht '华语'
     ZhongwenTools::Conversion.to_zhtw '方便面'
     ZhongwenTools::Conversion.to_zhhk '方便面'
-    ZhongwenTools::Conversion.to_zhmc 
-    ZhongwenTools::Conversion.to_zhsg 
+    ZhongwenTools::Conversion.to_zhmc
+    ZhongwenTools::Conversion.to_zhsg
     ZhongwenTools::Conversion.to_zhprc '马铃薯'
 
 
