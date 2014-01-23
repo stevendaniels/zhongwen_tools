@@ -118,6 +118,8 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     str.tone_sandhi?     #=> checks if the word has tone sandhi
     #=> true
     str.romanization?
+    str.pyn? #=> true
+
 
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
