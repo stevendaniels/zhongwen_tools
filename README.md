@@ -2,7 +2,8 @@
 Tools and methods for dealing with Chinese.
 [![Build
 Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://gemnasium.com/stevendaniels/zhongwen_tools.png)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://coveralls.io/repos/stevendaniels/zhongwen_tools/badge.png)](https://coveralls.io/r/stevendaniels/zhongwen_tools)
-[![GitHub version](https://badge.fury.io/gh/stevendaniels%2Fzhongwen_tools.png)](http://badge.fury.io/gh/stevendaniels%2Fzhongwen_tools)
+[![Gem Version](https://badge.fury.io/rb/zhongwen_tools.png)](http://badge.fury.io/rb/zhongwen_tools)
+
 ##INSTALLATION
 
 Install as a gem
@@ -34,8 +35,7 @@ ZhongwenTools includes the following modules:
 1. ZhongwenTools::String => some useful string functions and functions for identifying Chinese scripts and romanizations.
 2. ZhongwenTools::Numbers => functions for identifying and converting numbers.
 3. ZhongwenTools::Integer => some useful integer functions for Chinese:
-   e.g. 12.to_pinyin 12.to_zht
-4. [TODO] ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
+4. ZhongwenTools::Romanization => functions for converting between Chinese romanization systems
 5. [TODO] ZhongwenTools::Conversion => functions for converting between Chinese scripts.
 6. [TODO] ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
 7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
@@ -88,8 +88,8 @@ Monkey-patch your integers for Chinese.
 
 
 ### Romanization
-ZhongwenTools::Chinese has tools for converting between Chinese language romanization systems and
-scripts.
+ZhongwenTools::Romanization has tools for converting between Chinese language romanization systems and
+scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools::Conversion). 
 
     class String
       include ZhongwenTools::Romanization
@@ -118,6 +118,8 @@ scripts.
     str.tone_sandhi?     #=> checks if the word has tone sandhi
     #=> true
     str.romanization?
+    str.pyn? #=> true
+
 
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
