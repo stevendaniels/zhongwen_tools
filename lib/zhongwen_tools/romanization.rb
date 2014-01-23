@@ -1,5 +1,6 @@
 #encoding: utf-8
 require './lib/zhongwen_tools/romanization/conversion_table'
+require './lib/zhongwen_tools/romanization/detect'
 require './lib/zhongwen_tools/romanization/pyn_to_py'
 
 module ZhongwenTools

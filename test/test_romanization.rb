@@ -60,10 +60,15 @@ class TestRomanization < Test::Unit::TestCase
     skip
   end
 
+  def test_detect
+    assert @str.pyn?
+    refute @py.pyn?
+  end
+
   def setup
     @str = 'ni3 hao3'
     @mzd = 'Mao2 Ze2 dong1'
     @mzd2 = 'Mao2 Ze2-dong1'
-    @pyn = 'nǐ hǎo'
+    @py = 'nǐ hǎo'
   end
 end
