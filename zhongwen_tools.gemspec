@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
+require 'zhongwen_tools/version'
 
 Gem::Specification.new do |s|
   s.name        = "zhongwen_tools"
   s.license     = "MIT"
-  s.version     = "0.1.0"
+  s.version     = ZhongwenTools::VERSION
   s.authors     = ["Steven Daniels"]
   s.email       = ["steven@tastymantou.com"]
   s.homepage    = "https://github.com/stevendaniels/zhongwen_tools"

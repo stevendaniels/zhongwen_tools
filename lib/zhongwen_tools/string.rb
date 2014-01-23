@@ -1,7 +1,7 @@
 # encoding: utf-8
 #$:.unshift File.join(File.dirname(__FILE__),'..','lib','zhongwen_tools', 'string')
 require 'uri'
-require './lib/zhongwen_tools/string/fullwidth'
+require File.expand_path("../string/fullwidth", __FILE__)
 
 module ZhongwenTools
   module String
@@ -158,7 +158,7 @@ module ZhongwenTools
 end
 
 if RUBY_VERSION < '1.9'
-  require './lib/zhongwen_tools/string/ruby18'
+  require File.expand_path("../string/ruby18", __FILE__)
 elsif RUBY_VERSION < '2.0'
-  require './lib/zhongwen_tools/string/ruby19'
+  require File.expand_path("../string/ruby19", __FILE__)
 end
