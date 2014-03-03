@@ -11,10 +11,11 @@ rescue LoadError
   puts 'Pry disabled'
 end
 
-require 'test/unit'
+require 'minitest/autorun'
+#require 'test/unit'
 
 if RUBY_VERSION < '1.9'
-  class Test::Unit::TestCase
+  class Minitest::Test
     def refute(statement, message = '')
       assert !statement, message
     end
