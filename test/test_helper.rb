@@ -11,6 +11,7 @@ rescue LoadError
   puts 'Pry disabled'
 end
 
+gem 'minitest'
 require 'minitest/autorun'
 #require 'test/unit'
 
