@@ -13,6 +13,7 @@ class TestRomanization < Test::Unit::TestCase
   def test_pinyin
     assert_equal 'Zhōng wén','Zhong1 wen2'.to_pinyin
     assert_equal 'Zhōngwén', 'Zhong1-wen2'.to_pinyin
+    #binding.pry
     assert_equal "Tiān'ānmén",'Tian1an1men2'.to_pinyin
 
     #skip
@@ -20,10 +21,10 @@ class TestRomanization < Test::Unit::TestCase
     #assert_equal "Mao Zedong", mzd.to_pinyin(:wg)
   end
 
-  def test_pyn
-    skip
-    assert_equal 'ni3 hao3', @py.to_pyn
-  end
+  #def test_pyn
+    #skip
+    #assert_equal 'ni3 hao3', @py.to_pyn
+  #end
 
   def test_zhuyin_fuhao
      assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_bpmf
@@ -46,11 +47,11 @@ class TestRomanization < Test::Unit::TestCase
     #assert_equal '', @str.to_mspy2
   #end
 
-  def test_typy
-    skip
-    assert_equal '', @str.to_typy
-    assert_equal '', @str.to_tongyong
-  end
+  #def test_typy
+    #skip
+    #assert_equal '', @str.to_typy
+    #assert_equal '', @str.to_tongyong
+  #end
 
   def test_yale
     assert_equal 'ni3 hau3', @str.to_yale

@@ -70,7 +70,7 @@ module ZhongwenTools
       # doing the substitution in a block is ~8x faster than using scan and each.
       # Explanation: if it's pinyin without vowels, e.g. m, ng, then convert, otherwise, check if it needs an apostrophe (http://www.pinyin.info/romanization/hanyu/apostrophes.html). If it does, add it and then convert. Otherwise, just convert. Oh, and if double hyphens are used, replace them with one hyphen. And finally, correct those apostrophes at the very end.
       str.gsub(regex) do
-        ($3.nil? ? "#{PYN_PY[$1]}" : ($2 == '' && ['a','e','o'].include?($3[0]))? "'#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}" : "#{$2}#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}") + (($7.to_s.length > 1) ? '-' : '')
+        ($3.nil? ? "#{PYN_PY[$1]}" : ($2 == '' && ['a','e','o'].include?($3[0,1]))? "'#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}" : "#{$2}#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}") + (($7.to_s.length > 1) ? '-' : '')
       end.gsub("-'","-").sub(/^'/,'')
     end
 
@@ -124,7 +124,8 @@ module ZhongwenTools
 
 
     def _set_type(type)
-      case type.downcase
+      type = type.to_s.downcase.to_sym
+      case type
       when :zhuyinfuhao
         :zyfh
       when :bopomofo

@@ -18,5 +18,9 @@ if RUBY_VERSION < '1.9'
     def refute(statement, message = '')
       assert !statement, message
     end
+
+    def skip
+      return
+    end
   end
 end
