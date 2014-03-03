@@ -31,15 +31,15 @@ class TestRomanization < Minitest::Test
      assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_bopomofo
      assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_zhuyin
      assert_equal 'ㄇㄠ2 ㄗㄜ2 ㄉㄨㄥ1', @mzd.to_zhuyin_fuhao
-#skip
-     #assert_equal 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', @mzd2.to_zhuyin_fuhao
+     assert_equal 'ㄑㄧㄥ3 ㄏㄨㄟ2ㄉㄚ2 ㄨㄛ3 ㄉㄜ5 ㄨㄣ4ㄊㄧ2 .', @sent.to_zhuyin
+     assert_equal 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', @mzd2.to_zhuyin_fuhao
   end
 
   def test_wade_giles
     assert_equal 'kuo1', 'guo1'.to_wg
     assert_equal 'chung1 kuo2', 'zhong1 guo2'.to_wg
-    #assert_equal 'Mao2 Tse2 tung1', @mzd.to_wg
-    #assert_equal 'Mao2 Tse2 tung1', @mzd.to_wade_giles
+    assert_equal 'Mao2 Tse2 tung1', @mzd.to_wg
+    assert_equal 'Mao2 Tse2-tung1', @mzd2.to_wade_giles
   end
 
   #def test_mspy2
@@ -71,5 +71,6 @@ class TestRomanization < Minitest::Test
     @mzd = 'Mao2 Ze2 dong1'
     @mzd2 = 'Mao2 Ze2-dong1'
     @py = 'nǐ hǎo'
+    @sent = 'Qing3 hui2-da2 wo3 de5 wen4-ti2 .'
   end
 end

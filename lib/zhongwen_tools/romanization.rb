@@ -80,11 +80,12 @@ module ZhongwenTools
     def _to_romanization str, to, from
       convert_to = _set_type to
       convert_from = _set_type from
-      tokens = str.split(' ').uniq
+      tokens = str.split(/[ \-]/).uniq
       replacements = tokens.collect do |t|
         # non_romanization = t.match(/[1-5](.*)/)[-1]
         search = t.gsub(/[1-5].*/,'')
         begin
+          capitalized = t.downcase != t
           if from.nil? || convert_from.nil?
             replace = ROMANANIZATIONS_TABLE.find{|x| x.values.include? t.downcase.gsub(/[1-5].*/,'')}[convert_to.to_sym]
           else
@@ -93,6 +94,8 @@ module ZhongwenTools
         rescue =>  e#rescue when the converter meets something it doesn't recognize
           replace = search
         end
+
+        replace = replace.capitalize if capitalized
         str =  str.gsub(search, replace)
       end
       str
@@ -112,7 +115,7 @@ module ZhongwenTools
           #need to convert pinyin to pyn
           raise NotImplementedError, 'method not implemented'
         end
-        _to_romanization str, to, from
+        _to_romanization(str, to, from).gsub('-','')
       else
         if from == :pyn
           _to_romanization str, to, from
