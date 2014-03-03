@@ -4,5 +4,4 @@ gemspec
 
 group :test do
   gem 'pry'
-  gem 'minitest' if RUBY_VERSION < '1.9'
 end
