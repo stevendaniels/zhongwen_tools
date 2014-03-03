@@ -5,7 +5,7 @@ require './test/test_helper'
 require 'zhongwen_tools/string'
 require 'zhongwen_tools/numbers'
 
-class TestNumbers < Test::Unit::TestCase
+class TestNumbers < Minitest::Test
   include ZhongwenTools::Numbers
   def test_convert_to_numbers
     #skip

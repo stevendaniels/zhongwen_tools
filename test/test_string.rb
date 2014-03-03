@@ -7,7 +7,7 @@ class String
   include ZhongwenTools::String
 end
 
-class TestString < Test::Unit::TestCase
+class TestString < Minitest::Test
 
   def test_size
     assert_equal 2, @str.size
