@@ -8,7 +8,7 @@ class String
   include ZhongwenTools::Romanization
 end
 
-class TestRomanization < Test::Unit::TestCase
+class TestRomanization < Minitest::Test
 
   def test_pinyin
     assert_equal 'Zhōng wén','Zhong1 wen2'.to_pinyin

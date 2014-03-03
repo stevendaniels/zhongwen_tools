@@ -8,7 +8,7 @@ class Integer
   include ZhongwenTools::Integer
 end
 
-class TestInteger < Test::Unit::TestCase
+class TestInteger < Minitest::Test
   def test_zh
     assert_equal 122.to_zh, '一百二十二'
     assert_equal 12.to_zh, '十二'
