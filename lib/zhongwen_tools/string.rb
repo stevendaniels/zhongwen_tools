@@ -33,6 +33,12 @@ module ZhongwenTools
       !str[UNICODE_REGEX[:punc]].nil?
     end
 
+    def strip_zh_punctuation(str = nil)
+      str ||= self
+
+      str.gsub(UNICODE_REGEX[:punc], '')
+    end
+
     def size(str = nil)
       str ||= self
       str.chars.size
@@ -141,6 +147,9 @@ module ZhongwenTools
     end
     def self.has_zh?(*args)
       Basement.new.has_zh?(*args)
+    end
+    def self.strip_zh_punctuation(*args)
+      Basement.new.strip_zh_punctuation(*args)
     end
     def self.has_zh_punctuation?(*args)
       Basement.new.has_zh_punctuation?(*args)
