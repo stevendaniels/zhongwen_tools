@@ -13,10 +13,10 @@ class TestRomanization < Minitest::Test
   def test_pinyin
     assert_equal 'Zhōng wén','Zhong1 wen2'.to_pinyin
     assert_equal 'Zhōngwén', 'Zhong1-wen2'.to_pinyin
-    #binding.pry
     assert_equal "Tiān'ānmén",'Tian1an1men2'.to_pinyin
+    assert_equal @alabo[:py], @alabo[:pyn].to_pinyin
 
-    #skip
+    #wg -> py not yet implemented
     #mzd = "Mao Tse-tung"
     #assert_equal "Mao Zedong", mzd.to_pinyin(:wg)
   end
@@ -72,5 +72,6 @@ class TestRomanization < Minitest::Test
     @mzd2 = 'Mao2 Ze2-dong1'
     @py = 'nǐ hǎo'
     @sent = 'Qing3 hui2-da2 wo3 de5 wen4-ti2 .'
+    @alabo = {pyn: 'A1-la1-bo2', py: 'Ālābó'}
   end
 end
