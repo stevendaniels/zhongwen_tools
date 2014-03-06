@@ -99,10 +99,14 @@ class TestString < Minitest::Test
     assert_equal '羊', ZhongwenTools::String.from_codepoint('\\u7f8a')
   end
 
+
   def test_punctuation
     assert ZhongwenTools::String.has_zh_punctuation?(@zh_punc)
 
     assert @zh_punc.has_zh_punctuation?
+
+    refute ZhongwenTools::String.strip_zh_punctuation(@zh_punc) == @zh_punc
+    refute @zh_punc.strip_zh_punctuation == @zh_punc
   end
 
   def setup

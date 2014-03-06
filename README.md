@@ -44,22 +44,28 @@ ZhongwenTools includes the following modules:
 
 
 ### ZhongwenTools::String: useful string functions for Chinese.
-    ZhongwenTools::String.ascii? 'hello'    #=> true #non-multibyle strings
-    ZhongwenTools::String.multibyte? '中文'  #=> true #multibtye strings
-    ZhongwenTools::String.halfwidth?
-    ZhongwenTools::String.fullwidth?
-    ZhongwenTools::String.to_halfwidth
-    ZhongwenTools::String.uri_encode  #=> just because I'm lazy
-    ZhongwenTools::Unicode.to_codepoint
-    ZhongwenTools::Unicode.to_unicode --> converts from unicode codepoint.
-    ZhongwenTools::String.downcase --> does pinyin/ lowercase
-    ZhongwenTools::String.upcase --> does pinyin uppercase
-    ZhongwenTools::String.capitalize ---> does pinyin / fullwidth capitalization
+    ZhongwenTools::String.ascii? 'hello'              #=> true #non-multibyle strings
+    ZhongwenTools::String.multibyte? '中文'           #=> true #multibtye strings
+    ZhongwenTools::String.halfwidth? 'hello'          #=> true
+    ZhongwenTools::String.fullwidth? 'ｈｅｌｌｏ'     #=> true
+    ZhongwenTools::String.to_halfwidth 'ｈｅｌｌｏ'   #=> 'hello'
+
+    ZhongwenTools::String.uri_encode '我太懒'            #=>  
+    ZhongwenTools::Unicode.to_codepoint '中文'           #=> '\u4e2d\u6587'
+    ZhongwenTools::Unicode.from_codepoint '\u4e2d\u6587' #=> '中文' #converts string from a utf-8 codepoint.
 
     ZhongwenTools::String.has_zh? '1月'     #=> true
     ZhongwenTools::String.is_zh? '1月'      #=> false can't be mixed.
     ZhongwenTools::String.is_zhs? '中国'    #=> true
     ZhongwenTools::String.is_zht? '中国'    #=> false
+
+    ZhongwenTools::String.has_zh_punctuation? '你在哪里？'     #=> true
+    ZhongwenTools::String.strip_zh_punctuation? '你在哪里？'     #=> '你在哪里'
+
+#### The following capitalization methods work for pinyin. [TODO]
+    ZhongwenTools::String.downcase 'Qǐng wèn...'  #=> --> does pinyin/ lowercase
+    ZhongwenTools::String.upcase --> does pinyin uppercase
+    ZhongwenTools::String.capitalize ---> does pinyin / fullwidth capitalization
 
 #### Ruby 1.8 safe methods
     ZhongwenTools::String.chars '中文' #=> ['中','文']
@@ -68,7 +74,7 @@ ZhongwenTools includes the following modules:
     ZhongwenTools::Unicode.to_utf8 '\x{D6D0}\x{CEC4}' => '中文'
 
 
-###Numbers
+### Numbers
 Functions for converting to and from Chinese numbers.
 
     ZhongwenTools::Number.number_zht 12000        #=> '一萬二千'
@@ -77,7 +83,7 @@ Functions for converting to and from Chinese numbers.
     ZhongwenTools::Number.number_to_int '四十二'  #=> 42
     ZhongwenTools::Number.number? '四十二'        #=> true
 
-###Integers
+### Integers
 Monkey-patch your integers for Chinese.
 
     class Integer
@@ -122,7 +128,7 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     str.pyn? #=> true
 
 
-### Conversion
+### Conversion [TODO]
 Functions for converting between scripts (e.g. traditional Chinese to
 simplified Chinese) and between chinese and romanization systems (e.g.
 Chinese to pinyin).
@@ -139,9 +145,6 @@ Chinese to pinyin).
 ###Tone Sandhi
 Some functions for predicting / converting to tone sandhi
 
-##Plugins
-Zhongwen Tools tries to avoid having many dependencies. Functionality
-that requires an external dependency is packaged as a separate gem.
 
 ## TODO
 1. A trad/simp script converter
