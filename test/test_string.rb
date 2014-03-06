@@ -105,8 +105,8 @@ class TestString < Minitest::Test
 
     assert @zh_punc.has_zh_punctuation?
 
-    refute ZhongwenTools::String.strip_zh_punctuation(@zh_punc) == @zh_punc
-    refute @zh_punc.strip_zh_punctuation == @zh_punc
+    refute ZhongwenTools::String.strip_zh_punctuation(@zh_punc) == @zh_punc, "#{@zh_punc} should not equal #{ZhongwenTools::String.strip_zh_punctuation(@zh_punc)}"
+    refute @zh_punc.strip_zh_punctuation == @zh_punc, "#{@zh_punc} should not equal #{ @zh_punc.strip_zh_punctuation} "
   end
 
   def setup
