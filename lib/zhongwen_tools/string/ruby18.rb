@@ -67,5 +67,11 @@ module ZhongwenTools
 
       !str[regex[:punc]].nil?
     end
+
+    def strip_zh_punctuation(str = nil)
+      str ||= self
+
+      str.gsub(self.convert_regex(UNICODE_REGEX[:punc]), '')
+    end
   end
 end

@@ -72,6 +72,6 @@ class TestRomanization < Minitest::Test
     @mzd2 = 'Mao2 Ze2-dong1'
     @py = 'nǐ hǎo'
     @sent = 'Qing3 hui2-da2 wo3 de5 wen4-ti2 .'
-    @alabo = {pyn: 'A1-la1-bo2', py: 'Ālābó'}
+    @alabo = {:pyn => 'A1-la1-bo2', :py => 'Ālābó'}
   end
 end
