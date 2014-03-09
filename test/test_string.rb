@@ -109,11 +109,24 @@ class TestString < Minitest::Test
     refute @zh_punc.strip_zh_punctuation == @zh_punc, "#{@zh_punc} should not equal #{ @zh_punc.strip_zh_punctuation} "
   end
 
+  def test_capitalization
+    assert_equal @py_caps[:l], ZhongwenTools::String.downcase(@py_caps[:c])
+    assert_equal @py_caps[:l], @py_caps[:u].downcase
+
+    assert_equal  @py_caps[:c], ZhongwenTools::String.capitalize(@py_caps[:l])
+    assert_equal @py_caps[:c], @py_caps[:l].capitalize
+
+    assert_equal @py_caps[:u], @py_caps[:l].upcase
+    assert_equal  @py_caps[:u], ZhongwenTools::String.upcase(@py_caps[:l])
+    assert_equal 'ＨＥＬＬＯ', @fw.upcase
+  end
+
   def setup
     @str = '中文'
     @fw = 'ｈｅｌｌｏ'
     @hw = 'hello'
     @zh_punc = '不错吧！'
+    @py_caps = {:c => 'Àomén', :l => 'àomén', :u => 'ÀOMÉN'}
   end
 
 end

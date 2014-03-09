@@ -59,13 +59,13 @@ ZhongwenTools includes the following modules:
     ZhongwenTools::String.is_zhs? '中国'    #=> true
     ZhongwenTools::String.is_zht? '中国'    #=> false
 
-    ZhongwenTools::String.has_zh_punctuation? '你在哪里？'     #=> true
-    ZhongwenTools::String.strip_zh_punctuation? '你在哪里？'     #=> '你在哪里'
+    ZhongwenTools::String.has_zh_punctuation? '你在哪里？'    #=> true
+    ZhongwenTools::String.strip_zh_punctuation? '你在哪里？'  #=> '你在哪里'
 
-#### The following capitalization methods work for pinyin. [TODO]
-    ZhongwenTools::String.downcase 'Qǐng wèn...'  #=> --> does pinyin/ lowercase
-    ZhongwenTools::String.upcase --> does pinyin uppercase
-    ZhongwenTools::String.capitalize ---> does pinyin / fullwidth capitalization
+#### The following capitalization methods work for pinyin.
+    ZhongwenTools::String.downcase 'Àomén'  #=> 'àomén' does pinyin/ lowercase
+    ZhongwenTools::String.upcase 'àomén'    #=> --> does pinyin uppercase
+    ZhongwenTools::String.capitalize 'àomén'  #=> 'Àomén'
 
 #### Ruby 1.8 safe methods
     ZhongwenTools::String.chars '中文' #=> ['中','文']
