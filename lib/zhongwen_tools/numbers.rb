@@ -153,21 +153,13 @@ module ZhongwenTools
         num = str[(len - 1 - i),1].to_i
 
         if i == 0
-          replacement = NUMBERS_TABLE.find{|x| x[:num] == num}.fetch(to){0}
 
-          converted_number << replacement unless num == 0
+          converted_number << _find_number(num, to) unless num == 0
         else
-          replacement = (NUMBERS_TABLE.find{|x| x[:num] == (10**(i))} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000)} || NUMBERS_TABLE.find{|x| x[:num] == (10**(i) / 10000**2)} )[to]
-          converted_number << replacement
+          converted_number <<  _find_number((10**(i)), to) || _find_number((10**(i) / 10000), to) || _find_number((10**(i) / 10000**2), to)
 
           #checks the wan level and ...
-          if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
-            replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-            converted_number << replacement
-            #elsif num != 1
-            #replacement = NUMBERS_TABLE.find{|x| x[:num] == num}[to]
-            #converted_number << replacement
-          end
+          converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
         end
       end
 
@@ -185,6 +177,12 @@ module ZhongwenTools
 
       #liang rules are tough...
       converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
+    end
+
+    private
+
+    def _find_number(num, to)
+NUMBERS_TABLE.find{|x| x[:num] == num}.fetch(to){0}
     end
   end
 end
