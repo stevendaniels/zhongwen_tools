@@ -35,7 +35,7 @@ module ZhongwenTools
     }
     def to_utf8(str = nil)
       (str || self).force_encoding('utf-8')
-      #TODO: better conversion functions available in categorize
+      #TODO: better conversion methods can be extracted from categories service
     end
 
     def has_zh?(str = nil)
@@ -126,14 +126,8 @@ module ZhongwenTools
 
     def to_halfwidth(str = nil)
       str ||= self
-      matches = str.scan(/([０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞])/u).uniq.flatten
 
-      matches.each do |match|
-        replacement = FW_HW[match]
-        str = str.gsub(match, replacement) #unless str.nil?
-      end
-
-      str
+      str.gsub(/([０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞])/){  ZhongwenTools::FW_HW[$1] }
     end
 
     def to_codepoint(str = nil)
