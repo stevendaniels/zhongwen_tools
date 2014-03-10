@@ -45,18 +45,18 @@ ZhongwenTools includes the following Modules:
 
 ### Using ZhongwenTools::String
     require 'zhongwen_tools/string'
-    ZhongwenTools::String.ascii? 'hello'              #=> true #non-multibyle strings
+    ZhongwenTools::String.ascii? 'hello'               #=> true #non-multibyle strings
     ZhongwenTools::String.multibyte? '中文'            #=> true #multibtye strings
-    ZhongwenTools::String.halfwidth? 'hello'          #=> true
+    ZhongwenTools::String.halfwidth? 'hello'           #=> true
     ZhongwenTools::String.fullwidth? 'ｈｅｌｌｏ'       #=> true
     ZhongwenTools::String.to_halfwidth 'ｈｅｌｌｏ'     #=> 'hello'
 
     ZhongwenTools::String.uri_encode '我太懒'             #=> '%E6%88%91%E5%A4%AA%E6%87%92'
     ZhongwenTools::String.to_codepoint '中文'            #=> '\u4e2d\u6587'
-    ZhongwenTools::String.from_codepoint '\u4e2d\u6587' #=> '中文' #converts string from a utf-8 codepoint.
+    ZhongwenTools::String.from_codepoint '\u4e2d\u6587'   #=> '中文' #converts string from a utf-8 codepoint.
 
     ZhongwenTools::String.has_zh? '1月'     #=> true
-    ZhongwenTools::String.zh? '1月'      #=> false #(The string can't be mixed.)
+    ZhongwenTools::String.zh? '1月'         #=> false #(The string can't be mixed.)
     #TODO: ZhongwenTools::String.zhs? '中国'    #=> true
     #TODO: ZhongwenTools::String.zht? '中国'    #=> false
 
@@ -72,6 +72,7 @@ ZhongwenTools includes the following Modules:
 #### Ruby 1.8 safe methods
 Zhongwen Tools is tested on every ruby since 1.8.7 and lets you deal
 with multibyte strings in an simple way.
+
     require 'zhongwen_tools/string'
     ZhongwenTools::String.chars '中文' #=> ['中','文']
     ZhongwenTools::String.size '中文'  #=> 2
