@@ -28,6 +28,7 @@ end
 
 module ZhongwenTools
   module String
+    extend self
 
     UNICODE_REGEX = {
       :zh => /[\u2E80-\u2E99]|[\u2E9B-\u2EF3]|[\u2F00-\u2FD5]|[\u3005|\u3007]|[\u3021-\u3029]|[\u3038-\u303B]|[\u3400-\u4DB5]|[\u4E00-\u9FCC]|[\uF900-\uFA6D]|[\uFA70-\uFAD9]/,
@@ -142,70 +143,6 @@ module ZhongwenTools
       str ||= self
 
       [str.sub(/\\?u/,'').hex].pack("U")
-    end
-
-    class Basement #:nodoc:
-      include ZhongwenTools::String
-    end
-    def self.chars(*args)
-      Basement.new.chars(*args)
-    end
-    def self.size(*args)
-      Basement.new.size(*args)
-    end
-    def self.reverse(*args)
-      Basement.new.reverse(*args)
-    end
-    def self.downcase(*args)
-      Basement.new.downcase(*args)
-    end
-    def self.upcase(*args)
-      Basement.new.upcase(*args)
-    end
-    def self.capitalize(*args)
-      Basement.new.capitalize(*args)
-    end
-    def self.to_utf8(*args)
-      Basement.new.to_utf8(*args)
-    end
-    def self.uri_encode(*args)
-      Basement.new.uri_encode(*args)
-    end
-    def self.uri_escape(*args)
-      Basement.new.uri_escape(*args)
-    end
-    def self.ascii?(*args)
-      Basement.new.ascii?(*args)
-    end
-    def self.multibyte?(*args)
-      Basement.new.multibyte?(*args)
-    end
-    def self.halfwidth?(*args)
-      Basement.new.halfwidth?(*args)
-    end
-    def self.fullwidth?(*args)
-      Basement.new.fullwidth?(*args)
-    end
-    def self.to_halfwidth(*args)
-      Basement.new.to_halfwidth(*args)
-    end
-    def self.has_zh?(*args)
-      Basement.new.has_zh?(*args)
-    end
-    def self.strip_zh_punctuation(*args)
-      Basement.new.strip_zh_punctuation(*args)
-    end
-    def self.has_zh_punctuation?(*args)
-      Basement.new.has_zh_punctuation?(*args)
-    end
-    def self.zh?(*args)
-      Basement.new.zh?(*args)
-    end
-    def self.to_codepoint(*args)
-      Basement.new.to_codepoint(*args)
-    end
-    def self.from_codepoint(*args)
-      Basement.new.from_codepoint(*args)
     end
   end
 end

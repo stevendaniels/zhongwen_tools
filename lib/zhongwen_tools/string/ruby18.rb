@@ -73,5 +73,17 @@ module ZhongwenTools
 
       str.gsub(self.convert_regex(UNICODE_REGEX[:punc]), '')
     end
+    
+    def to_halfwidth(str = nil)
+      str ||= self
+      matches = str.scan(/([０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞])/u).uniq.flatten
+
+      matches.each do |match|
+        replacement = FW_HW[match]
+        str = str.gsub(match, replacement) #unless str.nil?
+      end
+
+      str
+    end
   end
 end
