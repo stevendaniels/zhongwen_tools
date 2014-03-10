@@ -153,11 +153,9 @@ module ZhongwenTools
         num = str[(len - 1 - i),1].to_i
 
         if i == 0
-
           converted_number << _find_number(num, to) unless num == 0
         else
           converted_number <<  _find_wan_level(i, to)
-
           #checks the wan level and ...
           converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
         end
