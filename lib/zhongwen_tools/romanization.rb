@@ -57,13 +57,6 @@ module ZhongwenTools
     #
     #
     #  Returns a string with actual pinyin
-    #  TODO: fix regex: false match for V
-    #  TODO: fix regex false match for "zhongguo person"
-    #  #this regex is a quick and dirty check, but it's not accurate.
-    #  an accurate regex would restrict access to completely accurate
-    #  pinyin, e.g. sounds that mandarin actually can contain.
-    #  #this regex extracts the pinyin components, but doesn't make
-    #  judgement on the pinyins accuracy.
     def _to_pinyin str
       regex = /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
 
@@ -80,26 +73,41 @@ module ZhongwenTools
     def _to_romanization str, to, from
       convert_to = _set_type to
       convert_from = _set_type from
+
       tokens = str.split(/[ \-]/).uniq
-      replacements = tokens.collect do |t|
-        # non_romanization = t.match(/[1-5](.*)/)[-1]
+      tokens.collect do |t|
         search = t.gsub(/[1-5].*/,'')
-        begin
-          capitalized = t.downcase != t
-          if from.nil? || convert_from.nil?
-            replace = ROMANANIZATIONS_TABLE.find{|x| x.values.include? t.downcase.gsub(/[1-5].*/,'')}[convert_to.to_sym]
-          else
-            replace = ROMANANIZATIONS_TABLE.find{|x| x[convert_from.to_sym] == t.downcase.gsub(/[1-5].*/,'')}[convert_to.to_sym]
-          end
-        rescue =>  e#rescue when the converter meets something it doesn't recognize
-          replace = search
+
+        if from.nil? || convert_from.nil?
+          replace = (_replacement(t) || {}).fetch(convert_to){search}
+        else
+          replace = (_replacement(t, convert_from) || {}).fetch(convert_to){search}
         end
 
-        replace = replace.capitalize if capitalized
+        replace = _fix_capitalization(str, t, replace)
         str =  str.gsub(search, replace)
       end
+
       str
     end
+
+    def _fix_capitalization(str, token, replace)
+      replace = replace.capitalize  if(token.downcase != token)     
+
+      replace
+    end
+
+    def _replacement(token, from = nil)
+      token = token.downcase.gsub(/[1-5].*/,'')
+      ROMANANIZATIONS_TABLE.find do |x| 
+        if from.nil? 
+          x.values.include?(token)
+        else
+          x[from] == token
+        end
+      end
+    end
+
     def _convert_romanization str, to, from
       return str if to == from
 
