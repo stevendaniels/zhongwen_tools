@@ -40,6 +40,7 @@ class TestRomanization < Minitest::Test
     assert_equal 'chung1 kuo2', 'zhong1 guo2'.to_wg
     assert_equal 'Mao2 Tse2 tung1', @mzd.to_wg
     assert_equal 'Mao2 Tse2-tung1', @mzd2.to_wade_giles
+    assert_equal 'Mao2 Tse2-tung1 te5 mao2', 'Mao2 Ze2-dong1 de5 mao2'.to_wade_giles
   end
 
   #def test_mspy2
