@@ -156,7 +156,7 @@ module ZhongwenTools
 
           converted_number << _find_number(num, to) unless num == 0
         else
-          converted_number <<  _find_number((10**(i)), to) || _find_number((10**(i) / 10000), to) || _find_number((10**(i) / 10000**2), to)
+          converted_number <<  _find_wan_level(i, to)
 
           #checks the wan level and ...
           converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
@@ -181,8 +181,12 @@ module ZhongwenTools
 
     private
 
+    def _find_wan_level(i, to)
+      _find_number((10**(i)), to) || _find_number((10**(i) / 10000), to) || _find_number((10**(i) / 10000**2), to)
+    end
+
     def _find_number(num, to)
-NUMBERS_TABLE.find{|x| x[:num] == num}.fetch(to){0}
+      NUMBERS_TABLE.find{|x| x[:num] == num}.fetch(to){0}
     end
   end
 end
