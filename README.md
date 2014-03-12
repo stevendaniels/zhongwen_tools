@@ -37,10 +37,6 @@ ZhongwenTools includes the following Modules:
 2. ZhongwenTools::Numbers - methods for identifying Chinese numbers and for converting to and from Chinese.
 3. ZhongwenTools::Integer - methods for converting integers into Chinese or pinyin.
 4. ZhongwenTools::Romanization - methods for converting between Chinese romanization systems.
-5. [TODO] ZhongwenTools::Conversion => functions for converting between Chinese scripts.
-6. [TODO] ZhongwenTools::ToneSandhi => functions for identifying and dealing with tone sandhi. (Wiki URL)
-7. [TODO] ZhongwenTools::Segmentation => functions for segmenting Chinese. Can provide different methods for converting
-8. [TODO] ZhongwenTools::Tagging => functions for tagging Chinese POS, NER, etc.
 
 
 ### Using ZhongwenTools::String
@@ -57,8 +53,6 @@ ZhongwenTools includes the following Modules:
 
     ZhongwenTools::String.has_zh? '1月'     #=> true
     ZhongwenTools::String.zh? '1月'         #=> false #(The string can't be mixed.)
-    #TODO: ZhongwenTools::String.zhs? '中国'    #=> true
-    #TODO: ZhongwenTools::String.zht? '中国'    #=> false
 
     ZhongwenTools::String.has_zh_punctuation? '你在哪里？'    #=> true
     ZhongwenTools::String.strip_zh_punctuation? '你在哪里？'  #=> '你在哪里'
@@ -121,34 +115,8 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     str.to_yale     #=> "ni3 hau3"
     str.to_typy
 
-    #converts pinyin into it's spoken tones.
-    #TODO: str.to_tone_sandhi     #=> "ni2 hao3"
-
-    #checks if the word has tone sandhi
-    str.tone_sandhi?      #=> true
-
-    #TODO: str.romanization?
     str.pyn? #=> true
     str.wg?  #=> true #(There can be overlap between Wade-Giles and Pinyin)
-
-
-### Conversion [TODO]
-Functions for converting between scripts (e.g. traditional Chinese to
-simplified Chinese) and between chinese and romanization systems (e.g.
-Chinese to pinyin).
-
-    ZhongwenTools::Conversion.to_zhs ‘華語'
-    ZhongwenTools::Conversion.to_zht '华语'
-    ZhongwenTools::Conversion.to_zhtw '方便面'
-    ZhongwenTools::Conversion.to_zhhk '方便面'
-    ZhongwenTools::Conversion.to_zhmc
-    ZhongwenTools::Conversion.to_zhsg
-    ZhongwenTools::Conversion.to_zhprc '马铃薯'
-
-
-###Tone Sandhi
-Some functions for predicting / converting to tone sandhi
-
 
 ## TODO
 1. A trad/simp script converter
