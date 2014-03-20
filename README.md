@@ -15,13 +15,15 @@ Install as a gem
 
 Add the ZhongwenTools component you need to your classes as a module.
 
+    require 'zhongwen_tools/romanization'
+
     class String
       include ZhongwenTools::Romanization
     end
 
     str = "ni3 hao3"  #pinyin with numbers
     str.to_pinyin     #=> "nǐ hǎo"
-    str.to_zhuyinfuhao  #=>
+    str.to_zhuyin_fuhao  #=> "ㄋㄧ3 ㄏㄠ3"
 
     mzd = "Mao Tse-tung"
     mzd.to_pinyin   #=> "Mao Zedong"
@@ -37,7 +39,7 @@ ZhongwenTools includes the following Modules:
 2. ZhongwenTools::Numbers - methods for identifying Chinese numbers and for converting to and from Chinese.
 3. ZhongwenTools::Integer - methods for converting integers into Chinese or pinyin.
 4. ZhongwenTools::Romanization - methods for converting between Chinese romanization systems.
-5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
+5. ZhongwenTools::Conversion - methods for converting between Chinese scripts.
 
 
 ### Using ZhongwenTools::String
@@ -66,7 +68,7 @@ ZhongwenTools includes the following Modules:
 #### The following capitalization methods work for pinyin.
     require 'zhongwen_tools/string'
     ZhongwenTools::String.downcase 'Àomén'  #=> 'àomén' does pinyin/ lowercase
-    ZhongwenTools::String.upcase 'àomén'    #=> --> does pinyin uppercase
+    ZhongwenTools::String.upcase 'àomén'    #=> 'ÀOMÉN'
     ZhongwenTools::String.capitalize 'àomén'  #=> 'Àomén'
 
 #### Ruby 1.8 safe methods
@@ -113,7 +115,6 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
 
 
     str = "ni3 hao3"
-    romanization_system = "pyn" #pyn|wg|yale|bpmf|zhyfh|wade-giles|bopomofo
 
     str.to_pinyin     #=> "nǐ hǎo"
     str.to_py         #=> "nǐ hǎo"
@@ -129,7 +130,7 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
 
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
-simplified Chinese) and [TODO] between chinese and romanization systems (e.g.
+simplified Chinese) and [TODO] between Chinese and romanization systems (e.g.
 Chinese to pinyin).
 Conversion methods must be required explicitly.
 
