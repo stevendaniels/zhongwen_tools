@@ -58,9 +58,9 @@ class TestRomanization < Minitest::Test
     assert_equal 'ni3 hau3', @str.to_yale
   end
 
-  def test_romanization?
-    skip
-  end
+  #def test_romanization?
+    #skip
+  #end
 
   def test_detect
     assert @str.pyn?

@@ -8,7 +8,7 @@ module ZhongwenTools
       :nl_regex => /(neng?|[ln](a(i|ng?|o)?|e(i|ng)?|i(ang|a[on]?|e|ng?|u)?|o(ng?|u)|u(o|i|an?|n)?|ve?))/,
       :gkh_regex => /([ghk](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
       :zczhch_regex => /(z[h]?ei|[cz]hua(i|ng?)?|[cz][h]?(a(i|ng?|o)?|en?g?|o(u|ng)?|u(a?n|o|i)?))/,
-      :ssh_regex => /(song|shua(i|ng?)?|shei|s[h]?(a(i|ng?|o)?|en?g?|ou|u(a?n|o|i)?))/, 
+      :ssh_regex => /(song|shua(i|ng?)?|shei|s[h]?(a(i|ng?|o)?|en?g?|ou|u(a?n|o|i)?))/,
       :r_regex => /(r([ae]ng?|i|e|ao|ou|ong|u[oin]|ua?n?))/,
       :jqx_regex => /([jqx](i(a(o|ng?)?|[eu]|ong|ng?)?|u(e|a?n)?))/,
       :aw_regex => /(wu|w?(a(i|o|ng?)?|ou?|e(i|ng?)?))/,
@@ -42,7 +42,7 @@ module ZhongwenTools
       str ||= self
       #easy ones.. is it py? pyn? zyfh? gyrm?
       #harder ones: is it typy, msp2, yale, wg
-      wg = str._convert_romanization(str, :wg, :pyn) 
+      wg = str._convert_romanization(str, :wg, :pyn)
 
       wg != pyn && wg.gsub(/[1-5]/,'')
     end
