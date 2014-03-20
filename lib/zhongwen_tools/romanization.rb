@@ -92,15 +92,15 @@ module ZhongwenTools
     end
 
     def _fix_capitalization(str, token, replace)
-      replace = replace.capitalize  if(token.downcase != token)     
+      replace = replace.capitalize  if(token.downcase != token)
 
       replace
     end
 
     def _replacement(token, from = nil)
       token = token.downcase.gsub(/[1-5].*/,'')
-      ROMANANIZATIONS_TABLE.find do |x| 
-        if from.nil? 
+      ROMANANIZATIONS_TABLE.find do |x|
+        if from.nil?
           x.values.include?(token)
         else
           x[from] == token
