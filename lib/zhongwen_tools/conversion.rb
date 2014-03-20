@@ -35,7 +35,6 @@ module ZhongwenTools
 
       convert(:zhcn, str)
     end
-    #encoding:  utf-8
 
     ZH_TYPES = {
       :zht => [0],
@@ -50,9 +49,10 @@ module ZhongwenTools
     private
     # Conversion data and algorithm shamelessly stolen from chinese_convt gem.
     # There are two differences:
-    #   + ZhongwenTools loads the conversion data into memory vs.
-    #     chinese_convt reads the file every time ( ~12X faster ).
-    #   + ZhongwenTools uses Ruby's nifty str[/regex/] = replacement
+    #   + Zhongwen Tools loads the conversion data into memory and
+    #     chinese_convt reads the file every time. As a result, 
+    #     Zhongwen Tools is  ~12X faster.
+    #   + Zhongwen Tools uses Ruby's nifty str[/regex/] = replacement
     #     instead of indices. Conversion tests using indices fail with Ruby 1.8.
     # ( https://github.com/xxxooo/chinese_convt )
     def load_table
