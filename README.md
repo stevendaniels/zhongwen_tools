@@ -37,6 +37,7 @@ ZhongwenTools includes the following Modules:
 2. ZhongwenTools::Numbers - methods for identifying Chinese numbers and for converting to and from Chinese.
 3. ZhongwenTools::Integer - methods for converting integers into Chinese or pinyin.
 4. ZhongwenTools::Romanization - methods for converting between Chinese romanization systems.
+5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
 
 
 ### Using ZhongwenTools::String
@@ -56,6 +57,11 @@ ZhongwenTools includes the following Modules:
 
     ZhongwenTools::String.has_zh_punctuation? '你在哪里？'    #=> true
     ZhongwenTools::String.strip_zh_punctuation? '你在哪里？'  #=> '你在哪里'
+
+    require 'zhongwen_tools/conversion'
+    ZhongwenTools::String.zhs? '中国'    #=> true
+    ZhongwenTools::String.zht? '中国'    #=> false
+
 
 #### The following capitalization methods work for pinyin.
     require 'zhongwen_tools/string'
@@ -96,7 +102,10 @@ Monkey-patch your integers for Chinese.
 
 ### Romanization
 ZhongwenTools::Romanization has tools for converting between Chinese language romanization systems and
-scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools::Conversion). 
+scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools::Conversion). Romanization methods must be required explicitly.
+
+    gem 'zhongwen_tools'
+    require 'zhongwen_tools/romanization'
 
     class String
       include ZhongwenTools::Romanization
@@ -118,6 +127,21 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     str.pyn? #=> true
     str.wg?  #=> true #(There can be overlap between Wade-Giles and Pinyin)
 
+### Conversion
+Functions for converting between scripts (e.g. traditional Chinese to
+simplified Chinese) and [TODO] between chinese and romanization systems (e.g.
+Chinese to pinyin).
+Conversion methods must be required explicitly.
+
+    gem 'zhongwen_tools'
+    require 'zhongwen_tools/romanization'
+
+    ZhongwenTools::Conversion.to_zhs '華語' #=> '华语'
+    ZhongwenTools::Conversion.to_zht '华语' #=> '華語'
+    ZhongwenTools::Conversion.to_zhtw '方便面' #=> '泡麵'
+    ZhongwenTools::Conversion.to_zhhk '方便面' #=> '即食麵'
+    ZhongwenTools::Conversion.to_zhcn '即食麵' #=> '方便面'
+
+
 ## TODO
-1. A trad/simp script converter
-2. A character -> pinyin converter
+1. A character -> pinyin converter
