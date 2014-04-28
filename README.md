@@ -85,10 +85,10 @@ with multibyte strings in an simple way.
 ### Numbers
 Functions for converting to and from Chinese numbers.
 
-    ZhongwenTools::Numbers.number_zht 12000        #=> '一萬二千'
-    ZhongwenTools::Numbers.number_zhs 42           #=> '四十二'
-    ZhongwenTools::Numbers.number_to_pyn 42        #=> 'si4-shi2-er4'
-    ZhongwenTools::Numbers.number_to_int '四十二'  #=> 42
+    ZhongwenTools::Numbers.number_to_zht :num, 12000        #=> '一萬二千'
+    ZhongwenTools::Numbers.number_to_zhs :num, 42           #=> '四十二'
+    ZhongwenTools::Numbers.number_to_pyn :num, 42        #=> 'si4-shi2-er4'
+    ZhongwenTools::Numbers.zh_number_to_number '四十二'  #=> 42
     ZhongwenTools::Numbers.number? '四十二'        #=> true
 
 ### Integers
