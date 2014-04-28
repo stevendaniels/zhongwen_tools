@@ -85,11 +85,11 @@ with multibyte strings in an simple way.
 ### Numbers
 Functions for converting to and from Chinese numbers.
 
-    ZhongwenTools::Number.number_zht 12000        #=> '一萬二千'
-    ZhongwenTools::Number.number_zhs 42           #=> '四十二'
-    ZhongwenTools::Number.number_to_pyn 42        #=> 'si4-shi2-er4'
-    ZhongwenTools::Number.number_to_int '四十二'  #=> 42
-    ZhongwenTools::Number.number? '四十二'        #=> true
+    ZhongwenTools::Numbers.number_zht 12000        #=> '一萬二千'
+    ZhongwenTools::Numbers.number_zhs 42           #=> '四十二'
+    ZhongwenTools::Numbers.number_to_pyn 42        #=> 'si4-shi2-er4'
+    ZhongwenTools::Numbers.number_to_int '四十二'  #=> 42
+    ZhongwenTools::Numbers.number? '四十二'        #=> true
 
 ### Integers
 Monkey-patch your integers for Chinese.
@@ -135,7 +135,7 @@ Chinese to pinyin).
 Conversion methods must be required explicitly.
 
     gem 'zhongwen_tools'
-    require 'zhongwen_tools/romanization'
+    require 'zhongwen_tools/conversion'
 
     ZhongwenTools::Conversion.to_zhs '華語' #=> '华语'
     ZhongwenTools::Conversion.to_zht '华语' #=> '華語'
