@@ -37,13 +37,14 @@ module ZhongwenTools
     #   wg?('pin1-yin1')
     #   # => false
     # There are some situations where wg == pyn, but there's no way to differentiate the two.
-    def wg?(str = nil)
+    def wg?(str = nil, type = :pyn)
       #it shouldn't be pyn, but it should be able to conver to pyn
       str ||= self
       #easy ones.. is it py? pyn? zyfh? gyrm?
       #harder ones: is it typy, msp2, yale, wg
-      wg = str._convert_romanization(str, :wg, :pyn)
-
+      wg = ZhongwenTools::Romanization.to_wade_giles(str, type)
+      # TODO: need to convert string to pyn.
+      pyn = str
       wg != pyn && wg.gsub(/[1-5]/,'')
     end
   end

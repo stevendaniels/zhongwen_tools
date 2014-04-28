@@ -65,6 +65,8 @@ class TestRomanization < Minitest::Test
   def test_detect
     assert @str.pyn?
     refute @py.pyn?
+
+    assert 'chung1 kuo2'.wg?
   end
 
   def setup

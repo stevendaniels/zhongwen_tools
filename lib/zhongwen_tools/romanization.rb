@@ -5,6 +5,8 @@ require File.expand_path("../romanization/pyn_to_py", __FILE__)
 
 module ZhongwenTools
   module Romanization
+    extend self
+
     def to_pinyin(*args)
       str, from = _romanization_options(args)
 

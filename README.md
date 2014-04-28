@@ -15,13 +15,15 @@ Install as a gem
 
 Add the ZhongwenTools component you need to your classes as a module.
 
+    require 'zhongwen_tools/romanization'
+
     class String
       include ZhongwenTools::Romanization
     end
 
     str = "ni3 hao3"  #pinyin with numbers
     str.to_pinyin     #=> "nǐ hǎo"
-    str.to_zhuyinfuhao  #=>
+    str.to_zhuyin_fuhao  #=> "ㄋㄧ3 ㄏㄠ3"
 
     mzd = "Mao Tse-tung"
     mzd.to_pinyin   #=> "Mao Zedong"
@@ -37,7 +39,7 @@ ZhongwenTools includes the following Modules:
 2. ZhongwenTools::Numbers - methods for identifying Chinese numbers and for converting to and from Chinese.
 3. ZhongwenTools::Integer - methods for converting integers into Chinese or pinyin.
 4. ZhongwenTools::Romanization - methods for converting between Chinese romanization systems.
-5. ZhongwenTools::Conversion => functions for converting between Chinese scripts.
+5. ZhongwenTools::Conversion - methods for converting between Chinese scripts.
 
 
 ### Using ZhongwenTools::String
@@ -66,7 +68,7 @@ ZhongwenTools includes the following Modules:
 #### The following capitalization methods work for pinyin.
     require 'zhongwen_tools/string'
     ZhongwenTools::String.downcase 'Àomén'  #=> 'àomén' does pinyin/ lowercase
-    ZhongwenTools::String.upcase 'àomén'    #=> --> does pinyin uppercase
+    ZhongwenTools::String.upcase 'àomén'    #=> 'ÀOMÉN'
     ZhongwenTools::String.capitalize 'àomén'  #=> 'Àomén'
 
 #### Ruby 1.8 safe methods
@@ -83,11 +85,11 @@ with multibyte strings in an simple way.
 ### Numbers
 Functions for converting to and from Chinese numbers.
 
-    ZhongwenTools::Number.number_zht 12000        #=> '一萬二千'
-    ZhongwenTools::Number.number_zhs 42           #=> '四十二'
-    ZhongwenTools::Number.number_to_pyn 42        #=> 'si4-shi2-er4'
-    ZhongwenTools::Number.number_to_int '四十二'  #=> 42
-    ZhongwenTools::Number.number? '四十二'        #=> true
+    ZhongwenTools::Numbers.number_to_zht :num, 12000        #=> '一萬二千'
+    ZhongwenTools::Numbers.number_to_zhs :num, 42           #=> '四十二'
+    ZhongwenTools::Numbers.number_to_pyn :num, 42        #=> 'si4-shi2-er4'
+    ZhongwenTools::Numbers.zh_number_to_number '四十二'  #=> 42
+    ZhongwenTools::Numbers.number? '四十二'        #=> true
 
 ### Integers
 Monkey-patch your integers for Chinese.
@@ -113,7 +115,6 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
 
 
     str = "ni3 hao3"
-    romanization_system = "pyn" #pyn|wg|yale|bpmf|zhyfh|wade-giles|bopomofo
 
     str.to_pinyin     #=> "nǐ hǎo"
     str.to_py         #=> "nǐ hǎo"
@@ -129,12 +130,12 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
 
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
-simplified Chinese) and [TODO] between chinese and romanization systems (e.g.
+simplified Chinese) and [TODO] between Chinese and romanization systems (e.g.
 Chinese to pinyin).
 Conversion methods must be required explicitly.
 
     gem 'zhongwen_tools'
-    require 'zhongwen_tools/romanization'
+    require 'zhongwen_tools/conversion'
 
     ZhongwenTools::Conversion.to_zhs '華語' #=> '华语'
     ZhongwenTools::Conversion.to_zht '华语' #=> '華語'
