@@ -12,9 +12,14 @@ class TestNumbers < Minitest::Test
     #your function sucks dick man
     @numbers.each do |num|
       number = zh_number_to_number num[:zh]
-      binding.pry if num[:en] != number
       assert_equal num[:en], number
     end
+  end
+
+  def test_class_methods
+    i = rand @numbers.length
+    number = @numbers[i]
+    assert_equal number[:en], ZhongwenTools::Numbers.zh_number_to_number(number[:zh])
   end
 
   def test_convert_to_traditional_number

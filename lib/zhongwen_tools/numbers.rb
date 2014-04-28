@@ -1,6 +1,7 @@
 #encoding: utf-8
 module ZhongwenTools
   module Numbers
+    extend self
 
     NUMBER_MULTIPLES = '拾十百佰千仟仟万萬亿億'
 
