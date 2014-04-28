@@ -113,6 +113,7 @@ simplified Chinese.
 #### Romanization
 By requiring the romanization module ZhongwenTools::String gets some
 convenience methods for dealing with romanization.
+
     require 'zhongwen_tools/romanziation'
 
     ZhongwenTools::String.to_pinyin 'ni3 hao3'
@@ -121,6 +122,7 @@ convenience methods for dealing with romanization.
 
 #### Pinyin-safe String Methods
 The following capitalization methods work for pinyin.
+
     require 'zhongwen_tools/string'
 
     ZhongwenTools::String.downcase 'Àomén'
@@ -136,6 +138,7 @@ with multibyte strings in an simple, consistent fashion regardless of
 which ruby version you are using.
 
     require 'zhongwen_tools/string'
+
     ZhongwenTools::String.chars '中文'
     #=> ['中','文']
     ZhongwenTools::String.size '中文'
@@ -148,6 +151,8 @@ which ruby version you are using.
 
 ### Numbers
 Functions for converting to and from Chinese numbers.
+
+    require 'zhongwen_tools/numbers'
 
     ZhongwenTools::Numbers.number_to_zht :num, 12000
     #=> '一萬二千'
@@ -162,6 +167,8 @@ Functions for converting to and from Chinese numbers.
 
 ### Integers
 Monkey-patch your integers for Chinese.
+
+    require 'zhongwen_tools/ingteger'
 
     class Integer
       include ZhongwenTools::Integer
@@ -191,16 +198,18 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     #=> "nǐ hǎo"
     str.to_py
     #=> "nǐ hǎo"
-    str.to_pyn
-    #=> "ni3 hao3"
 
     str.to_wg
     #=> "ni3 hao3"    #Wade-Giles
+    
     str.to_bpmf
     #=> "ㄋㄧ3 ㄏㄠ3" #Zhuyin Fuhao, a.k.a. Bopomofo
+
     str.to_yale
     #=> "ni3 hau3"
+
     str.to_typy
+    #=> 'ni3 hao3'
 
     str.pyn?
     #=> true
