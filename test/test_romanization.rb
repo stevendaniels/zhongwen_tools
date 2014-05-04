@@ -21,10 +21,10 @@ class TestRomanization < Minitest::Test
     #assert_equal "Mao Zedong", mzd.to_pinyin(:wg)
   end
 
-  #def test_pyn
-    #skip
-    #assert_equal 'ni3 hao3', @py.to_pyn
-  #end
+  def test_pyn
+    assert_equal 'ni3 hao3', @py.to_pyn(:py)
+    assert_equal 'tian1an1men2', 'tian1an1men2'.to_py.to_pyn(:py)
+  end
 
   def test_zhuyin_fuhao
      assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_bpmf
@@ -64,9 +64,11 @@ class TestRomanization < Minitest::Test
 
   def test_detect
     assert @str.pyn?
+    assert " #{@str}".pyn?
     refute @py.pyn?
 
     assert 'chung1 kuo2'.wg?
+    assert @py.py?
   end
 
   def setup

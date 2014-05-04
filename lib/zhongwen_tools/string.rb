@@ -24,7 +24,12 @@ class String
     #sub only substitues the first occurence.
     self.sub(self.chars[0], self.chars[0].upcase)
   end
+
+  def scan_utf8(regex)
+    scan(regex)
+  end
 end
+
 
 module ZhongwenTools
   module String
