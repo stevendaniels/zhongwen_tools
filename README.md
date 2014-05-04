@@ -33,16 +33,16 @@ Add the ZhongwenTools component you need to your classes as a module.
       include ZhongwenTools::Romanization
     end
 
-    str = "ni3 hao3"  #pinyin with numbers
+    str = 'ni3 hao3'  #pinyin with numbers
     str.to_pinyin
-    #=> "nǐ hǎo"
+    #=> 'nǐ hǎo'
 
     str.to_zhuyin_fuhao
-    #=> "ㄋㄧ3 ㄏㄠ3"
+    #=> 'ㄋㄧ3 ㄏㄠ3'
 
-    mzd = "Mao Tse-tung"
+    mzd = 'Mao Tse-tung'
     mzd.to_pinyin
-    #=> "Mao Zedong"
+    #=> 'Mao Zedong'
 
 Or require the components you want.
 
@@ -117,7 +117,7 @@ convenience methods for dealing with romanization.
     require 'zhongwen_tools/romanziation'
 
     ZhongwenTools::String.to_pinyin 'ni3 hao3'
-    #=> "nǐ hǎo"
+    #=> 'nǐ hǎo'
 
 
 #### Pinyin-safe String Methods
@@ -192,21 +192,25 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     end
 
 
-    str = "ni3 hao3"
+    str = 'ni3 hao3'
+    py = 'nǐ hǎo'
 
     str.to_pinyin
-    #=> "nǐ hǎo"
+    #=> 'nǐ hǎo'
     str.to_py
-    #=> "nǐ hǎo"
+    #=> 'nǐ hǎo'
+
+    py.to_pyn
+    #=> 'ni3 hao3'
 
     str.to_wg
-    #=> "ni3 hao3"    #Wade-Giles
+    #=> 'ni3 hao3'    #Wade-Giles
     
     str.to_bpmf
-    #=> "ㄋㄧ3 ㄏㄠ3" #Zhuyin Fuhao, a.k.a. Bopomofo
+    #=> 'ㄋㄧ3 ㄏㄠ3' #Zhuyin Fuhao, a.k.a. Bopomofo
 
     str.to_yale
-    #=> "ni3 hau3"
+    #=> 'ni3 hau3'
 
     str.to_typy
     #=> 'ni3 hao3'
@@ -215,6 +219,8 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     #=> true
     str.wg?
     #=> true #(There can be overlap between Wade-Giles and Pinyin)
+    str.to_py.py? 
+    #=> true
 
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
