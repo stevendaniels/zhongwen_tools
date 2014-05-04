@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 require File.expand_path("../romanization/conversion_table", __FILE__)
 require File.expand_path("../romanization/detect", __FILE__)
 require File.expand_path("../romanization/pyn_to_py", __FILE__)
