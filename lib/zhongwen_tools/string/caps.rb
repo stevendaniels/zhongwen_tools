@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 module ZhongwenTools
   UNICODE_CAPS = {
     'Ā' => 'ā',
