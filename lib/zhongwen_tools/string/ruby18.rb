@@ -12,6 +12,12 @@ class String
   def reverse(str = nil)
     self.chars.reverse.join
   end
+
+  def gsub_with_hash(pattern, hash)
+    gsub(pattern) do |m|
+      hash[m]
+    end
+  end
 end
 
 module ZhongwenTools

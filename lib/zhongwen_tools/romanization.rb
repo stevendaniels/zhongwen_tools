@@ -34,6 +34,12 @@ module ZhongwenTools
       _convert_romanization str, :typy, from
     end
 
+    def to_pyn(*args)
+      # needs to guess what the romanization type is.
+      str, from = _romanization_options(args)
+      _convert_romanization str, :pyn, from
+    end
+
     private
 
     def _romanization_options(args)
@@ -69,9 +75,9 @@ module ZhongwenTools
       end.gsub("-'","-").sub(/^'/,'')
     end
 
-    #http://en.wikipedia.org/wiki/Pinyin
-    #http://talkbank.org/pinyin/Trad_chart_IPA.php
-    #for ipa
+    # http://en.wikipedia.org/wiki/Pinyin
+    # http://talkbank.org/pinyin/Trad_chart_IPA.php
+    # for ipa
     def _to_romanization str, to, from
       convert_to = _set_type to
       convert_from = _set_type from
@@ -126,6 +132,12 @@ module ZhongwenTools
           raise NotImplementedError, 'method not implemented'
         end
         _to_romanization(str, to, from).gsub('-','')
+      elsif to == :pyn
+        if from == :py
+         _convert_pinyin_to_pyn(str)
+        else
+          raise NotImplementedError, 'method not implemented'
+        end
       else
         if from == :pyn
           _to_romanization str, to, from
@@ -133,6 +145,36 @@ module ZhongwenTools
           raise NotImplementedError, 'method not implemented'
         end
       end
+    end
+
+    def _convert_pinyin_to_pyn(pinyin)
+      # TODO: should method check to make sure pinyin is accurate?
+      pyn = []
+      words =  pinyin.split(' ')
+
+      pyn = words.map do |word|
+        pys = word.split(/['\-]/).flatten.map{|x| x.scan(PY_REGEX).map{|x| (x - [nil])[0]}}.flatten
+        current_pyn = word
+
+        pys.each do |py|
+          #take the longest pinyin match.
+          match = ZhongwenTools::Romanization::PYN_PY.values.select do |x|
+            py.include? x
+          end.sort{|x,y| x.length <=> y.length}[-1]
+
+          # Edge case.. en/eng pyn -> py conversion is one way only.
+          match = match[/(ē|é|ě|è)n?g?/].nil? ? match : match.chars[0]
+
+          replace = ZhongwenTools::Romanization::PYN_PY.find{|k,v| k if v == match}[0]
+          p = py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
+
+          current_pyn = current_pyn.sub(py, p)
+        end
+
+        current_pyn.gsub("'",'')
+      end
+
+      pyn.join(' ')
     end
 
 
