@@ -222,6 +222,10 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
     str.to_py.py? 
     #=> true
 
+    #split pinyin with numbers accurately.
+    'dong1xi1'.split_pyn    # => ['dong1', 'xi1']
+    'dongxi'.split_pyn      # => ['dong', 'xi']
+
 ### Conversion
 Functions for converting between scripts (e.g. traditional Chinese to
 simplified Chinese) and [TODO] between Chinese and romanization systems (e.g.
