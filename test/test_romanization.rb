@@ -68,7 +68,7 @@ class TestRomanization < Minitest::Test
     refute @py.pyn?
 
     assert 'chung1 kuo2'.wg?
-    assert @py.py?
+    assert @py.py?, "#{@py} should be pinyin. (#{@py.py?})"
   end
 
   def test_split_pyn
