@@ -16,7 +16,7 @@ module ZhongwenTools
     def split_pyn(str = nil)
       str ||= self
 
-      str.scan(/(#{PINYIN_REGEX})/).map{ |arr| arr[0] }.flatten
+      str.scan(/(#{PINYIN_REGEX})/).map{ |arr| arr[0].strip }.flatten
     end
   end
 end
