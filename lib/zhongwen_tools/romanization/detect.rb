@@ -2,19 +2,19 @@
 module ZhongwenTools
   module Romanization
 
-    #TODO: these regexes don't deal with capital letters. Capitals will make it much more complicated.
     pyn_regexes = {
-      :bpm_regex => /(miu|[pm]ou|[bpm](o|e(i|ng?)?|a(ng?|i|o)?|i(e|ng?|a[no])?|u))/,
-      :f_regex => /(f(ou?|[ae](ng?|i)?|u))/,
-      :dt_regex => /(d(e(i|ng?)|i(a[on]?|u))|[dt](a(i|ng?|o)?|e(i|ng)?|i(a[on]?|e|ng|u)?|o(ng?|u)|u(o|i|an?|n)?))/,
-      :nl_regex => /(neng?|[ln](a(i|ng?|o)?|e(i|ng)?|i(ang|a[on]?|e|ng?|u)?|o(ng?|u)|u(o|i|an?|n)?|ve?))/,
-      :gkh_regex => /([ghk](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
-      :zczhch_regex => /(z[h]?ei|[cz]hua(i|ng?)?|[cz][h]?(a(i|ng?|o)?|en?g?|o(u|ng)?|u(a?n|o|i)?))/,
-      :ssh_regex => /(song|shua(i|ng?)?|shei|s[h]?(a(i|ng?|o)?|en?g?|ou|u(a?n|o|i)?))/,
-      :r_regex => /(r([ae]ng?|i|e|ao|ou|ong|u[oin]|ua?n?))/,
-      :jqx_regex => /([jqx](i(a(o|ng?)?|[eu]|ong|ng?)?|u(e|a?n)?))/,
-      :aw_regex => /(wu|w?(a(i|o|ng?)?|ou?|e(i|ng?)?))/,
-      :y_regex => /y(a(o|ng?)?|e|in?g?|o(u|ng)?|u(e|a?n)?)/
+      :bpm_regex => /([mM]iu|[pmPM]ou|[bpmBPM](o|e(i|ng?)?|a(ng?|i|o)?|i(e|ng?|a[no])?|u))/,
+      :f_regex => /([fF](ou?|[ae](ng?|i)?|u))/,
+      :dt_regex => /([dD](e(i|ng?)|i(a[on]?|u))|[dtDT](a(i|ng?|o)?|e(i|ng)?|i(a[on]?|e|ng|u)?|o(ng?|u)|u(o|i|an?|n)?))/,
+      :nl_regex => /([nN]eng?|[lnLN](a(i|ng?|o)?|e(i|ng)?|i(ang|a[on]?|e|ng?|u)?|o(ng?|u)|u(o|i|an?|n)?|ve?))/,
+      :gkh_regex => /([ghkGHK](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
+      :zczhch_regex => /([zZ][h]?ei|[czCZ]hua(i|ng?)?|[czCZ][h]?(a(i|ng?|o)?|en?g?|o(u|ng)?|u(a?n|o|i)?))/,
+      :ssh_regex => /([sS]ong|[sS]hua(i|ng?)?|[sS]hei|[sS][h]?(a(i|ng?|o)?|en?g?|ou|u(a?n|o|i)?))/,
+      :r_regex => /([rR]([ae]ng?|i|e|ao|ou|ong|u[oin]|ua?n?))/,
+      :jqx_regex => /([jqxJQX](i(a(o|ng?)?|[eu]|ong|ng?)?|u(e|a?n)?))/,
+      :aeo_regex => /(([aA](i|o|ng?)?|[oO]u?|[eE](i|ng?)?))/,
+      :w_regex => /([wW](a(i|ng?)?|o|e(i|ng?)?|u))/,
+      :y_regex => /[yY](a(o|ng?)?|e|in?g?|o(u|ng)?|u(e|a?n)?)/
     }
 
 
