@@ -78,6 +78,8 @@ class TestRomanization < Minitest::Test
     assert_equal 'zhong1guo2'.split_pyn, %w(zhong1 guo2)
     assert_equal 'dong1xi'.split_pyn, %w(dong1 xi)
     assert_equal 'zhongguo'.split_pyn, %w(zhong guo)
+    assert_equal 'dong1 xi1 '.split_pyn, %w(dong1 xi1)
+    assert_equal @mzd2.split_pyn, %w(Mao2 Ze2 dong1)
   end
 
   def setup
