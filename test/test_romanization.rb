@@ -24,6 +24,9 @@ class TestRomanization < Minitest::Test
   def test_pyn
     assert_equal 'ni3 hao3', @py.to_pyn(:py)
     assert_equal 'tian1an1men2', 'tian1an1men2'.to_py.to_pyn(:py)
+
+    #assert_equal 'Wūlúhānuòfū'.to_pyn, 'Wu1-lu2-ha1-nuo4-fu1'
+    #"007：Dàpò Liàngzǐ Wēijī", "007: Da4po4 Liang4zi3 Wei1ji1"
   end
 
   def test_zhuyin_fuhao
