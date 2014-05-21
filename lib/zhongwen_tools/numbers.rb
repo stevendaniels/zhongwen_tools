@@ -1,10 +1,13 @@
 #encoding: utf-8
+require File.expand_path("../regex", __FILE__)
+# TODO: more testing
 module ZhongwenTools
   module Numbers
     extend self
 
     NUMBER_MULTIPLES = '拾十百佰千仟仟万萬亿億'
-
+    # TODO: Add huge numbers.
+    # 垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
     NUMBERS_TABLE = [
       { :zhs => '零', :zht => '零', :num => 0, :pyn => 'ling2'},
       { :zhs => '〇', :zht => '〇', :num => 0, :pyn => 'ling2'},
@@ -35,15 +38,14 @@ module ZhongwenTools
       { :zhs => '廿', :zht => '廿', :num => 20, :pyn => ' nian4'},
       { :zhs => '百', :zht => '百', :num => 100, :pyn => 'bai2'},
       { :zhs => '佰', :zht => '佰', :num => 100, :pyn => 'bai2'},
-      { :zhs => '千', :zht => '千', :num => 1000, :pyn => 'qian2'},
-      { :zhs => '仟', :zht => '仟', :num => 1000, :pyn => 'qian2'},
-      { :zhs => '万', :zht => '萬', :num => 10000, :pyn => 'wan4'},
-      { :zhs => '亿', :zht => '億', :num => 100000000, :pyn => 'yi4'},
+      { :zhs => '千', :zht => '千', :num => 1_000, :pyn => 'qian2'},
+      { :zhs => '仟', :zht => '仟', :num => 1_000, :pyn => 'qian2'},
+      { :zhs => '万', :zht => '萬', :num => 10_000, :pyn => 'wan4'},
+      { :zhs => '亿', :zht => '億', :num => 100_000_000, :pyn => 'yi4'},
     ]
 
     def number? word
-      #垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
-      "#{word}".gsub(/([\d]|[一二三四五六七八九十百千萬万億亿]){2,}/,'') == ''
+      "#{word}".gsub(/([\d]|#{ZhongwenTools::Regex.zh_numbers}){2,}/,'') == ''
     end
 
     def zh_number_to_number(zh_number)
@@ -125,7 +127,7 @@ module ZhongwenTools
 
 
     def is_number_multiplier?(number)
-      [10,100,1000,10000,100000000].include? number
+      [10,100,1_000,10_000,100_000_000].include? number
     end
 
 
@@ -158,7 +160,7 @@ module ZhongwenTools
         else
           converted_number <<  _find_wan_level(i, to)
           #checks the wan level and ...
-          converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
+          converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
         end
       end
 
@@ -181,7 +183,7 @@ module ZhongwenTools
     private
 
     def _find_wan_level(i, to)
-      _find_number((10**(i)), to) || _find_number((10**(i) / 10000), to) || _find_number((10**(i) / 10000**2), to)
+      _find_number((10**(i)), to) || _find_number((10**(i) / 10_000), to) || _find_number((10**(i) / 10_000**2), to)
     end
 
     def _find_number(num, to)

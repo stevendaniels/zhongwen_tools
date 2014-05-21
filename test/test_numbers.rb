@@ -41,6 +41,10 @@ class TestNumbers < Minitest::Test
     pyn = self.number_to_pyn num
 
     assert_equal 'yi1-bai2-san1-shi2-liu4', pyn
+
+    num = '一千五百四十二'
+    pyn = self.number_to_pyn num
+    assert_equal 'yi1-qian2-wu3-bai2-si4-shi2-er4', pyn
   end
 
   def setup
