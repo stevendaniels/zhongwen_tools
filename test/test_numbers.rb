@@ -47,12 +47,20 @@ class TestNumbers < Minitest::Test
     assert_equal 'yi1-qian2-wu3-bai2-si4-shi2-er4', pyn
   end
 
+  def test_is_number
+    @numbers.map{ |n| n[:zh]}.each do |zh|
+     assert self.number? zh
+    end
+
+    assert self.number? '一'
+  end
+
   def setup
     @numbers = [
-      {:zh =>'一万两千七', :en => 12007},
-      {:zh => '三千六十三', :en => 3063},
+      {:zh =>'一万两千七', :en => 12_007},
+      {:zh => '三千六十三', :en => 3_063},
       {:zh => '一百五十', :en => 150 },
-      {:zh => '三千亿', :en => 300000000000},
+      {:zh => '三千亿', :en => 300_000_000_000},
       {:zh => '一九六六', :en => 1966},
       {:zh => '二零零八', :en => 2008},
     ]

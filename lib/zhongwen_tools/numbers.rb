@@ -45,7 +45,7 @@ module ZhongwenTools
     ]
 
     def number? word
-      "#{word}".gsub(/([\d]|#{ZhongwenTools::Regex.zh_numbers}){2,}/,'') == ''
+      "#{word}".gsub(/([\d]|#{ZhongwenTools::Regex.zh_numbers}){1,}/,'') == ''
     end
 
     def zh_number_to_number(zh_number)
