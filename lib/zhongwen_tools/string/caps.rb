@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 
 module ZhongwenTools
   UNICODE_CAPS = {
@@ -18,10 +18,10 @@ module ZhongwenTools
     'Ó' => 'ó',
     'Ǒ' => 'ǒ',
     'Ò' => 'ò',
-    'Ǖ' => 'ǖ',# using combining diatrical marks
-    'Ǘ' => 'ǘ',# using combining diatrical marks
-    'Ǚ' => 'ǚ',# using combining diatrical marks
-    'Ǜ' => 'ǜ',# using combining diatrical marks
+    'Ǖ' => 'ǖ', # using combining diatrical marks
+    'Ǘ' => 'ǘ', # using combining diatrical marks
+    'Ǚ' => 'ǚ', # using combining diatrical marks
+    'Ǜ' => 'ǜ', # using combining diatrical marks
     'Ū' => 'ū',
     'Ú' => 'ú',
     'Ǔ' => 'ǔ',

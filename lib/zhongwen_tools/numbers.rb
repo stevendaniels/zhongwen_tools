@@ -1,10 +1,13 @@
-#encoding: utf-8
+# encoding: utf-8
+require File.expand_path("../regex", __FILE__)
+# TODO: more testing
 module ZhongwenTools
   module Numbers
     extend self
 
     NUMBER_MULTIPLES = '拾十百佰千仟仟万萬亿億'
-
+    # TODO: Add huge numbers.
+    # 垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
     NUMBERS_TABLE = [
       { :zhs => '零', :zht => '零', :num => 0, :pyn => 'ling2'},
       { :zhs => '〇', :zht => '〇', :num => 0, :pyn => 'ling2'},
@@ -35,31 +38,31 @@ module ZhongwenTools
       { :zhs => '廿', :zht => '廿', :num => 20, :pyn => ' nian4'},
       { :zhs => '百', :zht => '百', :num => 100, :pyn => 'bai2'},
       { :zhs => '佰', :zht => '佰', :num => 100, :pyn => 'bai2'},
-      { :zhs => '千', :zht => '千', :num => 1000, :pyn => 'qian2'},
-      { :zhs => '仟', :zht => '仟', :num => 1000, :pyn => 'qian2'},
-      { :zhs => '万', :zht => '萬', :num => 10000, :pyn => 'wan4'},
-      { :zhs => '亿', :zht => '億', :num => 100000000, :pyn => 'yi4'},
+      { :zhs => '千', :zht => '千', :num => 1_000, :pyn => 'qian2'},
+      { :zhs => '仟', :zht => '仟', :num => 1_000, :pyn => 'qian2'},
+      { :zhs => '万', :zht => '萬', :num => 10_000, :pyn => 'wan4'},
+      { :zhs => '亿', :zht => '億', :num => 100_000_000, :pyn => 'yi4'},
     ]
 
     def number? word
-      #垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
-      "#{word}".gsub(/([\d]|[一二三四五六七八九十百千萬万億亿]){2,}/,'') == ''
+      "#{word}".gsub(/([\d]|#{ZhongwenTools::Regex.zh_numbers}){1,}/,'') == ''
     end
 
     def zh_number_to_number(zh_number)
       zh_number = zh_number.to_s
       numbers = convert_date(zh_number)
 
-      #if it's a year, or an oddly formatted number
+      # if it's a year, or an oddly formatted number
       return numbers.join('').to_i if zh_number[/[#{NUMBER_MULTIPLES}]/u].nil?
 
       convert_numbers numbers
     end
 
-    #these should also be able to convert numbers to chinese numbers
+    # these should also be able to convert numbers to chinese numbers
     def number_to_zhs type, number
       convert_number_to :zhs, type.to_sym, number
     end
+
     def number_to_zht type, number
       convert_number_to :zht, type.to_sym, number
     end
@@ -70,7 +73,7 @@ module ZhongwenTools
 
     private
     def convert_date(zh)
-      #if it's a year, or an oddly formatted number
+      # if it's a year, or an oddly formatted number
       zh_numbers = ZhongwenTools::String.chars zh
       numbers = [];
       i = 0
@@ -78,7 +81,7 @@ module ZhongwenTools
       while( i < zh_numbers.length)
         curr_number = zh_numbers[i]
 
-        #x[:num] == curr_number.to_i is a kludge; any string will == 0
+        # x[:num] == curr_number.to_i is a kludge; any string will == 0
         num = convert(curr_number)[:num]
         numbers << num
         i += 1
@@ -125,7 +128,7 @@ module ZhongwenTools
 
 
     def is_number_multiplier?(number)
-      [10,100,1000,10000,100000000].include? number
+      [10,100,1_000,10_000,100_000_000].include? number
     end
 
 
@@ -144,7 +147,7 @@ module ZhongwenTools
     end
 
     def convert_from_num number, to
-      #TODO: this will fail for numbers over 1 billion. grr.
+      # TODO: this will fail for numbers over 1 billion. grr.
       str = number.to_s
       len = str.length
       converted_number = []
@@ -157,8 +160,8 @@ module ZhongwenTools
           converted_number << _find_number(num, to) unless num == 0
         else
           converted_number <<  _find_wan_level(i, to)
-          #checks the wan level and ...
-          converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10000 ** wan) != 10) || num != 1
+          # checks the wan level and ...
+          converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
         end
       end
 
@@ -174,14 +177,14 @@ module ZhongwenTools
         converted_number = convert_from_zh number, to
       end
 
-      #liang rules are tough...
+      # FIXME: liang rules are tough...
       converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
     end
 
     private
 
     def _find_wan_level(i, to)
-      _find_number((10**(i)), to) || _find_number((10**(i) / 10000), to) || _find_number((10**(i) / 10000**2), to)
+      _find_number((10**(i)), to) || _find_number((10**(i) / 10_000), to) || _find_number((10**(i) / 10_000**2), to)
     end
 
     def _find_number(num, to)

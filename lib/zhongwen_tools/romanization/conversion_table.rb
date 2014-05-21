@@ -1,8 +1,8 @@
-#encoding: utf-8
+# encoding: utf-8
 module ZhongwenTools
   module Romanization
-
-ROMANANIZATIONS_TABLE = [{:zyfh =>  " ㄚ", :wg =>  "a", :mps2 =>  "a", :yale =>  "a", :typy =>  "a", :py =>  "a"},
+    # TODO: remove excess values, i.e. keys whose value == :py
+ROMANIZATIONS_TABLE = [{:zyfh =>  " ㄚ", :wg =>  "a", :mps2 =>  "a", :yale =>  "a", :typy =>  "a", :py =>  "a"},
 { :zyfh =>  "ㄞ", :wg =>  "ai", :mps2 =>  "ai", :yale =>  "ai", :typy =>  "ai", :py =>  "ai"},
 { :zyfh =>  "ㄢ", :wg =>  "an", :mps2 =>  "an", :yale =>  "an", :typy =>  "an", :py =>  "an"},
 { :zyfh =>  "ㄤ", :wg =>  "ang", :mps2 =>  "ang", :yale =>  "ang", :typy =>  "ang", :py =>  "ang"},

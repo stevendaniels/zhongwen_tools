@@ -67,6 +67,7 @@ module ZhongwenTools
     #
     #  Returns a string with actual pinyin
     def _to_pinyin str
+      # TODO: move regex to ZhongwenTools::Regex
       regex = /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
 
       # doing the substitution in a block is ~8x faster than using scan and each.
@@ -108,7 +109,7 @@ module ZhongwenTools
 
     def _replacement(token, from = nil)
       token = token.downcase.gsub(/[1-5].*/,'')
-      ROMANANIZATIONS_TABLE.find do |x|
+      ROMANIZATIONS_TABLE.find do |x|
         if from.nil?
           x.values.include?(token)
         else

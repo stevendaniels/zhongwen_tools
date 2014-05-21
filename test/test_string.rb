@@ -75,6 +75,7 @@ class TestString < Minitest::Test
     assert @str.has_zh?
     refute @hw.has_zh?
     refute @fw.has_zh?
+    refute 'zhong1-guo'.has_zh?
 
     assert ZhongwenTools::String.has_zh? @str
     refute ZhongwenTools::String.has_zh? @hw
