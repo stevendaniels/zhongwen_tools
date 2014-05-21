@@ -36,6 +36,7 @@ class TestRomanization < Minitest::Test
      assert_equal 'ㄇㄠ2 ㄗㄜ2 ㄉㄨㄥ1', @mzd.to_zhuyin_fuhao
      assert_equal 'ㄑㄧㄥ3 ㄏㄨㄟ2ㄉㄚ2 ㄨㄛ3 ㄉㄜ5 ㄨㄣ4ㄊㄧ2 .', @sent.to_zhuyin
      assert_equal 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', @mzd2.to_zhuyin_fuhao
+     assert 'ㄋㄧ3 ㄏㄠ3'.zyfh?
   end
 
   def test_wade_giles
@@ -51,11 +52,16 @@ class TestRomanization < Minitest::Test
     #assert_equal '', @str.to_mspy2
   #end
 
-  #def test_typy
+  def test_typy
     #skip
-    #assert_equal '', @str.to_typy
-    #assert_equal '', @str.to_tongyong
-  #end
+    pyn = 'chui1 niu3'
+    typy = 'chuei1 niou3'
+    assert_equal typy, pyn.to_typy
+    # FIXME: to_typy doesn't work with non-spaced pinyin.
+    #assert_equal typy, typy.to_pyn(:typy)
+    assert typy.typy?
+    refute pyn.typy?
+  end
 
   def test_yale
     assert_equal 'ni3 hau3', @str.to_yale

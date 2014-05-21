@@ -109,7 +109,7 @@ module ZhongwenTools
 
     def _replacement(token, from = nil)
       token = token.downcase.gsub(/[1-5].*/,'')
-      ROMANANIZATIONS_TABLE.find do |x|
+      ROMANIZATIONS_TABLE.find do |x|
         if from.nil?
           x.values.include?(token)
         else

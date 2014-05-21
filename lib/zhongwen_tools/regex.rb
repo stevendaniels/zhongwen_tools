@@ -44,6 +44,18 @@ module ZhongwenTools
       /[〇零一壹幺二贰貳两兩三弎叁參四肆䦉五伍六陆陸七柒八捌九玖十拾廿百佰千仟万萬亿億]/
     end
 
+    # Public: A Regex for bopomofo, a.k.a. Zhuyin Fuhao 注音符号.
+    #
+    # Examples
+    #
+    #
+    #   bopomofo #=> <Regex>
+    #
+    # Returns a Regex.
+    def bopomofo
+      /[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ]/
+    end
+
     private
     def pyn_regexes
       # http://stackoverflow.com/questions/20736291/regex-for-matching-pinyin
