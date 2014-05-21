@@ -132,22 +132,6 @@ The following capitalization methods work for pinyin.
     ZhongwenTools::String.capitalize 'àomén'
     #=> 'Àomén'
 
-#### Ruby 1.8 safe methods
-Zhongwen Tools is tested on every ruby since 1.8.7 and lets you deal
-with multibyte strings in an simple, consistent fashion regardless of
-which ruby version you are using.
-
-    require 'zhongwen_tools/string'
-
-    ZhongwenTools::String.chars '中文'
-    #=> ['中','文']
-    ZhongwenTools::String.size '中文'
-    #=> 2
-    ZhongwenTools::String.reverse '中文'
-    #=> '文中'
-    ZhongwenTools::String.to_utf8 '\x{D6D0}\x{CEC4}'
-    #=> '中文'
-
 
 ### Numbers
 Functions for converting to and from Chinese numbers.
