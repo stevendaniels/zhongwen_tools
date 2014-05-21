@@ -35,21 +35,26 @@ module ZhongwenTools
       str.gsub(ZhongwenTools::Regex.pyn, '').strip == ''
     end
 
-    # Public: checks if a string is wade-giles.
+    # Public: Checks if a string is wade-giles.
     #
     # Examples
     #   wg?('pin1-yin1')
     #   # => false
     # There are some situations where wg == pyn, but there's no way to differentiate the two.
     def wg?(str = nil, type = :pyn)
-      #it shouldn't be pyn, but it should be able to conver to pyn
+      # FIXME: it shouldn't be pyn, but it should be able to conver to pyn
+      #        Actually, wade-giles does sometimes overlap with pyn. So this
+      #        method creates false negatives. A future :romanization method
+      #        would default to pyn, but this method shouldn't.
+      #        Add tests where str.pyn? and str.wg?
+
       str ||= self
-      #easy ones.. is it py? pyn? zyfh? gyrm?
-      #harder ones: is it typy, msp2, yale, wg
       wg = ZhongwenTools::Romanization.to_wade_giles(str, type)
       # TODO: need to convert string to pyn.
       pyn = str
       wg != pyn && wg.gsub(/[1-5]/,'')
     end
+
+    # TODO: zyfh? typy? msp2? yale? wgyrm? romanization?
   end
 end

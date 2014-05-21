@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 require File.expand_path("../regex", __FILE__)
 # TODO: more testing
 module ZhongwenTools
@@ -52,16 +52,17 @@ module ZhongwenTools
       zh_number = zh_number.to_s
       numbers = convert_date(zh_number)
 
-      #if it's a year, or an oddly formatted number
+      # if it's a year, or an oddly formatted number
       return numbers.join('').to_i if zh_number[/[#{NUMBER_MULTIPLES}]/u].nil?
 
       convert_numbers numbers
     end
 
-    #these should also be able to convert numbers to chinese numbers
+    # these should also be able to convert numbers to chinese numbers
     def number_to_zhs type, number
       convert_number_to :zhs, type.to_sym, number
     end
+
     def number_to_zht type, number
       convert_number_to :zht, type.to_sym, number
     end
@@ -72,7 +73,7 @@ module ZhongwenTools
 
     private
     def convert_date(zh)
-      #if it's a year, or an oddly formatted number
+      # if it's a year, or an oddly formatted number
       zh_numbers = ZhongwenTools::String.chars zh
       numbers = [];
       i = 0
@@ -80,7 +81,7 @@ module ZhongwenTools
       while( i < zh_numbers.length)
         curr_number = zh_numbers[i]
 
-        #x[:num] == curr_number.to_i is a kludge; any string will == 0
+        # x[:num] == curr_number.to_i is a kludge; any string will == 0
         num = convert(curr_number)[:num]
         numbers << num
         i += 1
@@ -146,7 +147,7 @@ module ZhongwenTools
     end
 
     def convert_from_num number, to
-      #TODO: this will fail for numbers over 1 billion. grr.
+      # TODO: this will fail for numbers over 1 billion. grr.
       str = number.to_s
       len = str.length
       converted_number = []
@@ -159,7 +160,7 @@ module ZhongwenTools
           converted_number << _find_number(num, to) unless num == 0
         else
           converted_number <<  _find_wan_level(i, to)
-          #checks the wan level and ...
+          # checks the wan level and ...
           converted_number <<  _find_number(num, to) if (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
         end
       end
@@ -176,7 +177,7 @@ module ZhongwenTools
         converted_number = convert_from_zh number, to
       end
 
-      #liang rules are tough...
+      # FIXME: liang rules are tough...
       converted_number.join(separator).gsub(/零[#{NUMBER_MULTIPLES}]/u,'')#.gsub(/二([百佰千仟仟万萬亿億])/){"#{NUMBERS_TABLE.find{|x|x[:pyn] == 'liang3'}[to]}#{$1}"}
     end
 

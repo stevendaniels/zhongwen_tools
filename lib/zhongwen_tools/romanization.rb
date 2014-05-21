@@ -67,6 +67,7 @@ module ZhongwenTools
     #
     #  Returns a string with actual pinyin
     def _to_pinyin str
+      # TODO: move regex to ZhongwenTools::Regex
       regex = /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
 
       # doing the substitution in a block is ~8x faster than using scan and each.

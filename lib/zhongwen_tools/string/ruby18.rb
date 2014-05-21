@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 
 class String
   define_method(:chars) do
@@ -22,8 +22,10 @@ end
 
 module ZhongwenTools
   module String
+    # TODO: replace deprecated constant UNICODE_REGEX.
+  end
     def to_utf8(encoding = nil, encodings = nil)
-      #should substitute out known bad actors like space
+      # FIXME: should substitute out known bad actors like space
       encodings = ['utf-8', 'GB18030', 'BIG5', 'GBK', 'GB2312'] if encodings.nil?
       encodings = encoding + encodings unless encoding.nil?
       raise 'Unable to Convert' if encodings.size == 0
@@ -49,7 +51,7 @@ module ZhongwenTools
         :zh => self.convert_regex(UNICODE_REGEX[:zh]),
         :punc => self.convert_regex(UNICODE_REGEX[:punc])
       }
-      #str.scan(/#{regex[:zh]}|#{regex[:punc]}|\s/).join == str
+      # str.scan(/#{regex[:zh]}|#{regex[:punc]}|\s/).join == str
       !self.fullwidth?(str) && (!str[regex[:zh]].nil? || !str[regex[:punc]].nil?)
     end
 
@@ -86,7 +88,7 @@ module ZhongwenTools
 
       matches.each do |match|
         replacement = FW_HW[match]
-        str = str.gsub(match, replacement) #unless str.nil?
+        str = str.gsub(match, replacement)
       end
 
       str

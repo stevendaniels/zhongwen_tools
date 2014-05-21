@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 
 module ZhongwenTools
 
@@ -19,7 +19,6 @@ module ZhongwenTools
 
     def to_zhtw(str = nil)
       str ||= self
-
 
       convert(:zhtw, str)
     end
@@ -48,17 +47,18 @@ module ZhongwenTools
 
     private
     # Conversion data and algorithm shamelessly stolen from chinese_convt gem.
+    # ( https://github.com/xxxooo/chinese_convt )
+    #
     # There are two differences:
     #   + Zhongwen Tools loads the conversion data into memory and
-    #     chinese_convt reads the file every time. As a result, 
+    #     chinese_convt reads the file every time it converts. As a result,
     #     Zhongwen Tools is  ~12X faster.
     #   + Zhongwen Tools uses Ruby's nifty str[/regex/] = replacement
     #     instead of indices. Conversion tests using indices fail with Ruby 1.8.
-    # ( https://github.com/xxxooo/chinese_convt )
     def load_table
       filename = File.expand_path('../conversion/conversion_data', __FILE__)
       File.open(filename).read.split("\n&\n").each do |group|
-      ZH_CONVERSION_TABLE << group.split("\n").map do |type|
+        ZH_CONVERSION_TABLE << group.split("\n").map do |type|
           Hash[ type.split(',').map{ |term| term.split(':') } ]
         end
       end

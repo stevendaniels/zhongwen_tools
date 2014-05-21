@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 module ZhongwenTools
   module Romanization
 # TODO: remove excess values, i.e. keys whose value == :py
