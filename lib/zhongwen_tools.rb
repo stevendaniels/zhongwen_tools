@@ -1,9 +1,7 @@
 # encoding: utf-8
-require File.expand_path("../zhongwen_tools/string", __FILE__)
-require File.expand_path("../zhongwen_tools/numbers", __FILE__)
-require File.expand_path("../zhongwen_tools/version", __FILE__)
-#require File.expand_path("../zhongwen_tools/romanization", __FILE__)
-#require File.expand_path("../zhongwen_tools/conversion", __FILE__)
+require 'zhongwen_tools/string'
+require 'zhongwen_tools/numbers'
+require 'zhongwen_tools/version'
 
 module ZhongwenTools
 end

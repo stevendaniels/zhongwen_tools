@@ -1,5 +1,5 @@
 # encoding: utf-8
-require File.expand_path("../../regex", __FILE__)
+require 'zhongwen_tools/regex'
 
 module ZhongwenTools
   module Romanization
@@ -10,6 +10,7 @@ module ZhongwenTools
     PINYIN_REGEX = ZhongwenTools::Regex.pyn
 
     # Public: checks if a string is pinyin.
+    #         http://en.wikipedia.org/wiki/Pinyin
     #
     # Examples
     #   py?('nǐ hǎo')
@@ -36,6 +37,7 @@ module ZhongwenTools
     end
 
     # Public: Checks if a string is wade-giles.
+    #         http://en.wikipedia.org/wiki/Wade%E2%80%93Giles
     #
     # Examples
     #   wg?('pin1-yin1')
@@ -58,6 +60,8 @@ module ZhongwenTools
     end
 
     # Public: Checks if a String is Zhuyin Fuhao (a.k.a. bopomofo).
+    #         http://en.wikipedia.org/wiki/Bopomofo
+    #         http://pinyin.info/romanization/bopomofo/index.html
     #
     # str - a String. Optional if the object calling the method is a String.
     #

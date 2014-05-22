@@ -1,5 +1,6 @@
 # encoding: utf-8
-require File.expand_path("../regex", __FILE__)
+require 'zhongwen_tools/regex'
+
 # TODO: more testing
 module ZhongwenTools
   module Numbers

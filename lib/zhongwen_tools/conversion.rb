@@ -95,4 +95,4 @@ module ZhongwenTools
   end
 end
 
-require File.expand_path("../conversion/string", __FILE__)
+require 'zhongwen_tools/conversion/string'
