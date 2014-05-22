@@ -67,9 +67,11 @@ class TestRomanization < Minitest::Test
     assert_equal 'ni3 hau3', @str.to_yale
   end
 
-  #def test_romanization?
-    #skip
-  #end
+  def test_romanization?
+    assert_equal :pyn, @alabo[:pyn].romanization?
+    assert_equal :py, @alabo[:py].romanization?
+    assert_equal :wg, @mzd.to_wg(:pyn).romanization?
+  end
 
   def test_detect
     assert @str.pyn?
@@ -81,6 +83,11 @@ class TestRomanization < Minitest::Test
     # Travis CI is having trouble with this using Ruby 1.8.7, but it works locally.
     # I'll probably end up dropping full 1.8.7 support.
     assert @py.py?, "#{@py} should be pinyin. (#{@py.py?})" unless RUBY_VERSION < '1.9'
+
+    #TODO yale test
+    #zhyfh detect
+    #typy detect
+    #msp2 detect
   end
 
   def test_split_pyn
@@ -92,6 +99,9 @@ class TestRomanization < Minitest::Test
   end
 
   def setup
+    @romanizations = [
+      { :pyn => '', :py => '', :bopomofo => '', :yale => '', :typy => '', :wg => '', :ipa => ''}
+    ]
     @str = 'ni3 hao3'
     @mzd = 'Mao2 Ze2 dong1'
     @mzd2 = 'Mao2 Ze2-dong1'

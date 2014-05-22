@@ -10,6 +10,8 @@ module ZhongwenTools
 
     def py
       # NOTE: might not need / want the space on the end.
+      # FIXME: need to detect Ālābó
+      # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
       /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub_with_hash(/[aeiouv]/,py_tones)}.join('|')}(\s\-))/
     end
 
@@ -85,7 +87,6 @@ module ZhongwenTools
         'o' => '[ōóǒòo]',
         'u' => '[ūúǔùu]',
         'v' => '[ǖǘǚǜü]'
-        #([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
       }
     end
   end
