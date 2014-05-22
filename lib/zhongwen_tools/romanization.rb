@@ -1,9 +1,16 @@
 # encoding: utf-8
+require 'zhongwen_tools/string'
 require 'zhongwen_tools/romanization/conversion_table'
 require 'zhongwen_tools/romanization/detect'
 require 'zhongwen_tools/romanization/string'
 require 'zhongwen_tools/romanization/pyn_to_py'
 
+# TODO: follow tone conventions for different systems.
+#       IPA	mä˥˥	mä˧˥	mä˨˩˦	mä˥˩	mä
+#       Pinyin	mā	má	mǎ	mà	ma
+#       Tongyong Pinyin	ma	má	mǎ	mà	må
+#       Wade–Giles	ma¹	ma²	ma³	ma⁴	ma⁰
+#       Zhuyin	ㄇㄚ	ㄇㄚˊ	ㄇㄚˇ	ㄇㄚˋ	•ㄇㄚ
 module ZhongwenTools
   module Romanization
     extend self
@@ -121,32 +128,30 @@ module ZhongwenTools
     def _convert_romanization str, to, from
       return str if to == from
 
-      if to == :py
-        if from == :pyn
+      result =
+        if to == :py
+          raise NotImplementedError, 'method not implemented' if from != :pyn
+          # convert to pyn first.
+          # TODO: test :zyfh -> py
+          # str = _to_romanization str, to, :pyn if from != :pyn
           _to_pinyin str
+
+        elsif to == :pyn
+          if from == :py
+            _convert_pinyin_to_pyn(str)
+          else
+            raise NotImplementedError, 'method not implemented'
+            # _to_romanization str, to, :pyn
+          end
         else
-          raise NotImplementedError, 'method not implemented'
-          #convert to pyn first.
-        end
-      elsif to == :zyfh
-        if from == :py
-          #need to convert pinyin to pyn
-          raise NotImplementedError, 'method not implemented'
-        end
-        _to_romanization(str, to, from).gsub('-','')
-      elsif to == :pyn
-        if from == :py
-         _convert_pinyin_to_pyn(str)
-        else
-          raise NotImplementedError, 'method not implemented'
-        end
-      else
-        if from == :pyn
+          raise NotImplementedError, 'method not implemented' if from != :pyn
+          # str = _to_romanization str, to, :pyn if from != :pyn
           _to_romanization str, to, from
-        else
-          raise NotImplementedError, 'method not implemented'
         end
-      end
+
+      # TODO: check to see if wade giles, yale etc. can have hyphens.
+      result = result.gsub('-','') if to == :zyfh
+      result
     end
 
     def _convert_pinyin_to_pyn(pinyin)
@@ -155,62 +160,59 @@ module ZhongwenTools
       words =  pinyin.split(' ')
 
       pyn = words.map do |word|
-        pys = word.split(/['\-]/).flatten.map{|x| x.scan(PY_REGEX).map{|x| (x - [nil])[0]}}.flatten
-        current_pyn = word
-
-        pys.each do |py|
-          #take the longest pinyin match.
-          match = ZhongwenTools::Romanization::PYN_PY.values.select do |x|
-            py.include? x
-          end.sort{|x,y| x.length <=> y.length}[-1]
-
-          # Edge case.. en/eng pyn -> py conversion is one way only.
-          match = match[/(ē|é|ě|è)n?g?/].nil? ? match : match.chars[0]
-
-          replace = ZhongwenTools::Romanization::PYN_PY.find{|k,v| k if v == match}[0]
-          p = py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
-
-          current_pyn = current_pyn.sub(py, p)
-        end
-
-        current_pyn.gsub("'",'')
+        pys = word.split(/['\-]/).flatten.map{|x| x.scan(Regex.py).map{|x| (x - [nil])[0]}}.flatten
+        _current_pyn(word, pys)
       end
 
       pyn.join(' ')
     end
 
+    def _current_pyn(pyn, pinyin_arr)
+      pinyin_arr.each do |pinyin|
+        pyn = pyn.sub(pinyin, pinyin_replacement(pinyin))
+      end
+
+      pyn.gsub("'",'')
+    end
+
+    def pinyin_replacement(py)
+      #take the longest pinyin match.
+      match = PYN_PY.values.select do |x|
+        py.include? x
+      end.sort{|x,y| x.length <=> y.length}[-1]
+
+      # Edge case.. en/eng pyn -> py conversion is one way only.
+      match = match[/(ē|é|ě|è)n?g?/].nil? ? match : match.chars[0]
+
+      replace = PYN_PY.find{|k,v| k if v == match}[0]
+
+      py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
+    end
+
 
     def _set_type(type)
       type = type.to_s.downcase.to_sym
+      return type if [:zyfh, :wg, :typy, :py, :msp2, :yale].include? type
+
       case type
       when :zhuyinfuhao
         :zyfh
       when :bopomofo
         :zyfh
       when :bpmf
-        type = :zyfh
+        :zyfh
       when :zhyfh
-        type = :zyfh
-      when :zyfh
         :zyfh
       when 'wade-giles'.to_sym
-        type = :wg
-      when :yale
-        :yale
+        :wg
       when :tongyong
-        type = :typy
-      when :wg
-        type = :wg
-      when :typy
         :typy
       when :ty
-        type = :typy
+        :typy
       when :pyn
         :py
       when :pinyin
-        type = :py
-      when :py
-        type = :py
+        :py
       when :msp2
         :msp2
       else
