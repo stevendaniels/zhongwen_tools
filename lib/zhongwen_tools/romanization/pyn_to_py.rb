@@ -160,7 +160,8 @@ module ZhongwenTools
       'ng2' => "éng",
       'ng3' => "ěng",
       'ng4' => "èng",
-      'ng5' => 'eng'
+      'ng5' => 'eng',
+      'r5' => 'r'
     }
   end
 end

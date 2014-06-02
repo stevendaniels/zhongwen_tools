@@ -1,5 +1,5 @@
 # encoding: utf-8
-require File.expand_path("../numbers", __FILE__)
+require 'zhongwen_tools/numbers'
 
 module ZhongwenTools
   module Integer

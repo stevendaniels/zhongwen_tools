@@ -1,9 +1,9 @@
 # encoding: utf-8
 #$:.unshift File.join(File.dirname(__FILE__),'..','lib','zhongwen_tools', 'string')
 require 'uri'
-require File.expand_path("../regex", __FILE__)
-require File.expand_path("../string/fullwidth", __FILE__)
-require File.expand_path("../string/caps", __FILE__)
+require 'zhongwen_tools/regex'
+require 'zhongwen_tools/string/fullwidth'
+require 'zhongwen_tools/string/caps'
 
 class String
   alias_method :_downcase, :downcase

@@ -4,13 +4,13 @@ module ZhongwenTools
     extend self
 
     def pyn
-      # NOTE: might not need / want the space on the end.
-      /(#{pyn_regexes.values.join('|')})([1-5])?([\s\-]+)?/
+      /(#{pyn_regexes.values.join('|')}|r)([1-5])?([\s\-]+)?/
     end
 
     def py
-      # NOTE: might not need / want the space on the end.
-      /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub_with_hash(/[aeiouv]/,py_tones)}.join('|')}(\s\-))/
+      # FIXME: need to detect Ālābó
+      # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
+      /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub_with_hash(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
     end
 
     def fullwidth
@@ -85,7 +85,6 @@ module ZhongwenTools
         'o' => '[ōóǒòo]',
         'u' => '[ūúǔùu]',
         'v' => '[ǖǘǚǜü]'
-        #([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
       }
     end
   end

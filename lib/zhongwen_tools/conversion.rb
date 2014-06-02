@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'zhongwen_tools/string'
 
 module ZhongwenTools
 
@@ -68,31 +69,33 @@ module ZhongwenTools
 
     def convert(type, str)
       load_table if ZH_CONVERSION_TABLE.length == 0
-      arr = ZH_TYPES[type] || ZH_TYPES[:zht]
+      types = ZH_TYPES[type] || ZH_TYPES[:zht]
 
       begin
-        str0 = str.dup
-        str1 = str.dup
         str_len = ZhongwenTools::String.size(str)
-        n = ( str_len < 6)? str_len : 6
-        ZH_CONVERSION_TABLE.last(n).each do |group|
-          arr.each do |t|
-            group[t].each do |key , value|
-              while !! q = str0.index( key )
-                str0[/#{key}/] = "#" * value.size
-                str1[/#{key}/] = value
-              end
-            end
-          end
-        end
-
-        str1
+        n = (str_len < 6)? str_len : 6
+        convert_zhongwen(str.dup, str.dup, types, n)
 
       rescue
         "[#{$!}]"
       end
     end
+
+    def convert_zhongwen(str0, str1, types, n)
+      ZH_CONVERSION_TABLE.last(n).each do |group|
+        types.each do |t|
+          group[t].each do |key , value|
+            until str0.index(key).nil?
+              str0[/#{key}/] = "#" * value.size
+              str1[/#{key}/] = value
+            end
+          end
+        end
+      end
+
+      str1
+    end
   end
 end
 
-require File.expand_path("../conversion/string", __FILE__)
+require 'zhongwen_tools/conversion/string'
