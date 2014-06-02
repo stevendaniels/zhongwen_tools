@@ -189,7 +189,7 @@ scripts. It **does not convert Chinese characters to pinyin** (see ZhongwenTools
 
     str.to_wg
     #=> 'ni3 hao3'    #Wade-Giles
-    
+
     str.to_bpmf
     #=> 'ㄋㄧ3 ㄏㄠ3' #Zhuyin Fuhao, a.k.a. Bopomofo
 

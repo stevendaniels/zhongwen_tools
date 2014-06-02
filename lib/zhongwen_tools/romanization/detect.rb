@@ -22,7 +22,7 @@ module ZhongwenTools
       str ||= self
 
       # NOTE: py regex does not include capitals with tones.
-      String.downcase(str).gsub(Regex.py, '').strip == ''
+      String.downcase(str).gsub(Regex.punc,'').gsub(Regex.py, '').gsub(/[\s\-]/,'').strip == ''
     end
 
     # Public: checks if a string is pinyin.
@@ -35,7 +35,7 @@ module ZhongwenTools
     def pyn?(str = nil)
       str ||= self
 
-      str.gsub(Regex.pyn, '').strip == ''
+      str.gsub(Regex.punc,'').gsub(Regex.pyn, '').gsub(/[\s\-]/,'').strip == ''
     end
 
     # Public: Checks if a String is Zhuyin Fuhao (a.k.a. bopomofo).
@@ -46,14 +46,14 @@ module ZhongwenTools
     #
     # Examples
     #
-    #   zyfh?('ㄊㄥ')
+    #   bpmf?('ㄊㄥ')
     #   # => true
     #
     # Returns a boolean.
-    def zyfh?(str = nil)
+    def bpmf?(str = nil)
       str ||= self
 
-      bopomofo = str.gsub(/[1-5\s]/,'')
+      bopomofo = str.gsub(/[1-5\s]/,'').gsub(Regex.punc,'')
       bopomofo.scan(Regex.bopomofo).join == bopomofo
     end
 
@@ -72,16 +72,34 @@ module ZhongwenTools
     #   wg?('Mao2 Tse2 Tung1')
     #
     # Returns a boolean.
-    %w(typy wg yale msp2).each do |type|
+    %w(typy wg yale mps2).each do |type|
       define_method("#{type}?") do |str = nil|
         str ||= self
         # TODO: ignore tonal marks from other systems wade giles, tongyong etc.
-        s = str.downcase.gsub(/[1-5\s\-']/,'')
+        s = str.downcase.gsub(Regex.punc,'').gsub(/[1-5\s\-']/,'')
 
         s.scan(detect_regex(type.to_sym)).join == s
       end
     end
 
+    # Public: Checks the srings romanizaiton. It always assumes the first correct result is the correct result.
+    #         This can sometimes provide sub-optimal results
+    #         e.g.
+    #           'chuei niou'.romanization? #=> :pyn
+    #           'chuei niou'.pyn? == true # this is correct because ['chu', 'ei', 'ni', 'ou'] are all valid pinyin
+    #                                     # but the best fit for 'chuei niou' should be :typy.
+    #         But this is not considered a major issue because most of the time pyn / py will be used. It could be
+    #         extended to try and figure out the best option, maybe by comparing the syllable length of each
+    #         valid romanization.
+    #
+    # str - a String. Optional if the object calling the method is a String.
+    #
+    # Examples
+    #
+    #
+    #   'hao3'.romanization? #=> :pyn
+    #
+    # Returns a Symbol for the romanization type.
     def romanization?(str = nil)
       str ||= self
 
@@ -90,8 +108,23 @@ module ZhongwenTools
       end
     end
 
+    # TODO: romanizations? method that returns all possible romanizations.
+
+    # Deprecated: ZhongwenTools::Romanizaiton.zyfh? is deprecated. Use ZhongwenTools::Romanizaiton.bpmf? instead
+    alias_method :zyfh?, :bpmf?
+
     private
 
+    # Internal: Produces a Regexp for a romanization type.
+    #
+    # type - a Symbol for the romanization type.
+    #
+    # Examples:
+    #
+    #
+    #   detect_regex(:typy) #=> <Regexp>
+    #
+    # Returns a Regexp.
     def detect_regex(type)
       /#{ROMANIZATIONS_TABLE.map{ |r| r[type] || r[:pyn] }.sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
     end

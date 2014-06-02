@@ -14,7 +14,7 @@ module ZhongwenTools
   module Romanization
     extend self
 
-    %w(pinyin py pyn bopomofo bpmf zhuyin zhyfh zhuyin_fuhao yale wade_giles wg typy tongyong).each do |type|
+    %w(pinyin py pyn bopomofo bpmf zhuyin zyfh zhyfh zhuyin_fuhao yale wade_giles wg typy tongyong mps2).each do |type|
       define_method("to_#{type}") do |*args|
         str, from = _romanization_options(args)
         _convert_romanization str, _set_type(type.to_sym), _set_type(from)
@@ -23,16 +23,30 @@ module ZhongwenTools
 
     private
 
+    # Private: Provides romanization options for romanization methods. If no :from argument is given, then
+    #          the method will try to guess the romanization. This can sometimes provide sub-optimal
+    #          romanization suggestions. See lib/zhongwen_tools/romanization/detect.rb#romanization? for details.
+    #
+    # args - an Array of arguments. If the Object is a String, then the first argument should be the :from option.
+    #        Otherwise, the first argument is a String and the second argument is the :from option.
+    #
+    # Examples:
+    #
+    #
+    #   _romanization_options('hao3', :pyn) #=> 'hao3' :pyn
+    #   _romanization_options('hao3') #=> 'hao3', :pyn
+    #
+    # Returns an Array. The first item is a String to be converted. The second item is a Symbol for the :from option.
     def _romanization_options(args)
       if self.class.to_s != 'String'
         str = args[0]
-        from = (args[1] || :pyn).to_sym
+        from = args[1] || str.romanization? || :pyn
       else
         str = self
-        from = (args[0] || :pyn).to_sym
+        from = args[0] || str.romanization? || :pyn
       end
 
-      [str, from]
+      [str, from.to_sym]
     end
 
     #  Private: Replaces numbered pinyin with actual pinyin. Pinyin separated with hyphens are combined as one word.
@@ -117,13 +131,10 @@ module ZhongwenTools
           if from == :py
             _convert_pinyin_to_pyn(str)
           else
-            raise NotImplementedError, 'method not implemented'
-            # _to_romanization str, to, :pyn
+             _to_romanization str, :pyn, from
           end
         else
-          raise NotImplementedError, 'method not implemented' if from != :pyn
-          # str = _to_romanization str, to, :pyn if from != :pyn
-          #binding.pry
+           str = _to_romanization str, to, :pyn if from != :pyn
           _to_romanization str, to, from
         end
 
@@ -170,7 +181,7 @@ module ZhongwenTools
 
     def _set_type(type)
       type = type.to_s.downcase.to_sym
-      return type if [:zyfh, :wg, :typy, :py, :msp2, :yale, :pyn].include? type
+      return type if [:zyfh, :wg, :typy, :py, :mps2, :yale, :pyn].include? type
 
       if [:zhuyinfuhao, :zhuyin, :zhuyin_fuhao, :bopomofo, :bpmf, :zhyfh].include? type
         :zyfh
