@@ -149,6 +149,7 @@ module ZhongwenTools
       words =  pinyin.split(' ')
 
       pyn = words.map do |word|
+        #binding.pry if word == "Wǒmen"
         pys = word.split(/['\-]/).flatten.map{|x| x.scan(Regex.py).map{|x| (x - [nil])[0]}}.flatten
         _current_pyn(word, pys)
       end
@@ -170,8 +171,9 @@ module ZhongwenTools
         py.include? x
       end.sort{|x,y| x.length <=> y.length}[-1]
 
+      #binding.pry
       # Edge case.. en/eng pyn -> py conversion is one way only.
-      match = match[/(ē|é|ě|è)n?g?/].nil? ? match : match.chars[0]
+      match = match[/(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
 
       replace = PYN_PY.find{|k,v| k if v == match}[0]
 

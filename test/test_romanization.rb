@@ -40,6 +40,8 @@ class TestRomanization < Minitest::Test
     assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn(:yale)
     assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn
 
+
+    assert_equal 'Wo3men5', "Wǒmen".to_pyn(:py)
     #assert_equal 'Wu1-lu2-ha1-nuo4-fu1', 'Wūlúhānuòfū'.to_pyn(:py)
     #"007：Dàpò Liàngzǐ Wēijī", "007: Da4po4 Liang4zi3 Wei1ji1"
   end
