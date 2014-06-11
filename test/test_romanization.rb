@@ -22,6 +22,18 @@ class TestRomanization < Minitest::Test
     assert @alabo[:py].py?
     assert 'Ā-lā-bó'.py?
     assert 'Zhong1 wen2'.to_pinyin.py?
+
+    @romanizations.each do |rom|
+      rom.each do |type, entry|
+        if type == :bopomofo
+        assert_equal rom[:py].downcase, entry.to_pinyin(type).downcase, "to_pinyin(#{type}) should convert to pinyin." 
+        assert_equal rom[:py].downcase, entry.to_pinyin.downcase, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly"
+        else
+        assert_equal rom[:py], entry.to_pinyin(type), "to_pinyin(#{type}) should convert to pinyin." 
+        assert_equal rom[:py], entry.to_pinyin, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly" unless type == :typy
+        end
+      end
+    end
   end
 
   def test_pyn
@@ -42,6 +54,9 @@ class TestRomanization < Minitest::Test
 
 
     assert_equal 'Wo3men5', "Wǒmen".to_pyn(:py)
+    assert_equal 'hao3xue2', 'hǎoxué'.to_pyn(:py)
+    assert_equal 'tai4re4', 'tàirè'.to_pyn(:py)
+    assert_equal 'tai4tai5', "tàitai".to_pyn(:py)
     #assert_equal 'Wu1-lu2-ha1-nuo4-fu1', 'Wūlúhānuòfū'.to_pyn(:py)
     #"007：Dàpò Liàngzǐ Wēijī", "007: Da4po4 Liang4zi3 Wei1ji1"
   end
@@ -122,10 +137,12 @@ class TestRomanization < Minitest::Test
     @romanizations = [
       # FIXME: bopomofo, tongyong pinyin, wade-giles tones are all wrong.
       # TODO: test IPA
-      { :pyn => 'ni3 hao', :py => 'nǐ hǎo', :bopomofo => 'ㄋㄧ3 ㄏㄠ3', :yale => 'ni3 hau3', :typy => 'ni3 hao3', :wg => 'ni3 hao3'},#, :ipa => ''}
-      { :pyn => 'zhong1 guo2', :py => 'nǐ hǎo', :bopomofo => 'ㄋㄧ3 ㄏㄠ3', :yale => 'ni3 hau3', :typy => 'ni3 hao3', :wg => 'chung1 kuo2'},#, :ipa => ''}
-      { :pyn => 'chui1 niu3', :py => '', :bopomofo => '', :yale => 'chwei1 nyou3', :typy => 'chuei1 niou3', :wg => 'chung1 kuo2'},#, :ipa => ''}
+      { :pyn => 'ni3 hao3', :py => 'nǐ hǎo', :bopomofo => 'ㄋㄧ3 ㄏㄠ3', :yale => 'ni3 hau3', :typy => 'ni3 hao3', :wg => 'ni3 hao3'},#, :ipa => ''}
+      { :pyn => 'Zhong1guo2', :py => 'Zhōngguó', :bopomofo => 'ㄓㄨㄥ1ㄍㄨㄛ2', :yale => 'Jung1gwo2', :typy => 'Jhong1guo2', :wg => 'Chung1kuo2'},#, :ipa => ''}
+      { :pyn => 'chui1 niu3', :py => "chuī niǔ", :bopomofo =>  "ㄔㄨㄟ1 ㄋㄧㄡ3", :yale => "chwei1 nyou3", :typy => "chuei1 niou3", :wg => "ch`ui1 niu3"},#, :ipa => ''}
+      { :pyn => 'Mao2 Ze2-dong1', :py => 'Máo Zédōng', :bopomofo => 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', :yale => 'Mau2 Dze2-dung1', :typy => 'Mao2 Ze2-dong1', :wg => 'Mao2 Tse2-tung1'},#, :ipa => ''}
     ]
+
     @str = 'ni3 hao3'
     @mzd = 'Mao2 Ze2 dong1'
     @mzd2 = 'Mao2 Ze2-dong1'

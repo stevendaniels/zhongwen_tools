@@ -75,14 +75,16 @@ module ZhongwenTools
       end.gsub("-'","-").sub(/^'/,'')
     end
 
-    # http://en.wikipedia.org/wiki/Pinyin
-    # http://talkbank.org/pinyin/Trad_chart_IPA.php
-    # for ipa
     def _to_romanization str, to, from
       convert_to = _set_type to
       convert_from = _set_type from
 
-      tokens = str.split(/[ \-]/).uniq
+      begin
+        tokens = self.send("split_#{from}").uniq
+      rescue
+        tokens = str.split(/[ \-]/).uniq
+      end
+
       tokens.collect do |t|
         search = t.gsub(/[1-5].*/,'')
 
@@ -121,20 +123,15 @@ module ZhongwenTools
 
       result =
         if to == :py
-          raise NotImplementedError, 'method not implemented' if from != :pyn
-          # convert to pyn first.
-          # TODO: test :zyfh -> py
-          # str = _to_romanization str, to, :pyn if from != :pyn
+          str = _to_romanization str, :pyn, from if from != :pyn
           _to_pinyin str
-
         elsif to == :pyn
           if from == :py
             _convert_pinyin_to_pyn(str)
           else
-             _to_romanization str, :pyn, from
+            _to_romanization str, :pyn, from
           end
         else
-           str = _to_romanization str, to, :pyn if from != :pyn
           _to_romanization str, to, from
         end
 
@@ -149,7 +146,6 @@ module ZhongwenTools
       words =  pinyin.split(' ')
 
       pyn = words.map do |word|
-        #binding.pry if word == "Wǒmen"
         pys = word.split(/['\-]/).flatten.map{|x| x.scan(Regex.py).map{|x| (x - [nil])[0]}}.flatten
         _current_pyn(word, pys)
       end
@@ -158,22 +154,27 @@ module ZhongwenTools
     end
 
     def _current_pyn(pyn, pinyin_arr)
+      replacements = []
       pinyin_arr.each do |pinyin|
-        pyn = pyn.sub(pinyin, pinyin_replacement(pinyin))
+        replace =  pinyin_replacement(pinyin)
+        match = pinyin
+        pyn = pyn.sub(/(#{replacements.join('.*')}.*)#{match}/){ $1 + replace}
+        replacements << replace
       end
 
       pyn.gsub("'",'')
     end
 
     def pinyin_replacement(py)
-      #take the longest pinyin match.
-      match = PYN_PY.values.select do |x|
+      matches = PYN_PY.values.select do |x|
         py.include? x
-      end.sort{|x,y| x.length <=> y.length}[-1]
+      end
 
-      #binding.pry
+      # take the longest pinyin match. Use bytes because 'è' is prefered over 'n' or 'r' or 'm'
+      match = matches.sort{|x,y| x.bytes.length <=> y.bytes.length}[-1]
+
       # Edge case.. en/eng pyn -> py conversion is one way only.
-      match = match[/(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
+      match = match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
 
       replace = PYN_PY.find{|k,v| k if v == match}[0]
 
