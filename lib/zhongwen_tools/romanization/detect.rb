@@ -126,7 +126,7 @@ module ZhongwenTools
     #
     # Returns a Regexp.
     def detect_regex(type)
-      /#{ROMANIZATIONS_TABLE.map{ |r| r[type] || r[:pyn] }.sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
+      /#{ROMANIZATIONS_TABLE.map{ |r| "[#{r[type][0]}#{r[type][0].upcase}]#{r[type][1..-1]}" || r[:pyn] }.flatten.sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
     end
   end
 end

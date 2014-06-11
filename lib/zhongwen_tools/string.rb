@@ -24,7 +24,8 @@ class String
 
   def capitalize
     #sub only substitues the first occurence.
-    self.sub(self.chars[0], self.chars[0].upcase)
+    c = self.chars[0]
+    self.sub(c, c.upcase) unless c.nil?
   end
 
   def scan_utf8(regex)
