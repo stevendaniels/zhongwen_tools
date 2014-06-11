@@ -171,7 +171,7 @@ module ZhongwenTools
       end
 
       # take the longest pinyin match. Use bytes because 'è' is prefered over 'n' or 'r' or 'm'
-      match = matches.sort{|x,y| x.bytes.length <=> y.bytes.length}[-1]
+      match = matches.sort{|x,y| x.bytes.to_a.length <=> y.bytes.to_a.length}[-1]
 
       # Edge case.. en/eng pyn -> py conversion is one way only.
       match = match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
