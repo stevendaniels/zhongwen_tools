@@ -75,9 +75,6 @@ module ZhongwenTools
       end.gsub("-'","-").sub(/^'/,'')
     end
 
-    # http://en.wikipedia.org/wiki/Pinyin
-    # http://talkbank.org/pinyin/Trad_chart_IPA.php
-    # for ipa
     def _to_romanization str, to, from
       convert_to = _set_type to
       convert_from = _set_type from

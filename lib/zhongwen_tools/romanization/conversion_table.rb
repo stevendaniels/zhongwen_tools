@@ -2,6 +2,8 @@
 module ZhongwenTools
   module Romanization
     # TODO: remove excess values, i.e. keys whose value == :pyn
+    # TODO: http://en.wikipedia.org/wiki/Jyutping
+    # TODO: http://en.wikipedia.org/wiki/Simplified_Wade
 ROMANIZATIONS_TABLE = [{:zyfh =>  " ㄚ", :wg =>  "a", :mps2 =>  "a", :yale =>  "a", :typy =>  "a", :pyn =>  "a"},
 { :zyfh =>  "ㄞ", :wg =>  "ai", :mps2 =>  "ai", :yale =>  "ai", :typy =>  "ai", :pyn =>  "ai"},
 { :zyfh =>  "ㄢ", :wg =>  "an", :mps2 =>  "an", :yale =>  "an", :typy =>  "an", :pyn =>  "an"},
