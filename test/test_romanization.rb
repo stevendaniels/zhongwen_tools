@@ -71,6 +71,19 @@ class TestRomanization < Minitest::Test
      assert 'ㄋㄧ3 ㄏㄠ3'.zyfh?
 
      assert_equal 'ㄋㄧ3 ㄏㄠ3', 'ni3 hau3'.to_bpmf(:yale)
+
+     t = :bopomofo
+    @romanizations.each do |rom|
+      rom.each do |type, entry|
+        #if type == :bopomofo
+        assert_equal rom[t].downcase, entry.send("to_#{t}", type).downcase, "to_#{t}(#{type}) should convert to #{t}." 
+        assert_equal rom[t].downcase, entry.send("to_#{t}").downcase, "to_#{t}(#{type}) should convert to #{t}, but it isn't detected properly"
+        #else
+        #assert_equal rom[:t], entry.to_pinyin(type), "to_pinyin(#{type}) should convert to pinyin." 
+        #assert_equal rom[:t], entry.to_pinyin, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly" unless type == :typy
+        #end
+      end
+    end
   end
 
   def test_wade_giles

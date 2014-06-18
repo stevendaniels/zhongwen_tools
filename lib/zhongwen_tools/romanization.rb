@@ -61,9 +61,7 @@ module ZhongwenTools
     #
     #  Returns a string with actual pinyin
     def _to_pinyin str
-      # TODO: move regex to ZhongwenTools::Regex
-      regex = /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
-
+      regex = Regex.pinyin_num
       # Using gsub is ~8x faster than using scan and each.
       # Explanation: if it's pinyin without vowels, e.g. m, ng, then convert,
       #              otherwise, check if it needs an apostrophe (http://www.pinyin.info/romanization/hanyu/apostrophes.html).
@@ -76,29 +74,29 @@ module ZhongwenTools
     end
 
     def _to_romanization str, to, from
-      convert_to = _set_type to
-      convert_from = _set_type from
-
+      # NOTE: extract/refactor tokens cause tests to fail.
       begin
-        tokens = self.send("split_#{from}").uniq
+        tokens = str.send("split_#{from}").uniq
       rescue
         tokens = str.split(/[ \-]/).uniq
       end
 
       tokens.collect do |t|
-        search = t.gsub(/[1-5].*/,'')
-
-        if from.nil?
-          replace = (_replacement(t) || {}).fetch(to){search}
-        else
-          replace = (_replacement(t, from) || {}).fetch(to){search}
-        end
-
-        replace = _fix_capitalization(str, t, replace)
+        search, replace = _token_search_replace(t, str, to, from)
         str =  str.gsub(search, replace)
       end
 
       str
+    end
+
+    def _token_search_replace(token, str, to, from)
+      search = token.gsub(/[1-5].*/,'')
+
+      replace = _replacement(token, from).fetch(to){ search }
+      replace = _fix_capitalization(str, token, replace)
+
+
+      [search, replace]
     end
 
     def _fix_capitalization(str, token, replace)
@@ -109,13 +107,15 @@ module ZhongwenTools
 
     def _replacement(token, from = nil)
       token = token.downcase.gsub(/[1-5].*/,'')
-      ROMANIZATIONS_TABLE.find do |x|
+      result = ROMANIZATIONS_TABLE.find do |x|
         if from.nil?
           x.values.include?(token)
         else
           x[from] == token
         end
       end
+
+      result || {}
     end
 
     def _convert_romanization str, to, from
@@ -132,6 +132,10 @@ module ZhongwenTools
             _to_romanization str, :pyn, from
           end
         else
+          if from == :py
+            str = _convert_pinyin_to_pyn(str) 
+            from = :pyn
+          end
           _to_romanization str, to, from
         end
 
@@ -142,7 +146,6 @@ module ZhongwenTools
 
     def _convert_pinyin_to_pyn(pinyin)
       # TODO: should method check to make sure pinyin is accurate?
-      pyn = []
       words =  pinyin.split(' ')
 
       pyn = words.map do |word|
@@ -169,16 +172,18 @@ module ZhongwenTools
       matches = PYN_PY.values.select do |x|
         py.include? x
       end
+      match = select_pinyin_match(matches)
+      replace = PYN_PY.find{|k,v| k if v == match}[0]
 
+      py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
+    end
+
+    def select_pinyin_match(matches)
       # take the longest pinyin match. Use bytes because 'è' is prefered over 'n' or 'r' or 'm'
       match = matches.sort{|x,y| x.bytes.to_a.length <=> y.bytes.to_a.length}[-1]
 
       # Edge case.. en/eng pyn -> py conversion is one way only.
-      match = match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
-
-      replace = PYN_PY.find{|k,v| k if v == match}[0]
-
-      py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
+      match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
     end
 
 

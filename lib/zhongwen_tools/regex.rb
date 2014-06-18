@@ -13,6 +13,10 @@ module ZhongwenTools
       /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub_with_hash(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
     end
 
+    def pinyin_num
+      /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
+    end
+
     def fullwidth
       /[０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞]/
     end

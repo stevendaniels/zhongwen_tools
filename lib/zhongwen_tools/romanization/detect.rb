@@ -103,7 +103,7 @@ module ZhongwenTools
     def romanization?(str = nil)
       str ||= self
 
-      [:pyn, :py, :zyfh, :wg, :typy, :yale, :msp2].find do |type|
+      [:pyn, :py, :zyfh, :wg, :typy, :yale, :mps2].find do |type|
         self.send("#{type}?", str)
       end
     end
@@ -126,7 +126,11 @@ module ZhongwenTools
     #
     # Returns a Regexp.
     def detect_regex(type)
-      /#{ROMANIZATIONS_TABLE.map{ |r| "[#{r[type][0]}#{r[type][0].upcase}]#{r[type][1..-1]}" || r[:pyn] }.flatten.sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
+      /#{regex_values(type).sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
+    end
+
+    def regex_values(type)
+      ROMANIZATIONS_TABLE.map{ |r| "[#{r[type][0]}#{r[type][0].upcase}]#{r[type][1..-1]}" || r[:pyn] }.flatten
     end
   end
 end
