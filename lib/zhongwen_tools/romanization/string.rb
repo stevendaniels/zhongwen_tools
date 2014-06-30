@@ -15,7 +15,6 @@ module ZhongwenTools
     # Returns an Array of Strings.
     def split_pyn(str = nil)
       str ||= self
-      puts "WARNING: string is not valid pinyin-num format. #{str}" unless str.pyn?
       # FIXME: ignore punctuation
       str.scan(/(#{Regex.pyn})/).map{ |arr| arr[0].strip.gsub('-','') }.flatten
     end

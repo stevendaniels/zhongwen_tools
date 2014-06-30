@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'zhongwen_tools/regex'
+require 'zhongwen_tools/romanization/string'
 
 module ZhongwenTools
   module Romanization
@@ -104,7 +105,7 @@ module ZhongwenTools
       str ||= self
 
       [:pyn, :py, :zyfh, :wg, :typy, :yale, :mps2].find do |type|
-        self.send("#{type}?", str)
+        send("#{type}?", str)
       end
     end
 
