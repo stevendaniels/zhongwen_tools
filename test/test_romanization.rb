@@ -121,12 +121,14 @@ class TestRomanization < Minitest::Test
   def test_romanization?
     assert_equal :pyn, @alabo[:pyn].romanization?
     assert_equal :py, @alabo[:py].romanization?
+    assert_equal :zyfh, 'ㄋㄧ3 ㄏㄠ3'.romanization?
     assert_equal :wg, @mzd.to_wg(:pyn).romanization?
   end
 
   def test_detect
     assert @str.pyn?
     assert " #{@str}".pyn?
+    refute 'Ardanz'.pyn?
     refute @py.pyn?
 
     assert 'chung1 kuo2'.wg?

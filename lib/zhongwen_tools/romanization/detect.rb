@@ -36,7 +36,11 @@ module ZhongwenTools
     def pyn?(str = nil)
       str ||= self
 
-      str.gsub(Regex.punc,'').gsub(Regex.pyn, '').gsub(/[\s\-]/,'').strip == ''
+      normalized_str = str.gsub(Regex.punc,'').gsub(/[\s\-]/,'').downcase
+      parts = split_pyn(normalized_str).map{ |p| p }
+      pyns = ROMANIZATIONS_TABLE.map{ |r| r[:pyn] }
+
+      parts.join('') == normalized_str && parts.size == parts.select{ |p| pyns.include? p.gsub(/[1-5]/,'') }.size
     end
 
     # Public: Checks if a String is Zhuyin Fuhao (a.k.a. bopomofo).
