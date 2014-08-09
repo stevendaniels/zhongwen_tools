@@ -12,17 +12,9 @@ rescue LoadError
 end
 
 gem 'minitest'
+gem 'minitest-reporters'
+
 require 'minitest/autorun'
-#require 'test/unit'
+require "minitest/reporters"
 
-if RUBY_VERSION < '1.9'
-  class Minitest::Test
-    def refute(statement, message = '')
-      assert !statement, message
-    end
-
-    def skip
-      return
-    end
-  end
-end
+Minitest::Reporters.use!  [Minitest::Reporters::SpecReporter.new]

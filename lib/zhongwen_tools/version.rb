@@ -1,3 +1,3 @@
 module ZhongwenTools
-  VERSION = '0.12.4'
+  VERSION = '0.15.0'
 end

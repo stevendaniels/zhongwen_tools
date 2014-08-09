@@ -1,7 +1,24 @@
 # encoding: utf-8
 
 module ZhongwenTools
-  UNICODE_CAPS = {
+  module Caps
+
+  def self.downcase(str)
+    regex = /(#{ZhongwenTools::Caps::CAPS.keys.join('|')})/
+    str.gsub(regex, ZhongwenTools::Caps::CAPS).downcase
+  end
+
+  def self.upcase(str)
+    str.gsub(/(#{ZhongwenTools::Caps::CAPS.values.join('|')})/){
+      ZhongwenTools::Caps::CAPS.find{|k,v| v == $1}[0]
+    }.upcase
+  end
+
+  def self.capitalize(str)
+    str.sub(str[0], ZhongwenTools::Caps.upcase(str[0]))
+  end
+
+  CAPS = {
     'Ā' => 'ā',
     'Á' => 'á',
     'Ǎ' => 'ǎ',
@@ -53,4 +70,5 @@ module ZhongwenTools
     "Ｙ" => "ｙ",
     "Ｚ" => "ｚ"
   }
+  end
 end

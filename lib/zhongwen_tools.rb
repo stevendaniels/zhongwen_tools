@@ -1,7 +1,6 @@
 # encoding: utf-8
-require 'zhongwen_tools/string'
-require 'zhongwen_tools/numbers'
-require 'zhongwen_tools/version'
+require 'zhongwen_tools/script'
+require 'zhongwen_tools/core'
 
 module ZhongwenTools
 end

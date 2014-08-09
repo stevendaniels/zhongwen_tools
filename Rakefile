@@ -1,4 +1,3 @@
-require 'rubygems' if RUBY_VERSION < '1.9'
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 Bundler.require :test
