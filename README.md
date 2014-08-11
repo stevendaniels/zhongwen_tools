@@ -115,10 +115,11 @@ You can also monkey patch the Integer class!
 
 You can also use refinements, to refine the string or integer class.
 
+    # some_class.rb
     require 'zhongwen_tools'
+    using ZhongwenTools
 
     class SomeClass
-      using ZhongwenTools
 
       def hi
         '你们好'.to_zht

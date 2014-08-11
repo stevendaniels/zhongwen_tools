@@ -1,17 +1,17 @@
-# encoding: utf-8
+  # encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require './test/test_helper'
 require 'zhongwen_tools'
 
+if RUBY_VERSION < '2.0.0'
+  String.send(:include, ZhongwenTools::StringExtension)
+else
+  using ZhongwenTools
+  puts 'using zhongwen_tools'
+end
 
 class TestStringExtention < Minitest::Test
-  if RUBY_VERSION < '2.0.0'
-    String.send(:include, ZhongwenTools::StringExtension)
-  else
-    using ZhongwenTools
-  end
-
   def setup
     @caps = { u: 'ĀLĀBÓ', d: 'ālābó', c: 'Ālābó' }
     @fw = { hw: 'hello',fw: 'ｈeｌｌｏ', mixed: 'hellｏ' }

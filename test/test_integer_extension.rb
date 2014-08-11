@@ -3,13 +3,14 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require './test/test_helper'
 require 'zhongwen_tools/integer_extension'
-class TestIntegerExtention < Minitest::Test
-  if RUBY_VERSION < '2.0.0'
-    Integer.send(:include, ZhongwenTools::IntegerExtension)
-  else
-    using ZhongwenTools
-  end
 
+if RUBY_VERSION < '2.0.0'
+  Integer.send(:include, ZhongwenTools::IntegerExtension)
+else
+  using ZhongwenTools
+end
+
+class TestIntegerExtention < Minitest::Test
   def test_to_zh
     assert_equal @yi[:zhs], @yi[:i].to_zh(:zhs)
     assert_equal @yi[:zht], @yi[:i].to_zh(:zht)
