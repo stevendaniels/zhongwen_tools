@@ -1,51 +1,68 @@
 # encoding: utf-8
+
 module ZhongwenTools
   module Regex
-    extend self
-
-    def pyn
-      /(#{pyn_regexes.values.join('|')}|r)([1-5])?([\s\-]+)?/
+    def self.pyn
+      /(#{pyn_regexes.values.join('|')}|r)([1-5])([\s\-]+)?/
     end
 
-    def py
+    def self.py
       # FIXME: need to detect Ālābó
       # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
-      /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub_with_hash(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
+      /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
     end
 
-    def pinyin_num
+    def self.pinyin_num
       /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
     end
 
-    def fullwidth
+    def self.pinyin_toneless
+      /(#{pyn_regexes.values.join('|')}|r)([\s\-]+)?/
+    end
+
+    def self.fullwidth
       /[０-９Ａ-Ｚａ-ｚ％．：＃＄＆＋－／＼＝；＜＞]/
     end
 
-    def capital_letters
-      /(#{Regexp.union(ZhongwenTools::UNICODE_CAPS.keys)})/
+    def self.capital_letters
+      /(#{Regexp.union(ZhongwenTools::Caps::CAPS.keys)})/
     end
 
-    def lowercase_letters
-      /(#{Regexp.union(ZhongwenTools::UNICODE_CAPS.values)})/
+    def self.lowercase_letters
+      /(#{Regexp.union(ZhongwenTools::Caps::CAPS.values)})/
     end
 
-    def zh
+    def self.zh
       /[\u2E80-\u2E99]|[\u2E9B-\u2EF3]|[\u2F00-\u2FD5]|[\u3005|\u3007]|[\u3021-\u3029]|[\u3038-\u303B]|[\u3400-\u4DB5]|[\u4E00-\u9FCC]|[\uF900-\uFA6D]|[\uFA70-\uFAD9]/
     end
 
-    def punc
+    def self.punc
       /[\u0021-\u0023]|[\u0025-\u002A]|[\u002C-\u002F]|[\u003A\u003B\u003F\u0040]|[\u005B-\u005D\u005F\u007B\u007D\u00A1\u00A7\u00AB\u00B6\u00B7\u00BB\u00BF\u037E\u0387]/
     end
 
-    def zh_punc
+    def self.zh_punc
       # TODO: includes non-zh punctuation codes. Should only include punctuation in CJK ranges.
       /[\u2E00-\u2E2E]|[\u2E30-\u2E3B]|[\u3001-\u3003]|[\u3008-\u3011]|[\u3014-\u301F]|[\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF]|[\uA60D-\uA60F]|[\uA673\uA67E]|[\uA6F2-\uA6F7]|[\uA874-\uA877]|[\uA8CE\uA8CF]|[\uA8F8-\uA8FA]|[\uA92E\uA92F\uA95F]|[\uA9C1-\uA9CD]|[\uA9DE\uA9DF]|[\uAA5C-\uAA5F]|[\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F]|[\uFE10-\uFE19]|[\uFE30-\uFE52]|[\uFE54-\uFE61]|[\uFE63\uFE68\uFE6A\uFE6B]|[\uFF01-\uFF03]|[\uFF05-\uFF0A]|[\uFF0C-\uFF0F]|[\uFF1A\uFF1B\uFF1F\uFF20]|[\uFF3B-\uFF3D]|[\uFF3F\uFF5B\uFF5D]|[\uFF5F-\uFF65]/
     end
 
-    def zh_numbers
+    def self.zh_numbers
       # TODO: include numbers like yotta, etc.
       # 垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
-      /[〇零一壹幺二贰貳两兩三弎叁參四肆䦉五伍六陆陸七柒八捌九玖十拾廿百佰千仟万萬亿億]/
+      # Regional: Dong Guai
+      /[〇零一壹幺二贰貳两兩三弎叁參仨四肆䦉五伍六陆陸七柒八捌九玖十拾廿卅百佰千仟万萬亿億]/
+    end
+
+    def self.zhs_numbers
+      # TODO: check if 佰,仟 are the financial numbers in zhs
+      /[〇零一壹幺二贰两三弎叁仨四肆䦉五伍六陆七柒八捌九玖十拾廿卅百佰千仟万亿]/
+    end
+
+    def self.zht_numbers
+      /[〇零一壹幺二貳兩三弎參仨四肆䦉五伍六陸七柒八捌九玖十拾廿卅佰千仟萬億]/
+    end
+
+    def self.zh_number_multiple
+      /[拾十百佰千仟仟万萬亿億]/
     end
 
     # Public: A Regex for bopomofo, a.k.a. Zhuyin Fuhao 注音符号.
@@ -56,12 +73,13 @@ module ZhongwenTools
     #   bopomofo #=> <Regex>
     #
     # Returns a Regex.
-    def bopomofo
+    def self.bopomofo
       /[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ]/
     end
 
     private
-    def pyn_regexes
+
+    def self.pyn_regexes
       # http://stackoverflow.com/questions/20736291/regex-for-matching-pinyin
       # https://www.debuggex.com/r/_9kbxA6f00gIGiVo
       # NOTE: you might need to change the order of these regexes for more accurate matching of some pinyin.
@@ -81,7 +99,7 @@ module ZhongwenTools
       }
     end
 
-    def py_tones
+    def self.py_tones
       py_tones = {
         'a' => '[āáǎàa]',
         'e' => '[ēéěèe]',
@@ -93,5 +111,3 @@ module ZhongwenTools
     end
   end
 end
-
-require File.expand_path("../regex/ruby18", __FILE__) if RUBY_VERSION < '1.9'

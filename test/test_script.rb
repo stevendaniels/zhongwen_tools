@@ -1,16 +1,10 @@
-#encoding: utf-8
+# encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require './test/test_helper'
-require 'zhongwen_tools/conversion'
-class String
-  include ZhongwenTools::Conversion
-  include ZhongwenTools::String
-end
-
-class TestConversion < Minitest::Test
-
+class TestScript < Minitest::Test
   def setup
+    load 'zhongwen_tools/script.rb'
     @strings = [
       {
         :zhs => '干部一干人等干事不干不净',
@@ -48,76 +42,79 @@ class TestConversion < Minitest::Test
         :zhcn => '旧金山台球冠军是笑星'
       }
     ]
-
   end
 
   def test_to_zht
     type = :zht
-    @strings.each do |zh_hash|
-      zh_hash.each do |k, str|
-        assert_equal zh_hash[type], ZhongwenTools::Conversion.to_zht(str) , k unless [:zhcn, :zhhk, :zhtw].include? k
-      end
+    @strings.each do |hash|
+      result = ZhongwenTools::Script.to_zht(hash[:zhs], type)
+      message = "#{ hash[type] } should equal #{ result }"
+      assert_equal hash[type],result, message
     end
   end
 
   def test_to_zhs
     type = :zhs
-    @strings.each do |zh_hash|
-      zh_hash.each do |k, str|
-        assert_equal zh_hash[type], str.to_zhs , k unless [:zhcn, :zhhk, :zhtw].include? k
-      end
+    @strings.each do |hash|
+      result = ZhongwenTools::Script.to_zhs(hash[:zht], type)
+      message = "#{ hash[type] } should equal #{ result }"
+      assert_equal hash[type], result, message
     end
 
   end
 
   def test_to_zhtw
     type = :zhtw
-    @strings.each do |zh_hash|
-      zh_hash.each do |k, str|
-        assert_equal zh_hash[type], str.to_zhtw , k unless [:zht].include? k
+    @strings.each do |hash|
+      hash.each do |k, str|
+        result = ZhongwenTools::Script.to_zht(str, type)
+        message = "#{ hash[type] } should equal #{ result }"
+        assert_equal hash[type], result, message unless [:zht].include? k
       end
     end
-
   end
 
   def test_to_zhhk
     type = :zhhk
 
-    #can only convert tw to hk
-    @strings.each do |zh_hash|
-      zh_hash.each do |k, str|
-        assert_equal zh_hash[type], ZhongwenTools::Conversion.to_zhhk(str) , k unless [:zht, :zhcn].include? k
+    # NOTE: Can only convert tw to hk
+    @strings.each do |hash|
+      hash.each do |k, str|
+        result = ZhongwenTools::Script.to_zht(str, type)
+        message = "#{ hash[type] } should equal #{ result }"
+        assert_equal hash[type], result, message unless [:zht, :zhcn].include? k
       end
     end
   end
 
   def test_to_zhcn
     type = :zhcn
-    @strings.each do |zh_hash|
-      zh_hash.each do |k, str|
-        assert_equal zh_hash[type], ZhongwenTools::Conversion.to_zhcn(str) , k unless [:zhs ].include? k
+    @strings.each do |hash|
+      hash.each do |k, str|
+        result = ZhongwenTools::Script.to_zhs(str, type)
+        message = "#{ hash[type] } should equal #{ result }"
+        assert_equal hash[type], result, message unless [:zhs].include? k
       end
     end
   end
 
   def test_zhs?
-    @strings.each do |zh_hash|
-      assert zh_hash[:zhcn].zhs?
-      assert zh_hash[:zhs].zhs?
-      refute zh_hash[:zht].zhs?
-      refute zh_hash[:zhtw].zhs?
-      refute zh_hash[:zhhk].zhs?
+    @strings.each do |hash|
+      assert ZhongwenTools::Script.zhs?(hash[:zhcn])
+      assert ZhongwenTools::Script.zhs?(hash[:zhs])
+      refute ZhongwenTools::Script.zhs?(hash[:zht])
+      refute ZhongwenTools::Script.zhs?(hash[:zhtw])
+      refute ZhongwenTools::Script.zhs?(hash[:zhhk])
     end
   end
 
   def test_zht?
-    @strings.each do |zh_hash|
-      refute zh_hash[:zhcn].zht?
-      refute zh_hash[:zhs].zht?
-      assert zh_hash[:zht].zht?
-      assert zh_hash[:zhtw].zht?
-      assert zh_hash[:zhhk].zht?, zh_hash[:zhhk]
+    @strings.each do |hash|
+      refute ZhongwenTools::Script.zht?(hash[:zhcn])
+      refute ZhongwenTools::Script.zht?(hash[:zhs])
+      assert ZhongwenTools::Script.zht?(hash[:zht])
+      assert ZhongwenTools::Script.zht?(hash[:zhtw])
+      assert ZhongwenTools::Script.zht?(hash[:zhhk])
     end
-  end
-
-end
+  end  
+end 

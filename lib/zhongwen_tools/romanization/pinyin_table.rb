@@ -2,7 +2,8 @@
 
 # NOTE: This table works for pyn -> pinyin conversion, but it introduces
 #       mistakes when converting pinyin to pyn. In practice, pinyin can't
-#       be converted to pyn properly unless it's properly formatted.
+#       be converted to pyn with complete accuracy unless it is properly 
+#       formatted.
 module ZhongwenTools
   module Romanization
     PYN_PY = {

@@ -1,168 +1,145 @@
-#encoding: utf-8
+# encoding: utf-8
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
+
 require './test/test_helper'
-require 'zhongwen_tools/string'
 require 'zhongwen_tools/romanization'
-
-class String
-  include ZhongwenTools::Romanization
-end
-
 class TestRomanization < Minitest::Test
 
-  def test_pinyin
-    assert_equal 'Zhōng wén','Zhong1 wen2'.to_pinyin
-    assert_equal 'Zhōngwén', 'Zhong1-wen2'.to_pinyin
-    assert_equal "Tiān'ānmén",'Tian1an1men2'.to_pinyin
-    assert_equal @alabo[:py], @alabo[:pyn].to_pinyin
-    assert_equal 'r', 'r5'.to_pinyin
-    #wg -> py not yet implemented
-    #mzd = "Mao Tse-tung"
-    #assert_equal "Mao Zedong", mzd.to_pinyin(:wg)
-    assert @alabo[:py].py?
-    assert 'Ā-lā-bó'.py?
-    assert 'Zhong1 wen2'.to_pinyin.py?
+  def test_romanization_modules
+    [:Pinyin, :ZhuyinFuhao, :WadeGiles, :Yale, :TongyongPinyin, :MPS2].each do |module_name|
+      assert ZhongwenTools::Romanization.const_defined?(module_name)
+    end
+  end
 
-    @romanizations.each do |rom|
-      rom.each do |type, entry|
-        if type == :bopomofo
-        assert_equal rom[:py].downcase, entry.to_pinyin(type).downcase, "to_pinyin(#{type}) should convert to pinyin." 
-        assert_equal rom[:py].downcase, entry.to_pinyin.downcase, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly"
-        else
-        assert_equal rom[:py], entry.to_pinyin(type), "to_pinyin(#{type}) should convert to pinyin." 
-        assert_equal rom[:py], entry.to_pinyin, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly" unless type == :typy
-        end
+  def test_zhuyin_fuhao_method_names
+    @romanization_hashes.each do |module_name, method_names|
+      rom_module =  ZhongwenTools::Romanization.const_get(module_name)
+      singleton_methods = rom_module.singleton_methods
+      method_names.map{ |x| "to_#{x}".to_sym }.each do |method_name|
+        message = "#{rom_module} should have method called #{ method_name }"
+        assert singleton_methods.include?(method_name), message
       end
     end
   end
 
-  def test_pyn
-    assert_equal 'ni3 hao3', @py.to_pyn(:py)
-    assert_equal 'tian1an1men2', 'tian1an1men2'.to_py.to_pyn(:py)
+  def test_split_methods
+    @romanizations.each do |romanization|
+      length = romanization == @romanizations.last ? 3 : 2
 
-    assert_equal 'yi4', 'yì'.to_pyn(:py)
-
-    assert_equal 'ni3 hao3', 'ㄋㄧ3 ㄏㄠ3'.to_pyn(:bpmf)
-    assert_equal 'ni3 hao3', 'ㄋㄧ3 ㄏㄠ3'.to_pyn
-    assert_equal 'zhong1 guo2', 'chung1 kuo2'.to_pyn(:wg)
-    assert_equal 'zhong1 guo2', 'chung1 kuo2'.to_pyn
-    assert_equal 'chui1 niu3', 'chuei1 niou3'.to_pyn(:typy)
-    assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn(:mspy2)
-    assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn
-    assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn(:yale)
-    assert_equal 'cao3 di4', 'tsau3 di4'.to_pyn
-
-
-    assert_equal 'Wo3men5', "Wǒmen".to_pyn(:py)
-    assert_equal 'hao3xue2', 'hǎoxué'.to_pyn(:py)
-    assert_equal 'tai4re4', 'tàirè'.to_pyn(:py)
-    assert_equal 'tai4tai5', "tàitai".to_pyn(:py)
-    #assert_equal 'Wu1-lu2-ha1-nuo4-fu1', 'Wūlúhānuòfū'.to_pyn(:py)
-    #"007：Dàpò Liàngzǐ Wēijī", "007: Da4po4 Liang4zi3 Wei1ji1"
+      assert_equal length, ZhongwenTools::Romanization::ZhuyinFuhao.split(romanization[:bpmf]).length
+      assert_equal length, ZhongwenTools::Romanization::WadeGiles.split(romanization[:wg]).length
+      assert_equal length, ZhongwenTools::Romanization::Yale.split(romanization[:yale]).length
+      assert_equal length, ZhongwenTools::Romanization::TongyongPinyin.split(romanization[:typy]).length
+      assert_equal length, ZhongwenTools::Romanization::MPS2.split(romanization[:mps2]).length
+    end
   end
 
   def test_zhuyin_fuhao
-     assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_bpmf
-     assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_bopomofo
-     assert_equal 'ㄋㄧ3 ㄏㄠ3', @str.to_zhuyin
-     assert_equal 'ㄇㄠ2 ㄗㄜ2 ㄉㄨㄥ1', @mzd.to_zhuyin_fuhao
-     assert_equal 'ㄑㄧㄥ3 ㄏㄨㄟ2ㄉㄚ2 ㄨㄛ3 ㄉㄜ5 ㄨㄣ4ㄊㄧ2 .', @sent.to_zhuyin
-     assert_equal 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', @mzd2.to_zhuyin_fuhao
-     assert 'ㄋㄧ3 ㄏㄠ3'.zyfh?
-
-     assert_equal 'ㄋㄧ3 ㄏㄠ3', 'ni3 hau3'.to_bpmf(:yale)
-
-     t = :bopomofo
-    @romanizations.each do |rom|
-      rom.each do |type, entry|
-        #if type == :bopomofo
-        assert_equal rom[t].downcase, entry.send("to_#{t}", type).downcase, "to_#{t}(#{type}) should convert to #{t}." 
-        assert_equal rom[t].downcase, entry.send("to_#{t}").downcase, "to_#{t}(#{type}) should convert to #{t}, but it isn't detected properly"
-        #else
-        #assert_equal rom[:t], entry.to_pinyin(type), "to_pinyin(#{type}) should convert to pinyin." 
-        #assert_equal rom[:t], entry.to_pinyin, "to_pinyin(#{type}) should convert to pinyin, but it isn't detected properly" unless type == :typy
-        #end
-      end
+    type = :bpmf
+    @romanizations.each do |romanization|
+      assert_equal type, ZhongwenTools::Romanization.romanization?(romanization[type])
+      assert_equal romanization[type], ZhongwenTools::Romanization::ZhuyinFuhao.to_bpmf(romanization[:pyn])
+      # NOTE: Zhuyin Fuhao doesn't encode capitilization information.
+      expected_result = romanization[:pyn].downcase.gsub('-', '')
+      py_result = romanization[:py].downcase
+      assert_equal expected_result, ZhongwenTools::Romanization::Pinyin::to_pyn(romanization[type])
+      assert_equal py_result, ZhongwenTools::Romanization::Pinyin::to_py(romanization[type])
     end
   end
 
   def test_wade_giles
-    assert_equal 'kuo1', 'guo1'.to_wg
-    assert_equal 'chung1 kuo2', 'zhong1 guo2'.to_wg
-    assert_equal 'Mao2 Tse2 tung1', @mzd.to_wg
-    assert_equal 'Mao2 Tse2-tung1', @mzd2.to_wade_giles
-    assert_equal 'Mao2 Tse2-tung1 te5 mao2', 'Mao2 Ze2-dong1 de5 mao2'.to_wade_giles
-
-    assert_equal 'ni3 hao3', 'ni3 hau3'.to_wg(:yale)
-  end
-
-  #def test_mspy2
-    #skip
-    #assert_equal '', @str.to_mspy2
-  #end
-
-  def test_typy
-    #skip
-    pyn = 'chui1 niu3'
-    typy = 'chuei1 niou3'
-    assert_equal typy, pyn.to_typy
-    # FIXME: to_typy doesn't work with non-spaced pinyin.
-    #assert_equal typy, typy.to_pyn(:typy)
-    assert typy.typy?
-    refute pyn.typy?
+    type = :wg
+    @romanizations.each do |romanization|
+      assert ZhongwenTools::Romanization::WadeGiles.wg?(romanization[type])
+      assert_equal romanization[type], ZhongwenTools::Romanization::WadeGiles.to_wg(romanization[:pyn])
+      expected_result = romanization[:pyn]
+      assert_equal expected_result, ZhongwenTools::Romanization::Pinyin::to_pyn(romanization[type], type)
+      assert_equal romanization[:py], ZhongwenTools::Romanization::Pinyin::to_py(romanization[type])
+    end
   end
 
   def test_yale
-    assert_equal 'ni3 hau3', @str.to_yale
-
-    assert_equal 'chwei1 nyou3', 'chuei1 niou3'.to_yale(:typy)
+    type = :yale
+    @romanizations.each do |romanization|
+      assert_equal type, ZhongwenTools::Romanization.romanization?(romanization[type])
+      assert_equal romanization[type], ZhongwenTools::Romanization::Yale.to_yale(romanization[:pyn])
+      expected_result = romanization[:pyn]
+      assert_equal expected_result, ZhongwenTools::Romanization::Pinyin::to_pyn(romanization[type])
+      assert_equal romanization[:py], ZhongwenTools::Romanization::Pinyin::to_py(romanization[type])
+    end
   end
 
-  def test_romanization?
-    assert_equal :pyn, @alabo[:pyn].romanization?
-    assert_equal :py, @alabo[:py].romanization?
-    assert_equal :zyfh, 'ㄋㄧ3 ㄏㄠ3'.romanization?
-    assert_equal :wg, @mzd.to_wg(:pyn).romanization?
+  def test_tongyong_pinyin
+    type = :typy
+    @romanizations.each do |romanization|
+      assert ZhongwenTools::Romanization::TongyongPinyin.typy?(romanization[type])
+      assert_equal romanization[type], ZhongwenTools::Romanization::TongyongPinyin.to_typy(romanization[:pyn])
+      expected_result = romanization[:pyn]
+      assert_equal expected_result, ZhongwenTools::Romanization::Pinyin::to_pyn(romanization[type], type)
+      assert_equal romanization[:py], ZhongwenTools::Romanization::Pinyin::to_py(romanization[type], type)
+    end
   end
 
-  def test_detect
-    assert @str.pyn?
-    assert " #{@str}".pyn?
-    refute 'Ardanz'.pyn?
-    refute @py.pyn?
+  def test_mps2
+    type = :mps2
 
-    assert 'chung1 kuo2'.wg?
-
-    assert @py.py?, "#{@py} should be pinyin. (#{@py.py?})" unless RUBY_VERSION < '1.9'
-    assert 'chuei1 niou3'.typy?
-    assert 'ㄋㄧ3 ㄏㄠ3'.bpmf?
-    assert 'ni3 hau3'.yale?
-    assert 'tsuen'.mps2?
-  end
-
-  def test_split_pyn
-    assert_equal 'zhong1guo2'.split_pyn, %w(zhong1 guo2)
-    assert_equal 'dong1xi'.split_pyn, %w(dong1 xi)
-    assert_equal 'zhongguo'.split_pyn, %w(zhong guo)
-    assert_equal 'dong1 xi1 '.split_pyn, %w(dong1 xi1)
-    assert_equal @mzd2.split_pyn, %w(Mao2 Ze2 dong1)
+    @romanizations.each do |romanization|
+      assert ZhongwenTools::Romanization::MPS2.mps2?(romanization[type])
+      assert_equal romanization[type], ZhongwenTools::Romanization::MPS2.to_mps2(romanization[:pyn])
+      expected_result = romanization[:pyn]
+      assert_equal expected_result, ZhongwenTools::Romanization::Pinyin::to_pyn(romanization[type], type)
+      assert_equal romanization[:py], ZhongwenTools::Romanization::Pinyin::to_py(romanization[type], type)
+    end
   end
 
   def setup
+    @romanization_hashes = {
+      ZhuyinFuhao: %w(bpmf zhuyin_fuhao zhuyinfuhao zyfh zhyfh),
+      WadeGiles: %w(wg wade_giles),
+      Yale: ['yale'],
+      TongyongPinyin: %w(typy tongyong tongyong_pinyin),
+      MPS2: ['mps2']
+    }
+
     @romanizations = [
       # FIXME: bopomofo, tongyong pinyin, wade-giles tones are all wrong.
       # TODO: test IPA
-      { :pyn => 'ni3 hao3', :py => 'nǐ hǎo', :bopomofo => 'ㄋㄧ3 ㄏㄠ3', :yale => 'ni3 hau3', :typy => 'ni3 hao3', :wg => 'ni3 hao3'},#, :ipa => ''}
-      { :pyn => 'Zhong1guo2', :py => 'Zhōngguó', :bopomofo => 'ㄓㄨㄥ1ㄍㄨㄛ2', :yale => 'Jung1gwo2', :typy => 'Jhong1guo2', :wg => 'Chung1kuo2'},#, :ipa => ''}
-      { :pyn => 'chui1 niu3', :py => "chuī niǔ", :bopomofo =>  "ㄔㄨㄟ1 ㄋㄧㄡ3", :yale => "chwei1 nyou3", :typy => "chuei1 niou3", :wg => "ch`ui1 niu3"},#, :ipa => ''}
-      { :pyn => 'Mao2 Ze2-dong1', :py => 'Máo Zédōng', :bopomofo => 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1', :yale => 'Mau2 Dze2-dung1', :typy => 'Mao2 Ze2-dong1', :wg => 'Mao2 Tse2-tung1'},#, :ipa => ''}
+      {
+        pyn: 'ni3 hao3',
+        py: 'nǐ hǎo',
+        bpmf: 'ㄋㄧ3 ㄏㄠ3',
+        yale: 'ni3 hau3',
+        typy: 'ni3 hao3',
+        wg: 'ni3 hao3',
+        mps2: 'ni3 hau3'
+      },
+      {
+        pyn: 'Zhong1guo2',
+        py: 'Zhōngguó',
+        bpmf: 'ㄓㄨㄥ1ㄍㄨㄛ2',
+        yale: 'Jung1gwo2',
+        typy: 'Jhong1guo2',
+        wg: 'Chung1kuo2',
+        mps2: 'Jung1guo2',
+      },
+      {
+        pyn: 'chui1 niu3',
+        py: 'chuī niǔ',
+        bpmf:  "ㄔㄨㄟ1 ㄋㄧㄡ3",
+        yale: "chwei1 nyou3",
+        typy: "chuei1 niou3",
+        wg: "ch`ui1 niu3",
+        mps2: 'chuei1 niou3'
+      },
+      {
+        pyn: 'Mao2 Ze2-dong1',
+        py: 'Máo Zédōng',
+        bpmf: 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1',
+        yale: 'Mau2 Dze2-dung1',
+        typy: 'Mao2 Ze2-dong1',
+        wg: 'Mao2 Tse2-tung1',
+        mps2: 'Mau2 Tze2-dung1'
+      }
     ]
-
-    @str = 'ni3 hao3'
-    @mzd = 'Mao2 Ze2 dong1'
-    @mzd2 = 'Mao2 Ze2-dong1'
-    @py = 'nǐ hǎo'
-    @sent = 'Qing3 hui2-da2 wo3 de5 wen4-ti2 .'
-    @alabo = {:pyn => 'A1-la1-bo2', :py => 'Ālābó'}
   end
 end
