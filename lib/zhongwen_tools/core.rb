@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'zhongwen_tools/ruby_19' if RUBY_VERSION < '2.0.0'
 require 'zhongwen_tools/regex'
 require 'zhongwen_tools/fullwidth'
 require 'zhongwen_tools/unicode'

@@ -2,12 +2,6 @@
 
 module ZhongwenTools
   module StringExtension
-    if RUBY_VERSION < '2.0.0'
-      def chars
-       self.scan(/./mu).to_a
-      end
-    end
-
     def capitalize
       ZhongwenTools::Caps.capitalize(self)
     end

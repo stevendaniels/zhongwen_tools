@@ -6,7 +6,12 @@ require 'zhongwen_tools'
 
 
 class TestStringExtention < Minitest::Test
-  using ZhongwenTools
+  if RUBY_VERSION < '2.0.0'
+    String.send(:include, ZhongwenTools::StringExtension)
+  else
+    using ZhongwenTools
+  end
+
   def setup
     @caps = { u: 'ĀLĀBÓ', d: 'ālābó', c: 'Ālābó' }
     @fw = { hw: 'hello',fw: 'ｈeｌｌｏ', mixed: 'hellｏ' }
