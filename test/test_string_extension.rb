@@ -8,7 +8,6 @@ if RUBY_VERSION < '2.0.0'
   String.send(:include, ZhongwenTools::StringExtension)
 else
   using ZhongwenTools
-  puts 'using zhongwen_tools'
 end
 
 class TestStringExtention < Minitest::Test
@@ -65,7 +64,7 @@ class TestStringExtention < Minitest::Test
 
 
     # script.rb
-    load 'zhongwen_tools/script.rb'  unless ZhongwenTools.const_defined?(:Script)
+    load 'zhongwen_tools/script.rb'#  unless ZhongwenTools.const_defined?(:Script)
     assert_equal @zh[:zht], @zh[:zhs].to_zht
     assert_equal @zh[:zhs], @zh[:zht].to_zhs
     assert_equal @zh[:zhcn], @zh[:zhhk].to_zhcn
