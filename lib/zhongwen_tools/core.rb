@@ -8,6 +8,7 @@ require 'zhongwen_tools/zhongwen'
 require 'zhongwen_tools/number'
 require 'zhongwen_tools/romanization'
 require 'zhongwen_tools/string_extension'
+require 'zhongwen_tools/version'
 
 module ZhongwenTools
   # Allow for the use Refinements.

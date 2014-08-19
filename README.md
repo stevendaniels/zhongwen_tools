@@ -38,21 +38,21 @@ You can monkey patch the String class.
 
     '你好'.zh? #=> true
 
-    '你好'.uri_encode
+    '你好'.uri_encode #=> "%E4%BD%A0%E5%A5%BD"
 
-    '你好'.uri_escape
+    '你好'.uri_escape #=> "%E4%BD%A0%E5%A5%BD"
 
     '你好！'.strip_zh_punctuation #=> '你好'
 
-    'hello'.ascii?
+    'hello'.ascii?  #=> true
 
-    '你好'.multibyte?
+    '你好'.multibyte? #=> true
 
-    'hello'.halfwidth?
+    'hello'.halfwidth?  #=> false
 
-    'ｈeｌｌｏ'.fullwidth?
+    'ｈeｌｌｏ'.fullwidth?  #=> true
     
-    'ｈeｌｌｏ'.to_halfwidth?
+    'ｈeｌｌｏ'.to_halfwidth? #=> 'hello'
 
     '\u4e2d\u6587'.from_codepoint #=> '中文'
 
