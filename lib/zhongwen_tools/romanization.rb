@@ -39,10 +39,10 @@ module ZhongwenTools
     # Returns a String for the romanization system or Nil if the string is not
     # a romanization.
     def self.romanization?(str)
-      if ZhongwenTools::Romanization::Pinyin.py?(str)
-        :py
-      elsif ZhongwenTools::Romanization::Pinyin.pyn?(str)
+      if ZhongwenTools::Romanization::Pinyin.pyn?(str)
         :pyn
+      elsif ZhongwenTools::Romanization::Pinyin.py?(str)
+        :py
       elsif ZhongwenTools::Romanization::ZhuyinFuhao.bpmf?(str)
         :bpmf
       elsif ZhongwenTools::Romanization::WadeGiles.wg?(str)
