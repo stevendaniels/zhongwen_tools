@@ -38,7 +38,7 @@ module ZhongwenTools
 
       def self.split_pyn(str)
         # FIXME: ignore punctuation
-        regex = str[/[1-5]/].nil? ?  /(#{ZhongwenTools::Regex.pinyin_toneless})/ : /(#{ZhongwenTools::Regex.pyn})/
+        regex = str[/[1-5]/].nil? ?  /(#{ZhongwenTools::Regex.pinyin_toneless})/ : /(#{ZhongwenTools::Regex.pyn}|#{ZhongwenTools::Regex.pinyin_toneless})/
 
         str.scan(regex).map{ |arr| arr[0].strip.gsub('-','') }.flatten
       end

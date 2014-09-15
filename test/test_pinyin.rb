@@ -28,6 +28,8 @@ class TestPinyin < Minitest::Test
       refute ZhongwenTools::Romanization::Pinyin.pyn?(w[:py]), w.inspect
       assert ZhongwenTools::Romanization::Pinyin.pyn?(w[:pyn]), w.inspect
     end
+
+     assert ZhongwenTools::Romanization::Pinyin.pyn?('ma2-fan')
   end
 
   def test_pyn_to_pinyin
