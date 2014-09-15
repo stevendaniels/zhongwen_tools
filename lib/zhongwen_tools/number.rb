@@ -160,7 +160,7 @@ module ZhongwenTools
     end
 
     def self.number_multiplier?(number)
-      [10,100,1_000,10_000,100_000_000].include? number
+      [10, 100, 1_000, 10_000, 100_000_000].include? number
     end
 
 

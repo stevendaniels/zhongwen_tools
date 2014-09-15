@@ -86,6 +86,22 @@ You can monkey patch the String class.
 
     'nǐ hǎo'.to_mps2 #=> 'ni3 hau3'
 
+    'nǐ hǎo'.romanization? :py
+    
+    'nǐ hǎo'.py? #=> true
+  
+    'nǐ hǎo'.pyn? # false
+
+    'nǐ hǎo'.bpmf? # false
+
+    'nǐ hǎo'.wg? # false
+
+    'nǐ hǎo'.yale? # false
+
+    'nǐ hǎo'.typy? # false
+
+    'nǐ hǎo'.mps2? # false
+
     '你们好'.zhs? #=> true
 
     '你们好'.zht? #=> false

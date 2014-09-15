@@ -62,6 +62,14 @@ class TestStringExtention < Minitest::Test
       end
     end
 
+    assert @rom[:pyn].pyn?
+    assert @rom[:py].py?
+    assert @rom[:bpmf].bpmf?
+    assert @rom[:yale].yale?
+    assert @rom[:typy].typy?
+    assert @rom[:wg].wg?
+    assert @rom[:mps2].mps2?
+    assert_equal @rom[:pyn].romanization?, :pyn
 
     # script.rb
     load 'zhongwen_tools/script.rb'#  unless ZhongwenTools.const_defined?(:Script)

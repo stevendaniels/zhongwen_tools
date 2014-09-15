@@ -105,6 +105,38 @@ module ZhongwenTools
       ZhongwenTools::Romanization::MPS2::to_mps2(self, from)
     end
 
+    def py?
+      ZhongwenTools::Romanization::Pinyin.py?(self)
+    end
+
+    def pyn?
+      ZhongwenTools::Romanization::Pinyin.pyn?(self)
+    end
+
+    def bpmf?
+      ZhongwenTools::Romanization::ZhuyinFuhao.bpmf?(self)
+    end
+
+    def wg?
+      ZhongwenTools::Romanization::WadeGiles.wg?(self)
+    end
+
+    def yale?
+      ZhongwenTools::Romanization::Yale.yale?(self)
+    end
+
+    def typy?
+      ZhongwenTools::Romanization::TongyongPinyin.typy?(self)
+    end
+
+    def mps2?
+      ZhongwenTools::Romanization::MPS2.mps2?(self)
+    end
+
+    def romanization?
+      ZhongwenTools::Romanization.romanization?(self)
+    end
+
     def zhs?
       ZhongwenTools::Script.zhs?(self)
     end
