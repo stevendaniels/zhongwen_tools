@@ -100,7 +100,7 @@ module ZhongwenTools
     end
 
     def self.py_tones
-      py_tones = {
+      {
         'a' => '[āáǎàa]',
         'e' => '[ēéěèe]',
         'i' => '[īíǐìi]',

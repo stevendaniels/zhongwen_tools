@@ -14,6 +14,8 @@ class TestPinyin < Minitest::Test
     @split_words.each do |w|
       assert_equal w[:split_py], ZhongwenTools::Romanization::Pinyin.split_py(w[:py])
     end
+
+    assert_equal ['fǎn', 'guāng', 'jìng'], ZhongwenTools::Romanization::Pinyin.split_py('fǎnguāngjìng')
   end
 
   def test_py?
@@ -21,6 +23,8 @@ class TestPinyin < Minitest::Test
       assert ZhongwenTools::Romanization::Pinyin.py?(w[:py]), w.inspect
       refute ZhongwenTools::Romanization::Pinyin.py?(w[:pyn]), w.inspect
     end
+
+    assert  ZhongwenTools::Romanization::Pinyin.py? 'fǎnguāngjìng'
   end
 
   def test_pyn?

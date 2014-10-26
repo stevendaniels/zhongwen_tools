@@ -48,6 +48,8 @@ module ZhongwenTools
 
         results = words.map do |word|
           word, is_capitalized = normalize_pinyin(word)
+          # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
+          word = word.gsub('ngu', 'n-gu')
           result = word.split(/['\-]/).flatten.map do |x|
             find_py(x)
           end
@@ -68,9 +70,10 @@ module ZhongwenTools
       # Returns Boolean.
       def self.py?(str)
         # NOTE: py regex does not include capitals with tones.
-        #ZhongwenTools::Caps.downcase(str).gsub(ZhongwenTools::Regex.punc,'').gsub(Regex.py, '').gsub(/[\s\-]/,'').strip == ''
+        # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
         regex = /(#{ ZhongwenTools::Regex.punc }|#{ ZhongwenTools::Regex.py }|[\s\-])/
-          ZhongwenTools::Caps.downcase(str).gsub(regex, '').strip == ''
+        str = str.gsub('ngu', 'n-gu')
+        ZhongwenTools::Caps.downcase(str).gsub(regex, '').strip == ''
       end
 
       # Public: checks if a string is pinyin.
@@ -126,7 +129,6 @@ module ZhongwenTools
 
       def self.find_py(str)
         str.scan(ZhongwenTools::Regex.py).map{ |x| (x - [nil])[0] }
-
       end
 
       def self.recapitalize(obj, capitalized)
