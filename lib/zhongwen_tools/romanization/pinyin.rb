@@ -69,11 +69,15 @@ module ZhongwenTools
       #
       # Returns Boolean.
       def self.py?(str)
-        # NOTE: py regex does not include capitals with tones.
-        # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
-        regex = /(#{ ZhongwenTools::Regex.punc }|#{ ZhongwenTools::Regex.py }|[\s\-])/
-        str = str.gsub('ngu', 'n-gu')
-        ZhongwenTools::Caps.downcase(str).gsub(regex, '').strip == ''
+        if str[ZhongwenTools::Regex.only_tones].nil? && str[/[1-5]/].nil?
+          pyn?(str)
+        else
+          # NOTE: py regex does not include capitals with tones.
+          # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
+          regex = /(#{ ZhongwenTools::Regex.punc }|#{ ZhongwenTools::Regex.py }|[\s\-])/
+          str = str.gsub('ngu', 'n-gu')
+          ZhongwenTools::Caps.downcase(str).gsub(regex, '').strip == ''
+        end
       end
 
       # Public: checks if a string is pinyin.
@@ -179,7 +183,7 @@ module ZhongwenTools
             pyn = pyn.sub(/(#{replacements.join('.*')}.*)#{match}/){ $1 + replace }
           else
             pyn = pyn.sub(/#{match}/){ "#{$1}#{replace}"}
-            end
+          end
           replacements << replace
         end
 

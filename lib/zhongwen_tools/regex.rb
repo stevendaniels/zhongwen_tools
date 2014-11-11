@@ -62,7 +62,7 @@ module ZhongwenTools
     end
 
     def self.zh_number_multiple
-      /[拾十百佰千仟仟万萬亿億]/
+      /[拾十百佰千仟万萬亿億]/
     end
 
     # Public: A Regex for bopomofo, a.k.a. Zhuyin Fuhao 注音符号.
@@ -108,6 +108,10 @@ module ZhongwenTools
         'u' => '[ūúǔùu]',
         'v' => '[ǖǘǚǜü]'
       }
+    end
+
+    def self.only_tones
+      /([āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ])/
     end
   end
 end

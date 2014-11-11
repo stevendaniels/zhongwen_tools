@@ -25,6 +25,12 @@ class TestPinyin < Minitest::Test
     end
 
     assert  ZhongwenTools::Romanization::Pinyin.py? 'fǎnguāngjìng'
+
+    english_words = %w(cyan moose cling touch)
+
+    english_words.each do |w|
+      refute ZhongwenTools::Romanization::Pinyin.py? w
+    end
   end
 
   def test_pyn?
@@ -62,13 +68,13 @@ class TestPinyin < Minitest::Test
 
 
     @words = [
-      {:pyn => 'A1la1bo2', :py => 'Ālābó'},
-      { :pyn => 'ni3 hao3', :py => 'nǐ hǎo' },
-      { :pyn => 'Zhong1guo2', :py => 'Zhōngguó' },
-      { :pyn => 'chui1 niu3', :py => "chuī niǔ" },
-      { :pyn => 'Mao2 Ze2dong1', :py => 'Máo Zédōng' },
+      { pyn: 'A1la1bo2', py: 'Ālābó'},
+      { pyn: 'ni3 hao3', py: 'nǐ hǎo' },
+      { pyn: 'Zhong1guo2', py: 'Zhōngguó' },
+      { pyn: 'chui1 niu3', py: "chuī niǔ" },
+      { pyn: 'Mao2 Ze2dong1', py: 'Máo Zédōng' }
     ]
 
-    @r =  { :pyn => 'r5', :py => 'r' }
+    @r =  { pyn: 'r5', py: 'r' }
   end
 end

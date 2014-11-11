@@ -51,7 +51,7 @@ You can monkey patch the String class.
     'hello'.halfwidth?  #=> false
 
     'ｈeｌｌｏ'.fullwidth?  #=> true
-    
+
     'ｈeｌｌｏ'.to_halfwidth? #=> 'hello'
 
     '\u4e2d\u6587'.from_codepoint #=> '中文'
@@ -87,9 +87,9 @@ You can monkey patch the String class.
     'nǐ hǎo'.to_mps2 #=> 'ni3 hau3'
 
     'nǐ hǎo'.romanization? :py
-    
+
     'nǐ hǎo'.py? #=> true
-  
+
     'nǐ hǎo'.pyn? # false
 
     'nǐ hǎo'.bpmf? # false
