@@ -40,6 +40,7 @@ class TestPinyin < Minitest::Test
     end
 
      assert ZhongwenTools::Romanization::Pinyin.pyn?('ma2-fan')
+     assert ZhongwenTools::Romanization::Pinyin.pyn?('yo1')
   end
 
   def test_pyn_to_pinyin
