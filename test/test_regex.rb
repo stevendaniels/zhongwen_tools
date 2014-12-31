@@ -30,7 +30,12 @@ class TestRegex < Minitest::Test
     refute '.'[ZhongwenTools::Regex.zh_punc]
     assert '.'[ZhongwenTools::Regex.punc]
     assert '。'[ZhongwenTools::Regex.zh_punc]
-    refute '。'[ZhongwenTools::Regex.punc]
+    assert '。'[ZhongwenTools::Regex.punc]
+  end
+
+  def test_bopomofo
+    assert "ㄅ"[ZhongwenTools::Regex.bopomofo]
+  #  ㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ
   end
 
   def test_zh

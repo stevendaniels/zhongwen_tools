@@ -54,6 +54,8 @@ class TestPinyin < Minitest::Test
     @words.each do |word|
       assert_equal word[:pyn], ZhongwenTools::Romanization::Pinyin.to_pyn(word[:py])
     end
+    assert_equal 'yi2ge4', ZhongwenTools::Romanization::Pinyin.to_pyn('yígè')
+    assert_equal 'yi4nian2', ZhongwenTools::Romanization::Pinyin.to_pyn('yìnián', :py)
   end
 
   def setup

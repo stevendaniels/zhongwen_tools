@@ -5,7 +5,6 @@ require 'zhongwen_tools/romanization'
 
 module ZhongwenTools
   module Romanization
-
     def self.convert_to_py(str, from)
       str =  convert_romanization(str, from, :pyn) if from != :pyn
       ZhongwenTools::Romanization::Pinyin.convert_pyn_to_pinyin(str)
@@ -31,7 +30,7 @@ module ZhongwenTools
           str, from = args
           from ||= ZhongwenTools::Romanization.romanization? str
 
-          #_convert_romanization str, _set_type(type.to_sym), _set_type(from)
+          # _convert_romanization str, _set_type(type.to_sym), _set_type(from)
           ZhongwenTools::Romanization.convert str, py_type(romanization), (py_type(from) || from)
         end
       end
@@ -40,7 +39,7 @@ module ZhongwenTools
         # FIXME: ignore punctuation
         regex = str[/[1-5]/].nil? ?  /(#{ZhongwenTools::Regex.pinyin_toneless})/ : /(#{ZhongwenTools::Regex.pyn}|#{ZhongwenTools::Regex.pinyin_toneless})/
 
-        str.scan(regex).map{ |arr| arr[0].strip.gsub('-','') }.flatten
+        str.scan(regex).map{ |arr| arr[0].strip.gsub('-', '') }.flatten
       end
 
       def self.split_py(str)
@@ -49,7 +48,9 @@ module ZhongwenTools
         results = words.map do |word|
           word, is_capitalized = normalize_pinyin(word)
           # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
+          #       Special Case "yìnián" should be "yì" + "nián"
           word = word.gsub('ngu', 'n-gu')
+            .gsub(/([#{ ZhongwenTools::Regex.only_tones }])(ni[#{ ZhongwenTools::Regex.py_tones['a'] }])/){ "#{ $1 }-#{ $2 }" }
           result = word.split(/['\-]/).flatten.map do |x|
             find_py(x)
           end
@@ -89,7 +90,7 @@ module ZhongwenTools
       # Returns Boolean.
       def self.pyn?(str)
         # FIXME: use strip_punctuation method
-        normalized_str = ZhongwenTools::Caps.downcase(str.gsub(ZhongwenTools::Regex.punc,'').gsub(/[\s\-]/,''))
+        normalized_str = ZhongwenTools::Caps.downcase(str.gsub(ZhongwenTools::Regex.punc, '').gsub(/[\s\-]/, ''))
         pyn_arr = split_pyn(normalized_str).map{ |p| p }
 
         pyn_matches_properly?(pyn_arr, normalized_str) &&
@@ -125,7 +126,6 @@ module ZhongwenTools
 
         { pyn: :pyn, py: :py, pinyin: :py }[romanization]
       end
-
 
       def self.normalize_pinyin(pinyin)
         [ZhongwenTools::Caps.downcase(pinyin), capitalized?(pinyin)]
@@ -180,9 +180,9 @@ module ZhongwenTools
           replace =  pinyin_replacement(pinyin)
           match = pinyin
           if replacements.size > 0
-            pyn = pyn.sub(/(#{replacements.join('.*')}.*)#{match}/){ $1 + replace }
+            pyn = pyn.sub(/(#{ replacements.join('.*') }.*)#{ match }/){ $1 + replace }
           else
-            pyn = pyn.sub(/#{match}/){ "#{$1}#{replace}"}
+            pyn = pyn.sub(/#{match}/){ "#{ $1 }#{ replace }" }
           end
           replacements << replace
         end
@@ -195,19 +195,18 @@ module ZhongwenTools
           py.include? x
         end
         match = select_pinyin_match(matches)
-        replace = PYN_PY.find{|k,v| k if v == match}[0]
+        replace = PYN_PY.find{ |k, v| k if v == match }[0]
 
-        py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){$1 + $3 + $2}
+        py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){ $1 + $3 + $2 }
       end
 
       def self.select_pinyin_match(matches)
         # take the longest pinyin match. Use bytes because 'è' is prefered over 'n' or 'r' or 'm'
-        match = matches.sort{|x,y| x.bytes.to_a.length <=> y.bytes.to_a.length}[-1]
+        match = matches.sort{ |x, y| x.bytes.to_a.length <=> y.bytes.to_a.length }[-1]
 
         # Edge case.. en/eng pyn -> py conversion is one way only.
         match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]
       end
-
 
       #  Internal: Replaces numbered pinyin with actual pinyin. Pinyin separated with hyphens are combined as one word.
       #
@@ -229,8 +228,8 @@ module ZhongwenTools
         #              And finally, correct those apostrophes at the very end.
         #              It's like magic.
         str.gsub(regex) do
-          ($3.nil? ? "#{PYN_PY[$1]}" : ($2 == '' && ['a','e','o'].include?($3[0,1]))? "'#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}" : "#{$2}#{PYN_PY["#{$3}#{$6}"]}#{$4}#{$5}") + (($7.to_s.length > 1) ? '-' : '')
-        end.gsub("-'","-").sub(/^'/,'')
+          ($3.nil? ? "#{ PYN_PY[$1] }" : ($2 == '' && %w(a e o).include?($3[0,1]))? "'#{ PYN_PY["#{ $3 }#{ $6 }"]}#{ $4 }#{ $5 }" : "#{ $2 }#{ PYN_PY["#{ $3 }#{ $6 }"] }#{ $4 }#{ $5 }") + (($7.to_s.length > 1) ? '-' : '')
+        end.gsub("-'", '-').sub(/^'/, '')
       end
     end
   end

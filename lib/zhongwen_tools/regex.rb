@@ -33,11 +33,11 @@ module ZhongwenTools
     end
 
     def self.zh
-      /[\u2E80-\u2E99]|[\u2E9B-\u2EF3]|[\u2F00-\u2FD5]|[\u3005|\u3007]|[\u3021-\u3029]|[\u3038-\u303B]|[\u3400-\u4DB5]|[\u4E00-\u9FCC]|[\uF900-\uFA6D]|[\uFA70-\uFAD9]/
+      /\p{Han}/
     end
 
     def self.punc
-      /[\u0021-\u0023]|[\u0025-\u002A]|[\u002C-\u002F]|[\u003A\u003B\u003F\u0040]|[\u005B-\u005D\u005F\u007B\u007D\u00A1\u00A7\u00AB\u00B6\u00B7\u00BB\u00BF\u037E\u0387]/
+      /\p{Punct}/
     end
 
     def self.zh_punc
@@ -74,7 +74,7 @@ module ZhongwenTools
     #
     # Returns a Regex.
     def self.bopomofo
-      /[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ]/
+      /\p{Bopomofo}/
     end
 
     private
@@ -86,6 +86,7 @@ module ZhongwenTools
       {
         nl_regex: /([nN]eng?|[lnLN](a(i|ng?|o)?|e(i|ng)?|i(ang|a[on]?|e|ng?|u)?|o(ng?|u)|u(o|i|an?|n)?|ve?))/,
         bpm_regex: /([mM]iu|[pmPM]ou|[bpmBPM](o|e(i|ng?)?|a(ng?|i|o)?|i(e|ng?|a[no])?|u))/,
+        y_regex: /[yY](a(o|ng?)?|e|i(n|ng)?|o(u|ng)?|u(e|a?n)?)/,
         f_regex: /([fF](ou?|[ae](ng?|i)?|u))/,
         dt_regex: /([dD](e(i|ng?)|i(a[on]?|u))|[dtDT](a(i|ng?|o)?|e(i|ng)?|i(a[on]?|e|ng|u)?|o(ng?|u)|u(o|i|an?|n)?))/,
         gkh_regex: /([ghkGHK](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
@@ -94,8 +95,7 @@ module ZhongwenTools
         r_regex: /([rR]([ae]ng?|i|e|ao|ou|ong|u[oin]|ua?n?))/,
         jqx_regex: /([jqxJQX](i(a(o|ng?)?|[eu]|ong|ng?)?|u(e|a?n)?))/,
         aeo_regex: /(([aA](i|o|ng?)?|[oO]u?|[eE](i|ng?|r)?))/,
-        w_regex: /([wW](a(i|ng?)?|o|e(i|ng?)?|u))/,
-        y_regex: /[yY](a(o|ng?)?|e|in?g?|o(u|ng)?|u(e|a?n)?)/
+        w_regex: /([wW](a(i|ng?)?|o|e(i|ng?)?|u))/
       }
     end
 

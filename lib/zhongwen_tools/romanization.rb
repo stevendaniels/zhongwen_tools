@@ -1,6 +1,11 @@
 # encoding: utf-8
 require 'zhongwen_tools/romanization/pinyin'
 require 'zhongwen_tools/romanization/pinyin_table'
+require 'zhongwen_tools/romanization/zhuyin_fuhao'
+require 'zhongwen_tools/romanization/tongyong_pinyin'
+require 'zhongwen_tools/romanization/wade_giles'
+require 'zhongwen_tools/romanization/yale'
+require 'zhongwen_tools/romanization/mps2'
 require 'zhongwen_tools/romanization/romanization_table'
 
 # NOTE: Creates several dynamic Modules and their associated methods.
@@ -29,7 +34,12 @@ module ZhongwenTools
     #         belongs to another romanization system p a romanization
     #         system, use the romanization modules specific function.
     #
-    # str - a String to test.
+    #         Zhuyin Fuhao, Tongyong Pinyin, Wade Giles, MSP2 or Yale.
+    #         http://en.wikipedia.org/wiki/Tongyong_Pinyin
+    #         http://pinyin.info/romanization/tongyong/
+    #         http://en.wikipedia.org/wiki/Wade%E2%80%93Giles
+    #         http://en.wikipedia.org/wiki/Bopomofo
+    #         http://pinyin.info/romanization/bopomofo/index.html  # str - a String to test.
     #
     # Examples
     #    romanization?('hao3') #=> :pyn
@@ -56,7 +66,8 @@ module ZhongwenTools
       end
     end
 
-    def split(str, type = nil)
+    def self.split(str, type = nil)
+      # should probably yield
       type ||= romanization?(str)
 
       if type == :py
@@ -66,6 +77,22 @@ module ZhongwenTools
     end
 
     private
+
+    def self.detect_romanization(str, regex)
+      normalized_str = str.downcase.gsub(ZhongwenTools::Regex.punc, '').gsub(/[1-5\s\-']/, '')
+      #TODO: ignore tonal marks from other systems wade giles, tongyong etc.
+
+      normalized_str.scan(regex).join == normalized_str
+    end
+
+    def self.split_romanization(str, regex)
+      # TODO: ignore tonal marks from other systems wade giles, tongyong etc.
+      results = str.scan(regex).map do |arr|
+        arr[0].strip.gsub('-','')
+      end
+
+      results.flatten - ['']
+    end
 
     def self.convert_romanization(str, from, to)
         # NOTE: extract/refactor tokens cause tests to fail.
@@ -104,7 +131,6 @@ module ZhongwenTools
       replace = token_replacement(token, from).fetch(to){ search }
       replace = fix_capitalization(str, token, replace)
 
-
       [search, replace]
     end
 
@@ -125,82 +151,6 @@ module ZhongwenTools
       end
 
       result || {}
-    end
-
-
-    # <module_name>::<romanization_type>?(str)
-    #
-    # Public: Checks if a String is a romanization:
-    #         Zhuyin Fuhao, Tongyong Pinyin, Wade Giles, MSP2 or Yale.
-    #         http://en.wikipedia.org/wiki/Tongyong_Pinyin
-    #         http://pinyin.info/romanization/tongyong/
-    #         http://en.wikipedia.org/wiki/Wade%E2%80%93Giles
-    #         http://en.wikipedia.org/wiki/Bopomofo
-    #         http://pinyin.info/romanization/bopomofo/index.html
-    #
-    # str - a String. Optional if the object calling the method is a String.
-    #
-    # Examples
-    #
-    #   typy?('chuei niou')     #=> true
-    #   wg?('Mao2 Tse2 Tung1')  #=> true
-    #   bpmf?('ㄊㄥ')           #=> true
-    #
-    # Returns a boolean.
-    def self.create_detect_method(romanization_module, name)
-      romanization_module.define_singleton_method("#{name}?") do |str|
-
-        regex = romanization_module == :ZhuyinFuhao ? ZhongwenTools::Regex.bopomofo : ZhongwenTools::Romanization.detect_regex(name.to_sym)
-        normalized_str = str.downcase.gsub(ZhongwenTools::Regex.punc,'').gsub(/[1-5\s\-']/,'')
-        #TODO: ignore tonal marks from other systems wade giles, tongyong etc.
-        normalized_str.scan(regex).join == normalized_str
-      end
-    end
-
-    # <module_name>::to_<romanization_type>(str)
-    # Public: Converts to the given romanization from pyn (pinyin using numbers instead of tone marks.
-    #
-    # str = a String to be converted
-    #
-    # Examples:
-    #
-    #
-    #
-    #   ZhongwenTools::Romanization::ZhuyinFuhao.to_zyfh('Mao2 Ze2-dong1') # => 'ㄇㄠ2 ㄗㄜ2ㄉㄨㄥ1'
-    #
-    # Returns a String.
-    def self.create_convert_method(romanization_module, romanization_name, name)
-      romanization_module.define_singleton_method("to_#{ name }") do |*args|
-        str, from = args
-        from ||= ZhongwenTools::Romanization.romanization?(str)
-
-        ZhongwenTools::Romanization.convert str, romanization_name, from.to_sym
-      end
-    end
-
-    # <module_name>::split(str)
-    # Public: splits the romanization's string.
-    #
-    # str - a String to be split
-    #
-    # Examples
-    #
-    #
-    #   split('zhong1guo2')
-    #   # => ['zhong1', 'guo2']
-    #
-    # Returns an Array of Strings.
-    def self.create_split_method(romanization_module, name)
-      regex = romanization_module == :ZhuyinFuhao ? /([#{ZhongwenTools::Regex.bopomofo}]*)/ : /(#{ZhongwenTools::Romanization.detect_regex(name.to_sym)}*)/
-
-      romanization_module.define_singleton_method("split") do |str|
-        # TODO: ignore tonal marks from other systems wade giles, tongyong etc.
-        results = str.scan(regex).map do |arr|
-          arr[0].strip.gsub('-','')
-        end
-
-        results.flatten - ['']
-      end
     end
 
     # Internal: Produces a Regexp for a romanization type.
@@ -252,19 +202,5 @@ module ZhongwenTools
       TongyongPinyin: %w(typy tongyong tongyong_pinyin),
       MPS2: ['mps2']
     }
-
-    RomanizationTypes.each do |module_name, names|
-      romanization_module = self.const_set(module_name, Module.new) unless self.const_defined?(module_name)
-      romanization_module ||= self.const_get(module_name)
-
-      romanization_name = names.first.to_sym
-
-      names.each do |name|
-        create_convert_method(romanization_module, romanization_name, name)
-      end
-
-      create_detect_method(romanization_module, romanization_name)
-      create_split_method(romanization_module, romanization_name)
-    end
   end
 end
