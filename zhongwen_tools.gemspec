@@ -27,4 +27,8 @@ Gem::Specification.new do |s|
     s.add_development_dependency('pry', '~> 0.9', '>= 0.9.12')
     s.add_development_dependency('minitest-reporters', '~> 1.0', '>= 1.0.4')
   end
+
+  if RUBY_VERSION >= '2.1'
+    s.add_development_dependency('memory_profiler', '0.0.4')
+  end
 end
