@@ -116,7 +116,6 @@ You can monkey patch the String class.
 
     '金枪鱼'.to_zhhk #=> '吞拿魚'
 
-
 #### Integer Extensions
 
 You can also monkey patch the Integer class!
@@ -150,11 +149,8 @@ The core functionality of ZhongwenTools excludes converting between
 simplified and traditional Chinese. You can use it by requiring
 'zhongwen_tools/core' instead of 'zhongwen_tools'
 
-    require 'zhongwen_tools/core' 
+    require 'zhongwen_tools/core'
     require 'zhongwen_tools/core_ext/string'
 
     'ni3 hao3'.to_pinyin #=> 'nǐ hǎo'
     '你們好'.to_zhs #=> NoMethodError
-
-##TODO:
- 1. create a generic ZhongwenTools::Romanization.split method for convenience

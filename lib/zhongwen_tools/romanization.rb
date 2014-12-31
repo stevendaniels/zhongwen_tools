@@ -67,13 +67,23 @@ module ZhongwenTools
     end
 
     def self.split(str, type = nil)
-      # should probably yield
       type ||= romanization?(str)
 
       if type == :py
+         ZhongwenTools::Romanization::Pinyin.split_py(str)
       elsif type == :pyn
+         ZhongwenTools::Romanization::Pinyin.split_pyn(str)
+      elsif type == :bpmf
+         ZhongwenTools::Romanization::ZhuyinFuhao.split(str)
+      elsif type == :wg
+         ZhongwenTools::Romanization::WadeGiles.split(str)
+      elsif type == :typy
+         ZhongwenTools::Romanization::TongyongPinyin.split(str)
+      elsif type == :yale
+         ZhongwenTools::Romanization::Yale.split(str)
+      elsif type == :mps2
+         ZhongwenTools::Romanization::MPS2.split(str)
       end
-
     end
 
     private
