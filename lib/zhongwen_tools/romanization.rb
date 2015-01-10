@@ -174,7 +174,9 @@ module ZhongwenTools
     #
     # Returns a Regexp.
     def self.detect_regex(type)
-      /#{romanization_values(type).sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
+      # TODO: memoize
+      @memoized_detect_regex ||= {}
+      @memoized_detect_regex[type] ||= /#{romanization_values(type).sort{|x,y| x.size <=> y.size}.reverse.join('|')}/
     end
 
     # Internal: Selects the romanization values for a particular romanization type.
@@ -188,11 +190,13 @@ module ZhongwenTools
     #
     # Returns an Array that contains the romanization's values.
     def self.romanization_values(type)
-      results = ZhongwenTools::Romanization::ROMANIZATIONS_TABLE.map do |r|
+      # TODO: memoize
+      @memoized_romanization_values = {}
+      @memoized_romanization_values[type] = ZhongwenTools::Romanization::ROMANIZATIONS_TABLE.map do |r|
         "[#{r[type][0]}#{r[type][0].upcase}]#{r[type][1..-1]}" || r[:pyn]
-      end
+      end.flatten
 
-      results.flatten
+      @memoized_romanization_values[type]
     end
 
     def self.romanization_module(type)

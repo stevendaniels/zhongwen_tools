@@ -3,13 +3,13 @@
 module ZhongwenTools
   module Regex
     def self.pyn
-      /(#{pyn_regexes.values.join('|')}|r)([1-5])([\s\-]+)?/
+      @pyn ||= /(#{pyn_regexes.values.join('|')}|r)([1-5])([\s\-]+)?/
     end
 
     def self.py
       # FIXME: need to detect Ālābó
       # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
-      /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
+      @py ||= /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
     end
 
     def self.pinyin_num
@@ -17,7 +17,7 @@ module ZhongwenTools
     end
 
     def self.pinyin_toneless
-      /(#{pyn_regexes.values.join('|')}|r)([\s\-]+)?/
+      @pynt ||= /(#{pyn_regexes.values.join('|')}|r)([\s\-]+)?/
     end
 
     def self.fullwidth
