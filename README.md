@@ -2,8 +2,8 @@
 Methods for dealing with Chinese.
 
 [![Build
-Status](https://travis-ci.org/stevendaniels/zhongwen_tools.png?branch=master)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://gemnasium.com/stevendaniels/zhongwen_tools.png)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://codeclimate.com/github/stevendaniels/zhongwen_tools.png)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://coveralls.io/repos/stevendaniels/zhongwen_tools/badge.png)](https://coveralls.io/r/stevendaniels/zhongwen_tools)
-[![Gem Version](https://badge.fury.io/rb/zhongwen_tools.png)](http://badge.fury.io/rb/zhongwen_tools)
+Status](https://img.shields.io/travis/stevendaniels/zhongwen_tools.svg?style=flat-square)](https://travis-ci.org/stevendaniels/zhongwen_tools) [![Dependency Status](https://img.shields.io/gemnasium/stevendaniels/zhongwen_tools.svg?style=flat-square)](https://gemnasium.com/stevendaniels/zhongwen_tools) [![Code Climate](https://img.shields.io/codeclimate/github/stevendaniels/zhongwen_tools.svg?style=flat-square)](https://codeclimate.com/github/stevendaniels/zhongwen_tools) [![Coverage Status](https://img.shields.io/coveralls/stevendaniels/zhongwen_tools.svg?style=flat-square)](https://coveralls.io/r/stevendaniels/zhongwen_tools)
+[![Gem Version](https://img.shields.io/gem/v/zhongwen_tools.svg?style=flat-square)](http://badge.fury.io/rb/zhongwen_tools)
 
 ##INSTALLATION
 
