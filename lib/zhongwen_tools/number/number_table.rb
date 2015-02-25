@@ -2,8 +2,10 @@
 
 module ZhongwenTools
   module Number
-    # TODO: Add huge numbers.
-    # 垓	秭	穰	溝	澗	正	載 --> beyond 100,000,000!
+    # TODO: Add huge numbers. http://en.wikipedia.org/wiki/Chinese_numerals#Large_numbers
+    # 垓=亿 (archaic)
+    # 秭: 1B or 100B or 1T  or 10000T (archaic)
+    # 穰	溝	澗	正	載 --> beyond 100,000,000!
     # NOTE: financial numbers i == 0 ? NT.select{ |x| x[:i] == i }.last[:zhs] : NT.find{ |x| x[:i] = i }
     NUMBERS_TABLE = [
       { zhs: '零', zht: '零', i: 0, pyn: 'ling2' },
@@ -39,6 +41,7 @@ module ZhongwenTools
       { zhs: '仟', zht: '仟', i: 1_000, pyn: 'qian1' },
       { zhs: '万', zht: '萬', i: 10_000, pyn: 'wan4' },
       { zhs: '亿', zht: '億', i: 100_000_000, pyn: 'yi4' },
+      { zhs: '京', zht: '京', i: 1_000_000_000_000_000, pyn: 'jing1' }
     ]
   end
 end

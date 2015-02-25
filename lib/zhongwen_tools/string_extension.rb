@@ -138,7 +138,7 @@ module ZhongwenTools
     end
 
     def split_romanization
-      ZhongwenTools::romanization.split(self)
+      ZhongwenTools::Romanization.split(self)
     end
 
     def zhs?

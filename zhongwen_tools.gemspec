@@ -1,31 +1,31 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'zhongwen_tools/version'
 
 Gem::Specification.new do |s|
-  s.name        = "zhongwen_tools"
-  s.license     = "MIT"
+  s.name        = 'zhongwen_tools'
+  s.license     = 'MIT'
   s.version     = ZhongwenTools::VERSION
-  s.authors     = ["Steven Daniels"]
-  s.email       = ["steven@tastymantou.com"]
-  s.homepage    = "https://github.com/stevendaniels/zhongwen_tools"
+  s.authors     = ['Steven Daniels']
+  s.email       = ['steven@tastymantou.com']
+  s.homepage    = 'https://github.com/stevendaniels/zhongwen_tools'
   s.summary     = %q{Zhongwen Tools provide romanization conversions and helper methods for Chinese.}
   s.description = %q{Chinese tools for romanization conversions and other helpful string functions for Chinese.}
-  s.rubyforge_project = "zhongwen_tools"
+  s.rubyforge_project = 'zhongwen_tools'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.require_paths = ['lib']
 
-  s.add_development_dependency('rake', "~> 10.1")
+  s.add_development_dependency('rake', '~> 10.1')
   if RUBY_VERSION >= '1.9'
-    s.add_development_dependency('simplecov', '~> 0.7', '>= 0.7.0')
+    s.add_development_dependency('simplecov', '~> 0.9', '>= 0.9.1')
     s.add_development_dependency('simplecov-gem-adapter', '~> 1.0', '>= 1.0.1')
     s.add_development_dependency('coveralls', '~> 0.7', '>= 0.7.0')
-    s.add_development_dependency('minitest', '~> 5.3', '>= 5.3.0')
-    s.add_development_dependency('pry', '~> 0.9', '>= 0.9.12')
-    s.add_development_dependency('minitest-reporters', '~> 1.0', '>= 1.0.4')
+    s.add_development_dependency('minitest', '~> 5.5', '>= 5.5.1')
+    s.add_development_dependency('pry', '~> 0.10', '>= 0.10.1')
+    s.add_development_dependency('minitest-reporters', '~> 1.0', '>= 1.0.10')
   end
 
   if RUBY_VERSION >= '2.1'

@@ -76,4 +76,10 @@ class TestNumber < Minitest::Test
         assert_equal n[:i], ZhongwenTools::Number.to_i(n[:zhs])
     end
   end
+
+  def test_large_numbers
+    assert_equal '五十万',  ZhongwenTools::Number.to_zhs(500_000)
+    assert_equal '五十亿',  ZhongwenTools::Number.to_zhs(5_000_000_000)
+    #assert_equal '五万亿',  ZhongwenTools::Number.to_zhs(5_000_000_000_000)
+  end
 end

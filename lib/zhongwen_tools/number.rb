@@ -44,7 +44,7 @@ module ZhongwenTools
 
     def self.convert(obj, to, from, separator = '')
       fail ArgumentError unless [:zhs, :zht, :i, :pyn].include?(to.to_sym)
-      fail ArgumentError unless [String, Integer, Fixnum].include?(obj.class)
+      fail ArgumentError unless [String, Integer, Fixnum, Bignum].include?(obj.class)
 
       number =   convert_from from, to, obj
 
@@ -61,7 +61,7 @@ module ZhongwenTools
     def self.number_type(obj)
       klass = obj.class
 
-      if klass == Fixnum || klass == Integer
+      if [Fixnum, Integer, Bignum].include?(klass)
         :i
       else
         if ZhongwenTools::Zhongwen.zh?(obj)
@@ -175,7 +175,13 @@ module ZhongwenTools
         if i == 0
           result << convert_integer(num, to) unless num == 0
         else
-          result << convert_wan_level(i, to)
+          if i < 5
+            result << convert_wan_level(i, to)
+          elsif i == 8
+            result << convert_wan_level(i, to)
+          else
+            result << "#{ convert_wan_level(i - (i / 4 * 4), to) }#{ convert_wan_level((i / 4 * 4), to) }"
+          end
           # checks the wan level and ...
           result << convert_integer(num, to) if wan_ok?(num, wan, i)
         end
@@ -189,7 +195,7 @@ module ZhongwenTools
     end
 
     def self.wan_ok?(num, wan, i)
-      (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
+        (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
     end
 
     def self.wan_level(wan, i)
@@ -215,7 +221,7 @@ module ZhongwenTools
       # FIXME: is finalize_number the best name you can think of?
       # NOTE: Figuring out usage of "liang" vs. "er" is pretty
       #       difficult, so always use "er" instead.
-      number.join(separator).gsub(/零#{ZhongwenTools::Regex.zh_number_multiple}/u,'')
+      number.join(separator).gsub(/零[#{ Regex.zh_number_multiple }]*/u,'')
     end
   end
 end
