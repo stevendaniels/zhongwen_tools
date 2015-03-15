@@ -4,41 +4,43 @@ require 'zhongwen_tools/caps'
 require 'zhongwen_tools/romanization'
 
 module ZhongwenTools
+  # Public: Romanization converts to pinyin and pyn.
   module Romanization
     def self.convert_to_py(str, from)
       str =  convert_romanization(str, from, :pyn) if from != :pyn
-      ZhongwenTools::Romanization::Pinyin.convert_pyn_to_pinyin(str)
+      Pinyin.convert_pyn_to_pinyin(str)
     end
 
     def self.convert_to_pyn(str, from)
       orig_str = str.dup
 
       if from == :py
-        str = ZhongwenTools::Romanization::Pinyin.convert_pinyin_to_pyn(str)
+        str = Romanization::Pinyin.convert_pinyin_to_pyn(str)
       else
         str = convert_romanization(str, from, :pyn)
       end
 
-      str = ZhongwenTools::Romanization::Pinyin.add_hyphens_to_pyn(str) if hyphenated?(orig_str)
+      str = Romanization::Pinyin.add_hyphens_to_pyn(str) if hyphenated?(orig_str)
 
       str
     end
 
+    # Public: methods to convert, detect and split pinyin or
+    #         pyn (pinyin with numbers, e.g. hao3).
     module Pinyin
       %w(pinyin py pyn).each do |romanization|
         define_singleton_method("to_#{romanization}") do |*args|
           str, from = args
-          from ||= ZhongwenTools::Romanization.romanization? str
+          from ||= Romanization.romanization? str
 
-          # _convert_romanization str, _set_type(type.to_sym), _set_type(from)
-          ZhongwenTools::Romanization.convert str, py_type(romanization), (py_type(from) || from)
+          Romanization.convert str, py_type(romanization), (py_type(from) || from)
         end
       end
 
       def self.split_pyn(str)
         # FIXME: ignore punctuation
-        regex = str[/[1-5]/].nil? ?  /(#{ZhongwenTools::Regex.pinyin_toneless})/ : /(#{ZhongwenTools::Regex.pyn}|#{ZhongwenTools::Regex.pinyin_toneless})/
-        # NOTE: p[/[^\-]*/].to_s is 25% faster thang gsub('-', '')
+        regex = str[/[1-5]/].nil? ?  /(#{ Regex.pinyin_toneless })/ : /(#{ Regex.pyn }|#{ Regex.pinyin_toneless })/
+        # NOTE: p[/[^\-]*/].to_s is 25% faster than gsub('-', '')
         str.scan(regex).map{ |arr| arr[0].strip[/[^\-]*/].to_s }.flatten
       end
 
@@ -50,7 +52,7 @@ module ZhongwenTools
           # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
           #       Special Case "yìnián" should be "yì" + "nián"
           word = word.gsub('ngu', 'n-gu')
-            .gsub(/([#{ ZhongwenTools::Regex.only_tones }])(ni[#{ ZhongwenTools::Regex.py_tones['a'] }])/){ "#{ $1 }-#{ $2 }" }
+          word = word.gsub(/([#{ Regex.only_tones }])(ni[#{ Regex.py_tones['a'] }])/){ "#{ $1 }-#{ $2 }" }
           result = word.split(/['\-]/).flatten.map do |x|
             find_py(x)
           end
@@ -70,14 +72,15 @@ module ZhongwenTools
       #
       # Returns Boolean.
       def self.py?(str)
-        if str[ZhongwenTools::Regex.only_tones].nil? && str[/[1-5]/].nil?
+        if str[Regex.only_tones].nil? && str[/[1-5]/].nil?
           pyn?(str)
         else
-          # NOTE: py regex does not include capitals with tones.
+          # TODO: py regex does not include capitals with tones.
           # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
-          regex = /(#{ ZhongwenTools::Regex.punc }|#{ ZhongwenTools::Regex.py }|[\s\-])/
+
+          regex = /(#{ Regex.punc }|#{ Regex.py }|#{ Regex.py_syllabic_nasals }|[\s\-])/
           str = str.gsub('ngu', 'n-gu')
-          ZhongwenTools::Caps.downcase(str).gsub(regex, '').strip == ''
+          Caps.downcase(str).gsub(regex, '').strip == ''
         end
       end
 
@@ -90,8 +93,9 @@ module ZhongwenTools
       # Returns Boolean.
       def self.pyn?(str)
         # FIXME: use strip_punctuation method
-        normalized_str = ZhongwenTools::Caps.downcase(str.gsub(ZhongwenTools::Regex.punc, '').gsub(/[\s\-]/, ''))
+        normalized_str = Caps.downcase(str.gsub(Regex.punc, '').gsub(/[\s\-]/, ''))
         pyn_arr = split_pyn(normalized_str).map{ |p| p }
+        pyn_arr << normalized_str if pyn_arr.size == 0 && PYN_SYLLABIC_NASALS.include?(normalized_str.gsub(/[1-5]/, ''))
 
         pyn_matches_properly?(pyn_arr, normalized_str) &&
           are_all_pyn_syllables_complete?(pyn_arr)
@@ -112,7 +116,7 @@ module ZhongwenTools
       end
 
       def self.are_all_pyn_syllables_complete?(pyn_arr)
-        pyns = ROMANIZATIONS_TABLE.map{ |r| r[:pyn] }
+        pyns = ROMANIZATIONS_TABLE.map{ |r| r[:pyn] } + PYN_SYLLABIC_NASALS
 
         pyn_syllables = pyn_arr.select do |p|
           pyns.include?(p.gsub(/[1-5]/, ''))
@@ -128,20 +132,21 @@ module ZhongwenTools
       end
 
       def self.normalize_pinyin(pinyin)
-        [ZhongwenTools::Caps.downcase(pinyin), capitalized?(pinyin)]
+        [Caps.downcase(pinyin), capitalized?(pinyin)]
       end
 
       def self.find_py(str)
-        str.scan(ZhongwenTools::Regex.py).map{ |x| x.compact[0] }
+        regex = /(#{ Regex.py }|#{ Regex.py_syllabic_nasals })/
+        str.scan(regex).map{ |x| x.compact[0] }
       end
 
       def self.recapitalize(obj, capitalized)
         return obj unless capitalized
 
-        if obj.class == String
-          ZhongwenTools::Caps.capitalize(obj)
-        elsif obj.class == Array
-          [ZhongwenTools::Caps.capitalize(obj[0]), obj[1..-1]].flatten
+        if obj.is_a? String
+          Caps.capitalize(obj)
+        elsif obj.is_a? Array
+          [Caps.capitalize(obj[0]), obj[1..-1]].flatten
         end
       end
 
@@ -161,9 +166,8 @@ module ZhongwenTools
           # NOTE: if a word is upcase, then it will be converted the same
           #       as a word that is only capitalized.
           word, is_capitalized = normalize_pinyin(word)
-
           pys = split_py(word)
-          #is_capitalized ? ZhongwenTools::Caps.capitalize(result) : result
+
           recapitalize(current_pyn(word, pys), is_capitalized)
         end
 
@@ -171,11 +175,12 @@ module ZhongwenTools
       end
 
       def self.capitalized?(str)
-        str[0] != ZhongwenTools::Caps.downcase(str[0])
+        str[0] != Caps.downcase(str[0])
       end
 
       def self.current_pyn(pyn, pinyin_arr)
         replacements = []
+
         pinyin_arr.each do |pinyin|
           replace =  pinyin_replacement(pinyin)
           match = pinyin
@@ -194,6 +199,7 @@ module ZhongwenTools
         matches = PYN_PY.values.select do |x|
           py.include? x
         end
+
         match = select_pinyin_match(matches)
         replace = PYN_PY.find{ |k, v| k if v == match }[0]
 
@@ -220,13 +226,13 @@ module ZhongwenTools
       #  Returns a string with actual pinyin
       def self.convert_pyn_to_pinyin(str)
         regex = Regex.pinyin_num
-        # Using gsub is ~8x faster than using scan and each.
-        # Explanation: if it's pinyin without vowels, e.g. m, ng, then convert,
-        #              otherwise, check if it needs an apostrophe (http://www.pinyin.info/romanization/hanyu/apostrophes.html).
-        #              If it does, add it and then convert. Otherwise, just convert.
-        #              Oh, and if it has double hyphens, replace with one hyphen.
-        #              And finally, correct those apostrophes at the very end.
-        #              It's like magic.
+        # NOTE: Using gsub is ~8x faster than using scan and each.
+        # NOTE: if it's pinyin without vowels, e.g. m, ng, then convert,
+        #       otherwise, check if it needs an apostrophe (http://www.pinyin.info/romanization/hanyu/apostrophes.html).
+        #       If it does, add it and then convert. Otherwise, just convert it.
+        #       Oh, and if it has double hyphens, replace with one hyphen.
+        #       And finally, correct those apostrophes at the very end.
+        #       It's like magic.
         str.gsub(regex) do
           ($3.nil? ? "#{ PYN_PY[$1] }" : ($2 == '' && %w(a e o).include?($3[0,1]))? "'#{ PYN_PY["#{ $3 }#{ $6 }"]}#{ $4 }#{ $5 }" : "#{ $2 }#{ PYN_PY["#{ $3 }#{ $6 }"] }#{ $4 }#{ $5 }") + (($7.to_s.length > 1) ? '-' : '')
         end.gsub("-'", '-').sub(/^'/, '')

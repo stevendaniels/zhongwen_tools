@@ -2,10 +2,12 @@
 
 # NOTE: This table works for pyn -> pinyin conversion, but it introduces
 #       mistakes when converting pinyin to pyn. In practice, pinyin can't
-#       be converted to pyn with complete accuracy unless it is properly 
+#       be converted to pyn with complete accuracy unless it is properly
 #       formatted.
 module ZhongwenTools
   module Romanization
+    PYN_SYLLABIC_NASALS = %w(ng m n)
+
     PYN_PY = {
       'A1' => 'Ā',
       'A2' => 'Á',
@@ -152,17 +154,42 @@ module ZhongwenTools
       'm3' => 'm̌', # using combining diacritical marks
       'm4' => 'm̀', # using combining diacritical marks
       'm5' => 'm',
-      'n1' => 'ēn',
-      'n2' => 'én',
-      'n3' => 'ěn',
-      'n4' => 'èn',
-      'n5' => 'en',
-      'ng1' => 'ēng',
-      'ng2' => 'éng',
-      'ng3' => 'ěng',
-      'ng4' => 'èng',
-      'ng5' => 'eng',
-      'r5' => 'r'
+      'n1' => 'n̄',
+      'n2' => 'ń',
+      'n3' => 'ň',
+      'n4' => 'ǹ',
+      'n5' => 'n',
+      'Ng1' => 'N̄g', # using combining diacritical marks
+      'Ng2' => 'Ńg',
+      'Ng3' => 'Ňg', # using combining diacritical marks
+      'Ng4' => 'Ǹg',
+      'Ng5' => 'Ng',
+      'ng1' => 'n̄g', # using combining diacritical marks
+      'ng2' => 'ńg',
+      'ng3' => 'ňg', # using combining diacritical marks
+      'ng4' => 'ǹg',
+      'ng5' => 'ng',
+      'r5' => 'r',
+      'ang1' => 'āng',
+      'ang2' => 'áng',
+      'ang3' => 'ǎng',
+      'ang4' => 'àng',
+      'ang5' => 'ang',
+      'eng1' => 'ēng',
+      'eng2' => 'éng',
+      'eng3' => 'ěng',
+      'eng4' => 'èng',
+      'eng5' => 'eng',
+      'ing1' => 'īng',
+      'ing2' => 'íng',
+      'ing3' => 'ǐng',
+      'ing4' => 'ìng',
+      'ing5' => 'ing',
+      'ong1' => 'ōng',
+      'ong2' => 'óng',
+      'ong3' => 'ǒng',
+      'ong4' => 'òng',
+      'ong5' => 'ong',
     }
   end
 end

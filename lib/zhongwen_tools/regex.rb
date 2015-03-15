@@ -99,6 +99,11 @@ module ZhongwenTools
       }
     end
 
+    def self.py_syllabic_nasals
+      # NOTE: includes combining diatrical marks for n̄ňm̄m̌m̀
+      /((N̄|n̄|ň)g?|[ŇŃǸńǹ]g?|m̄|m̌|m̀|ḿ)/
+    end
+
     def self.py_tones
       {
         'a' => '[āáǎàa]',
@@ -111,7 +116,8 @@ module ZhongwenTools
     end
 
     def self.only_tones
-      /([āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ])/
+      # NOTE: includes combining diatrical marks for n̄ňm̄m̌m̀
+      /([āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜńǹḿŃŇǸ]|N̄|n̄|ň|m̄|m̌|m̀)/
     end
   end
 end

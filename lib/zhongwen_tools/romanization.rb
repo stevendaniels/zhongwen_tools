@@ -8,10 +8,8 @@ require 'zhongwen_tools/romanization/yale'
 require 'zhongwen_tools/romanization/mps2'
 require 'zhongwen_tools/romanization/romanization_table'
 
-# NOTE: Creates several dynamic Modules and their associated methods.
-#       e.g. ZhongwenTools::Romanization::ZhuyinFuhao.to_bpmf
-#            ZhongwenTools::Romanization::WadeGiles.to_wg
 module ZhongwenTools
+  # Public: Romanization converts, detects and splits different romanizations.
   module Romanization
     def self.convert(str, to, from)
       # NOTE: don't convert if it already is converted.
@@ -105,14 +103,14 @@ module ZhongwenTools
     end
 
     def self.convert_romanization(str, from, to)
-        # NOTE: extract/refactor tokens cause tests to fail.
-        if from == :pyn
-          tokens = ZhongwenTools::Romanization::Pinyin.split_pyn(str).uniq
-        else
-          tokens = romanization_module(from).send(:split, str).uniq
-        end
+      # NOTE: extract/refactor tokens cause tests to fail.
+      if from == :pyn
+        tokens = ZhongwenTools::Romanization::Pinyin.split_pyn(str).uniq
+      else
+        tokens = romanization_module(from).send(:split, str).uniq
+      end
 
-     tokens.collect do |t|
+      tokens.collect do |t|
         search, replace = find_token_replacement(t, str, to, from)
         str =  str.gsub(search, replace)
       end
@@ -193,14 +191,15 @@ module ZhongwenTools
       # TODO: memoize
       @memoized_romanization_values = {}
       @memoized_romanization_values[type] = ZhongwenTools::Romanization::ROMANIZATIONS_TABLE.map do |r|
-        "[#{r[type][0]}#{r[type][0].upcase}]#{r[type][1..-1]}" || r[:pyn]
+        "[#{ r[type][0] }#{ r[type][0].upcase }]#{ r[type][1..-1] }" || r[:pyn]
       end.flatten
 
       @memoized_romanization_values[type]
     end
 
-    def self.romanization_module(type)
-      module_name = RomanizationTypes.find{ |k,v| v.include?(type.to_s) }.first
+    def self.romanization_module(type = :py)
+      module_name = ROMANIZATION_TYPES.find{ |_k, v| v.include?(type.to_s) }.first
+
       ZhongwenTools::Romanization.const_get(module_name)
     end
 
@@ -208,8 +207,7 @@ module ZhongwenTools
       !str[/\-/].nil?
     end
 
-    # Internal: Creates romanization modules and their methods.
-    RomanizationTypes = {
+    ROMANIZATION_TYPES = {
       ZhuyinFuhao: %w(bpmf zhuyin_fuhao zhuyinfuhao zyfh zhyfh bopomofo),
       WadeGiles: %w(wg wade_giles),
       Yale: ['yale'],
