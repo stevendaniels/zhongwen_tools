@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 module ZhongwenTools
   module Regex
     def self.pyn
@@ -9,7 +8,7 @@ module ZhongwenTools
     def self.py
       # FIXME: need to detect Ālābó
       # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
-      @py ||= /(#{pyn_regexes.map{|k,v| v.to_s[7..-2].gsub(/[aeiouv]/,py_tones)}.join('|')}([\s\-])?)/
+      @py ||= /(#{pyn_regexes.map { |_k, v| v.to_s[7..-2].gsub(/[aeiouv]/, py_tones) }.join('|')}([\s\-])?)/
     end
 
     def self.pinyin_num
@@ -86,7 +85,7 @@ module ZhongwenTools
       {
         nl_regex: /([nN]eng?|[lnLN](a(i|ng?|o)?|e(i|ng)?|i(ang|a[on]?|e|ng?|u)?|o(ng?|u)|u(o|i|an?|n)?|ve?))/,
         bpm_regex: /([mM]iu|[pmPM]ou|[bpmBPM](o|e(i|ng?)?|a(ng?|i|o)?|i(e|ng?|a[no])?|u))/,
-        y_regex: /[yY](a(o|ng?)?|e|i(n|ng)?|o(u|ng)?|u(e|a?n)?)/,
+        y_regex: /[yY](a(o|ng?)?|e|i(ng|n)?|o(u|ng)?|u(e|a?n)?)/,
         f_regex: /([fF](ou?|[ae](ng?|i)?|u))/,
         dt_regex: /([dD](e(i|ng?)|i(a[on]?|u))|[dtDT](a(i|ng?|o)?|e(i|ng)?|i(a[on]?|e|ng|u)?|o(ng?|u)|u(o|i|an?|n)?))/,
         gkh_regex: /([ghkGHK](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
