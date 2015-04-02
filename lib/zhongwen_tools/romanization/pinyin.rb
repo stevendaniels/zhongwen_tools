@@ -49,13 +49,17 @@ module ZhongwenTools
 
         results = words.map do |word|
           word, is_capitalized = normalize_pinyin(word)
-          # NOTE: Special Case "fǎnguāng" should be "fǎn" + "guāng"
-          #       Special Case "yìnián" should be "yì" + "nián"
-          word = word.gsub('ngu', 'n-gu')
-          word = word.gsub(/([#{ Regex.only_tones }])(ni[#{ Regex.py_tones['a'] }])/){ "#{ $1 }-#{ $2 }" }
+          # NOTE: Special Case split_py("fǎnguāng") # => ["fǎn" + "guāng"]
+          #       Special Case split_py("yìnián")   # => ["yì" + "nián"]
+          #                    split_py("Xīní")     # => ["Xī", "ní"]
+          word = word.gsub(/(n)(g(#{ Regex.py_tones['o'] }|u))/){ "#{ $1 }-#{ $2 }" }
+          word = word.gsub(/([#{ Regex.only_tones }])(n(#{ Regex.py_tones['v'] }|#{ Regex.py_tones['i'] }|[iu][#{ Regex.py_tones['a'] }]))/){ "#{ $1 }-#{ $2 }" }
           result = word.split(/['\-]/).flatten.map do |x|
             find_py(x)
           end
+
+          # NOTE: Special Case split_py('wányìr')   # => ['wán', 'yì', 'r']
+          result << 'r' unless word[/(.*[^#{ Regex.py_tones['e'] }.])(r)$/].nil?
 
           recapitalize(result.flatten, is_capitalized)
         end

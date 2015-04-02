@@ -17,6 +17,13 @@ class TestPinyin < Minitest::Test
 
     assert_equal ['fǎn', 'guāng', 'jìng'], ZhongwenTools::Romanization::Pinyin.split_py('fǎnguāngjìng')
     assert_equal ['Yīng', 'guó'], ZhongwenTools::Romanization::Pinyin.split_py('Yīngguó')
+    assert_equal ['Xī', 'ní'], ZhongwenTools::Romanization::Pinyin.split_py('Xīní')
+    assert_equal ['bàn', 'gōng', 'lóu'], ZhongwenTools::Romanization::Pinyin.split_py('bàngōnglóu')
+    assert_equal ['jì', 'nǚ'], ZhongwenTools::Romanization::Pinyin.split_py('jìnǚ')
+    assert_equal ['sè', 'guǐ'], ZhongwenTools::Romanization::Pinyin.split_py('sèguǐ')
+    assert_equal ['qǔ', 'nuǎn'], ZhongwenTools::Romanization::Pinyin.split_py('qǔnuǎn')
+    assert_equal ['wán', 'yì', 'r'], ZhongwenTools::Romanization::Pinyin.split_py('wányìr')
+    assert_equal ['yīng', "ér"], ZhongwenTools::Romanization::Pinyin.split_py("yīng'ér")
   end
 
   def test_py?

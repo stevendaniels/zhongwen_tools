@@ -6,12 +6,12 @@ module ZhongwenTools
     end
 
     def self.py
-      # FIXME: need to detect Ālābó
       # ([ĀÁǍÀA][io]?|[io]?|[][āáǎàaēéěèeūúǔùu]?o?|[ĒÉĚÈE]i?|[]i?|[ŌÓǑÒO]u?|[]u?|u[āáǎàaēoēéěèe]?i?|[]e?)(n?g?r?)){1,}
       @py ||= /(#{pyn_regexes.map { |_k, v| v.to_s[7..-2].gsub(/[aeiouv]/, py_tones) }.join('|')}([\s\-])?)/
     end
 
     def self.pinyin_num
+      # FIXME: n?g? might need to be replaced with (ng|n)?
       /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/
     end
 
@@ -90,7 +90,7 @@ module ZhongwenTools
         dt_regex: /([dD](e(i|ng?)|i(a[on]?|u))|[dtDT](a(i|ng?|o)?|e(i|ng)?|i(a[on]?|e|ng|u)?|o(ng?|u)|u(o|i|an?|n)?))/,
         gkh_regex: /([ghkGHK](a(i|ng?|o)?|e(i|ng?)?|o(u|ng)|u(a(i|ng?)?|i|n|o)?))/,
         zczhch_regex: /([zZ]h?ei|[czCZ]h?(e(ng?)?|o(ng?|u)?|ao|u?a(i|ng?)?|u?(o|i|n)?))/,
-        ssh_regex: /([sS]ong|[sS]hua(i|ng?)?|[sS]hei|[sS][h]?(a(i|ng?|o)?|en?g?|ou|u(a?n|o|i)?|i))/,
+        ssh_regex: /([sS]ong|[sS]hua(i|ng?)?|[sS]hei|[sS][h]?(a(i|ng?|o)?|e(ng|n)?|ou|u(a?n|o|i)?|i))/,
         r_regex: /([rR]([ae]ng?|i|e|ao|ou|ong|u[oin]|ua?n?))/,
         jqx_regex: /([jqxJQX](i(a(o|ng?)?|[eu]|ong|ng?)?|u(e|a?n)?))/,
         aeo_regex: /(([aA](i|o|ng?)?|[oO]u?|[eE](i|ng?|r)?))/,
