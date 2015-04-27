@@ -39,9 +39,9 @@ module ZhongwenTools
 
       def self.split_pyn(str)
         # FIXME: ignore punctuation
-        regex = str[/[1-5]/].nil? ?  /(#{ Regex.pinyin_toneless })/ : /(#{ Regex.pyn }|#{ Regex.pinyin_toneless })/
+        regex = str[/[1-5]/].nil? ? /(#{ Regex.pinyin_toneless })/ : /(#{ Regex.pyn }|#{ Regex.pinyin_toneless })/
         # NOTE: p[/[^\-]*/].to_s is 25% faster than gsub('-', '')
-        str.scan(regex).map{ |arr| arr[0].strip[/[^\-]*/].to_s }.flatten
+        str.scan(regex).map { |arr| arr[0].strip[/[^\-]*/].to_s }.flatten
       end
 
       def self.split_py(str)
@@ -49,11 +49,8 @@ module ZhongwenTools
 
         results = words.map do |word|
           word, is_capitalized = normalize_pinyin(word)
-          # NOTE: Special Case split_py("fǎnguāng") # => ["fǎn" + "guāng"]
-          #       Special Case split_py("yìnián")   # => ["yì" + "nián"]
-          #                    split_py("Xīní")     # => ["Xī", "ní"]
-          word = word.gsub(/(n)(g(#{ Regex.py_tones['o'] }|u))/){ "#{ $1 }-#{ $2 }" }
-          word = word.gsub(/([#{ Regex.only_tones }])(n(#{ Regex.py_tones['v'] }|#{ Regex.py_tones['i'] }|[iu][#{ Regex.py_tones['a'] }]))/){ "#{ $1 }-#{ $2 }" }
+          word = normalize_n_g(word)
+          word = normalize_n(word)
           result = word.split(/['\-]/).flatten.map do |x|
             find_py(x)
           end
@@ -135,13 +132,29 @@ module ZhongwenTools
         { pyn: :pyn, py: :py, pinyin: :py }[romanization]
       end
 
+      # NOTE: Special Case split_py("fǎnguāng") # => ["fǎn" + "guāng"]
+      #       In pinyin, sāngēng == sān gēng and sāng'ēng = sāng ēng
+      def self.normalize_n_g(pinyin)
+        regex = /(?<n_part>n)(?<g_part>g(#{Regex.py_tones['o']}|#{Regex.py_tones['u']}|#{Regex.py_tones['a']}|#{Regex.py_tones['e']}))/
+        pinyin.gsub(regex) do
+          "#{Regexp.last_match[:n_part]}-#{Regexp.last_match[:g_part]}"
+        end
+      end
+
+      def self.normalize_n(pinyin)
+        #       Special Case split_py("yìnián")   # => ["yì" + "nián"]
+        #                    split_py("Xīní")     # => ["Xī", "ní"]
+        regex = /([#{ Regex.only_tones }])(n(#{Regex.py_tones['v']}|#{Regex.py_tones['i']}|[iu]|#{Regex.py_tones['e']}|[#{Regex.py_tones['a']}]))/
+        pinyin.gsub(regex) { "#{ $1 }-#{ $2 }" }
+      end
+
       def self.normalize_pinyin(pinyin)
         [Caps.downcase(pinyin), capitalized?(pinyin)]
       end
 
       def self.find_py(str)
         regex = /(#{ Regex.py }|#{ Regex.py_syllabic_nasals })/
-        str.scan(regex).map{ |x| x.compact[0] }
+        str.scan(regex).map { |x| x.compact[0] }
       end
 
       def self.recapitalize(obj, capitalized)
@@ -179,21 +192,15 @@ module ZhongwenTools
       end
 
       def self.capitalized?(str)
-        str[0] != Caps.downcase(str[0])
+        first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|#{Regex.py_syllabic_nasals}/][0]
+
+        first_letter != Caps.downcase(first_letter)
       end
 
       def self.current_pyn(pyn, pinyin_arr)
-        replacements = []
-
         pinyin_arr.each do |pinyin|
           replace =  pinyin_replacement(pinyin)
-          match = pinyin
-          if replacements.size > 0
-            pyn = pyn.sub(/(#{ replacements.join('.*') }.*)#{ match }/){ $1 + replace }
-          else
-            pyn = pyn.sub(/#{match}/){ "#{ $1 }#{ replace }" }
-          end
-          replacements << replace
+          pyn.sub!(pinyin, replace)
         end
 
         pyn.gsub("'", '')
@@ -205,14 +212,14 @@ module ZhongwenTools
         end
 
         match = select_pinyin_match(matches)
-        replace = PYN_PY.find{ |k, v| k if v == match }[0]
+        replace = PYN_PY.find { |k, v| k if v == match }[0]
 
         py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){ $1 + $3 + $2 }
       end
 
       def self.select_pinyin_match(matches)
         # take the longest pinyin match. Use bytes because 'è' is prefered over 'n' or 'r' or 'm'
-        match = matches.sort{ |x, y| x.bytes.to_a.length <=> y.bytes.to_a.length }[-1]
+        match = matches.sort { |x, y| x.bytes.to_a.length <=> y.bytes.to_a.length }[-1]
 
         # Edge case.. en/eng pyn -> py conversion is one way only.
         match[/^(ē|é|ě|è|e)n?g?/].nil? ? match : match.chars[0]

@@ -15,15 +15,19 @@ class TestPinyin < Minitest::Test
       assert_equal w[:split_py], ZhongwenTools::Romanization::Pinyin.split_py(w[:py])
     end
 
-    assert_equal ['fǎn', 'guāng', 'jìng'], ZhongwenTools::Romanization::Pinyin.split_py('fǎnguāngjìng')
+    assert_equal %w(fǎn guāng jìng), ZhongwenTools::Romanization::Pinyin.split_py('fǎnguāngjìng')
     assert_equal ['Yīng', 'guó'], ZhongwenTools::Romanization::Pinyin.split_py('Yīngguó')
     assert_equal ['Xī', 'ní'], ZhongwenTools::Romanization::Pinyin.split_py('Xīní')
-    assert_equal ['bàn', 'gōng', 'lóu'], ZhongwenTools::Romanization::Pinyin.split_py('bàngōnglóu')
+    assert_equal %w(bàn gōng lóu), ZhongwenTools::Romanization::Pinyin.split_py('bàngōnglóu')
     assert_equal ['jì', 'nǚ'], ZhongwenTools::Romanization::Pinyin.split_py('jìnǚ')
     assert_equal ['sè', 'guǐ'], ZhongwenTools::Romanization::Pinyin.split_py('sèguǐ')
     assert_equal ['qǔ', 'nuǎn'], ZhongwenTools::Romanization::Pinyin.split_py('qǔnuǎn')
-    assert_equal ['wán', 'yì', 'r'], ZhongwenTools::Romanization::Pinyin.split_py('wányìr')
-    assert_equal ['yīng', "ér"], ZhongwenTools::Romanization::Pinyin.split_py("yīng'ér")
+    assert_equal %w(wán yì r), ZhongwenTools::Romanization::Pinyin.split_py('wányìr')
+    assert_equal ['yīng', 'ér'], ZhongwenTools::Romanization::Pinyin.split_py("yīng'ér")
+    assert_equal ['xiǎn', 'gù'], ZhongwenTools::Romanization::Pinyin.split_py('xiǎngù')
+    assert_equal ['nián', 'gāo'], ZhongwenTools::Romanization::Pinyin.split_py('niángāo')
+    assert_equal %w(fú shè néng), ZhongwenTools::Romanization::Pinyin.split_py('fúshènéng')
+    assert_equal ['sān', 'gēng'], ZhongwenTools::Romanization::Pinyin.split_py('sāngēng')
   end
 
   def test_py?
@@ -84,17 +88,19 @@ class TestPinyin < Minitest::Test
 
     assert_equal 'yi2ge4', ZhongwenTools::Romanization::Pinyin.to_pyn('yígè')
     assert_equal 'yi4nian2', ZhongwenTools::Romanization::Pinyin.to_pyn('yìnián', :py)
+    assert_equal 'hei1hu1hu1', ZhongwenTools::Romanization::Pinyin.to_pyn('hēihūhū', :py)
+    assert_equal '"Zheng4qie1"',  ZhongwenTools::Romanization::Pinyin.to_pyn('"Zhèngqiē"', :py)
   end
 
   def setup
     @hyphenated_words = [
-      { :pyn => 'A1-la1-bo2', :py => 'Ālābó' },
-      { :pyn => 'Mao2 Ze2-dong1', :py => 'Máo Zédōng' }
+      { pyn: 'A1-la1-bo2', py: 'Ālābó' },
+      { pyn: 'Mao2 Ze2-dong1', py: 'Máo Zédōng' }
     ]
 
     @split_words = [
-      { :pyn => 'A1-la1-bo2',  :py => 'Ālābó', :split => %w(A1 la1 bo2), split_py: %w(Ā lā bó) },
-      { :pyn => 'Mao2 Ze2-dong1',  :py => 'Máo Zédōng', :split => %w(Mao2 Ze2 dong1), :split_py =>  %w(Máo Zé dōng) }
+      { pyn: 'A1-la1-bo2',  py: 'Ālābó', split: %w(A1 la1 bo2), split_py: %w(Ā lā bó) },
+      { pyn: 'Mao2 Ze2-dong1',  py: 'Máo Zédōng', split: %w(Mao2 Ze2 dong1), split_py:  %w(Máo Zé dōng) }
     ]
 
     @syllabic_nasals = [
