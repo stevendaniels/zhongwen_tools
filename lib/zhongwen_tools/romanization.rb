@@ -68,19 +68,19 @@ module ZhongwenTools
       type ||= romanization?(str)
 
       if type == :py
-         ZhongwenTools::Romanization::Pinyin.split_py(str)
+        ZhongwenTools::Romanization::Pinyin.split_py(str)
       elsif type == :pyn
-         ZhongwenTools::Romanization::Pinyin.split_pyn(str)
+        ZhongwenTools::Romanization::Pinyin.split_pyn(str)
       elsif type == :bpmf
-         ZhongwenTools::Romanization::ZhuyinFuhao.split(str)
+        ZhongwenTools::Romanization::ZhuyinFuhao.split(str)
       elsif type == :wg
-         ZhongwenTools::Romanization::WadeGiles.split(str)
+        ZhongwenTools::Romanization::WadeGiles.split(str)
       elsif type == :typy
-         ZhongwenTools::Romanization::TongyongPinyin.split(str)
+        ZhongwenTools::Romanization::TongyongPinyin.split(str)
       elsif type == :yale
-         ZhongwenTools::Romanization::Yale.split(str)
+        ZhongwenTools::Romanization::Yale.split(str)
       elsif type == :mps2
-         ZhongwenTools::Romanization::MPS2.split(str)
+        ZhongwenTools::Romanization::MPS2.split(str)
       end
     end
 
@@ -88,7 +88,7 @@ module ZhongwenTools
 
     def self.detect_romanization(str, regex)
       normalized_str = str.downcase.gsub(ZhongwenTools::Regex.punc, '').gsub(/[1-5\s\-']/, '')
-      #TODO: ignore tonal marks from other systems wade giles, tongyong etc.
+      # TODO: ignore tonal marks from other systems wade giles, tongyong etc.
 
       normalized_str.scan(regex).join == normalized_str
     end
