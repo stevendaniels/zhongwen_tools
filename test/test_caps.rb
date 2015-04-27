@@ -17,10 +17,10 @@ class TestCaps < Minitest::Test
 
   def test_capitalize
     assert_equal @caps[:c], ZhongwenTools::Caps.capitalize(@caps[:d])
+    assert_equal '"Zheng4qie1"', ZhongwenTools::Caps.capitalize('"Zheng4qie1"')
   end
 
   def setup
     @caps = { u: 'ĀLĀBÓ', d: 'ālābó', c: 'Ālābó' }
   end
 end
-
