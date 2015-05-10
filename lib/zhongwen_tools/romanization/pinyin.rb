@@ -47,7 +47,7 @@ module ZhongwenTools
       def self.split_py(str)
         words = str.split(' ')
 
-        results = words.map do |word|
+        words.flat_map do |word|
           word, is_capitalized = normalize_pinyin(word)
           word = normalize_n_g(word)
           word = normalize_n(word)
@@ -60,8 +60,6 @@ module ZhongwenTools
 
           recapitalize(result.flatten, is_capitalized)
         end
-
-        results.flatten
       end
 
       # Public: checks if a string is pinyin.
@@ -95,7 +93,7 @@ module ZhongwenTools
       def self.pyn?(str)
         # FIXME: use strip_punctuation method
         normalized_str = Caps.downcase(str.gsub(Regex.punc, '').gsub(/[\s\-]/, ''))
-        pyn_arr = split_pyn(normalized_str).map{ |p| p }
+        pyn_arr = split_pyn(normalized_str).map { |p| p }
         pyn_arr << normalized_str if pyn_arr.size == 0 && PYN_SYLLABIC_NASALS.include?(normalized_str.gsub(/[1-5]/, ''))
 
         pyn_matches_properly?(pyn_arr, normalized_str) &&
@@ -117,7 +115,7 @@ module ZhongwenTools
       end
 
       def self.are_all_pyn_syllables_complete?(pyn_arr)
-        pyns = ROMANIZATIONS_TABLE.map{ |r| r[:pyn] } + PYN_SYLLABIC_NASALS
+        pyns = ROMANIZATIONS_TABLE.map { |r| r[:pyn] } + PYN_SYLLABIC_NASALS
 
         pyn_syllables = pyn_arr.select do |p|
           pyns.include?(p.gsub(/[1-5]/, ''))
@@ -145,7 +143,7 @@ module ZhongwenTools
         #       Special Case split_py("yìnián")   # => ["yì" + "nián"]
         #                    split_py("Xīní")     # => ["Xī", "ní"]
         regex = /([#{ Regex.only_tones }])(n(#{Regex.py_tones['v']}|#{Regex.py_tones['i']}|[iu]|#{Regex.py_tones['e']}|[#{Regex.py_tones['a']}]))/
-        pinyin.gsub(regex) { "#{ $1 }-#{ $2 }" }
+        pinyin.gsub(regex) { "#{$1}-#{$2}" }
       end
 
       def self.normalize_pinyin(pinyin)
@@ -198,12 +196,11 @@ module ZhongwenTools
       end
 
       def self.current_pyn(pyn, pinyin_arr)
-        pinyin_arr.each do |pinyin|
-          replace =  pinyin_replacement(pinyin)
-          pyn.sub!(pinyin, replace)
-        end
+        replacements = pinyin_arr.map  do |pinyin|
+          [pinyin, pinyin_replacement(pinyin)]
+        end.to_h
 
-        pyn.gsub("'", '')
+        pyn.gsub(/#{pinyin_arr.join('|')}/, replacements).gsub("''", '')
       end
 
       def self.pinyin_replacement(py)
@@ -214,7 +211,7 @@ module ZhongwenTools
         match = select_pinyin_match(matches)
         replace = PYN_PY.find { |k, v| k if v == match }[0]
 
-        py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/){ $1 + $3 + $2 }
+        py.gsub(match, replace).gsub(/([^\d ]*)(\d)([^\d ]*)/) { $1 + $3 + $2 }
       end
 
       def self.select_pinyin_match(matches)
@@ -245,7 +242,7 @@ module ZhongwenTools
         #       And finally, correct those apostrophes at the very end.
         #       It's like magic.
         str.gsub(regex) do
-          ($3.nil? ? "#{ PYN_PY[$1] }" : ($2 == '' && %w(a e o).include?($3[0,1]))? "'#{ PYN_PY["#{ $3 }#{ $6 }"]}#{ $4 }#{ $5 }" : "#{ $2 }#{ PYN_PY["#{ $3 }#{ $6 }"] }#{ $4 }#{ $5 }") + (($7.to_s.length > 1) ? '-' : '')
+          ($3.nil? ? "#{ PYN_PY[$1] }" : ($2 == '' && %w(a e o).include?($3[0, 1])) ? "'#{ PYN_PY["#{ $3 }#{ $6 }"]}#{ $4 }#{ $5 }" : "#{ $2 }#{ PYN_PY["#{ $3 }#{ $6 }"] }#{ $4 }#{ $5 }") + (($7.to_s.length > 1) ? '-' : '')
         end.gsub("-'", '-').sub(/^'/, '')
       end
     end
