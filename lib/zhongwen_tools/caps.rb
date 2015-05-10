@@ -14,7 +14,7 @@ module ZhongwenTools
     end
 
     def self.capitalize(str)
-      first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]/][0]
+      first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|[a-zA-Z]/][0]
       str.sub(first_letter, ZhongwenTools::Caps.upcase(first_letter))
     end
 
