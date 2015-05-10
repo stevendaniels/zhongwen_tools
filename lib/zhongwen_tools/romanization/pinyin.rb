@@ -196,11 +196,10 @@ module ZhongwenTools
       end
 
       def self.current_pyn(pyn, pinyin_arr)
-        replacements = pinyin_arr.map  do |pinyin|
-          [pinyin, pinyin_replacement(pinyin)]
-        end.to_h
+        replace = {}
+        pinyin_arr.map { |pinyin| replace[pinyin] = pinyin_replacement(pinyin) }
 
-        pyn.gsub(/#{pinyin_arr.join('|')}/, replacements).gsub("''", '')
+        pyn.gsub(/#{pinyin_arr.join('|')}/, replace).gsub("''", '')
       end
 
       def self.pinyin_replacement(py)
