@@ -190,7 +190,7 @@ module ZhongwenTools
       end
 
       def self.capitalized?(str)
-        first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|#{Regex.py_syllabic_nasals}/][0]
+        first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|[a-zA-Z]|#{Regex.py_syllabic_nasals}/][0]
 
         first_letter != Caps.downcase(first_letter)
       end
