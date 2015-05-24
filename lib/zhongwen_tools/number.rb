@@ -4,23 +4,19 @@ require 'zhongwen_tools/zhongwen'
 require 'zhongwen_tools/romanization/pinyin'
 require 'zhongwen_tools/number/number_table'
 
-# Number.to_pyn, to_i, to_zhs, etc.
 module ZhongwenTools
+  # Number.to_pyn, to_i, to_zhs, etc.
   module Number
     def self.number?(obj)
-      klass = obj.class
-
-      if klass == String
+      case obj
+      when String
         regex = /([\d]|#{ZhongwenTools::Regex.zh_numbers}){1,}/
-          "#{obj}".gsub(regex, '') == ''
-      elsif klass == Integer
-        true
-      elsif klass == Fixnum
+        "#{obj}".gsub(regex, '') == ''
+      when Integer, Fixnum, Float
         true
       end
     end
 
-    #needs to be a class method
     %w(i zhs zht pyn).each do |action|
       define_singleton_method("to_#{ action }") do |*args|
         obj, from, separator = args
@@ -31,9 +27,8 @@ module ZhongwenTools
     end
 
     def self.to_zh(obj, type = :zhs, from = nil)
-      type = type.to_sym
-
-      if type == :zht
+      case type.to_sym
+      when :zht
         to_zht(obj, from)
       else
         to_zhs(obj, from)
@@ -51,7 +46,7 @@ module ZhongwenTools
       if to == :i
         combine_integers(number)
       elsif to == :pyn
-        regex = /#{ %w(yi4 wan4 qian1 bai2 shi2).map{ |x| 'ling2\-' + x }.join('|')}/
+        regex = /#{ %w(yi4 wan4 qian1 bai2 shi2).map { |x| 'ling2\-' + x }.join('|')}/
         finalize_number(number, '-').gsub(regex, '').gsub(/\-+/, '-').gsub(/\-$/, '')
       else
         finalize_number(number)
@@ -65,15 +60,13 @@ module ZhongwenTools
         :i
       else
         if ZhongwenTools::Zhongwen.zh?(obj)
-          # need to check zhs or zht
           if zht?(obj)
             :zht
           else
             :zhs
           end
-        else #assume it is pyn
-          #if ZhongwenTools.const_defined?(:Romanization) && ZhongwenTools::Romanization.romanization?(obj)
-          # might need to convert to pyn
+        else # assume it is pyn
+          # FIXME: might need to convert to pyn
           :pyn
         end
       end
@@ -105,13 +98,13 @@ module ZhongwenTools
       pyns = ZhongwenTools::Romanization::Pinyin.split_pyn(pyn)
 
       pyns.map do |p|
-        convert_number(p).fetch( to ){ p }
+        convert_number(p).fetch(to) { p }
       end
     end
 
     def self.convert_from_zh(to, number)
       converted_number = number.chars.map do |zh|
-        convert_number(zh).fetch(to){ zh }
+        convert_number(zh).fetch(to) { zh }
       end
 
       converted_number
@@ -127,7 +120,7 @@ module ZhongwenTools
       integers.each_with_index do |curr_num, i|
         next if skipped == i
 
-        if (i+2) <= length
+        if (i + 2) <= length
           number, i = combine_integer(integers, number, curr_num, i)
           skipped = i + 1
         else
@@ -139,18 +132,16 @@ module ZhongwenTools
     end
 
     def self.year?(integers)
-      integers.select{ |i| i < 10 }.size == integers.size
+      integers.select { |i| i < 10 }.size == integers.size
     end
 
     def self.combine_year(integers)
-      integers.map{ |i| i.to_s }.join.to_i
+      integers.map(&:to_s).join.to_i
     end
 
-    def self.combine_integer integers, result, curr_num, i
+    def self.combine_integer(integers, result, curr_num, i)
       next_number = integers[i + 1]
-      if number_multiplier? next_number
-        result += next_number * curr_num
-      end
+      result += next_number * curr_num if number_multiplier?(next_number)
 
       [result, i]
     end
@@ -163,8 +154,7 @@ module ZhongwenTools
       [10, 100, 1_000, 10_000, 100_000_000].include? number
     end
 
-
-    def self.convert_from_integer to, int
+    def self.convert_from_integer(to, int)
       # FIXME: this will fail for numbers over 1 billion.
       result = []
       nums = convert_integer_to_reversed_array_of_integers(int)
@@ -191,11 +181,11 @@ module ZhongwenTools
     end
 
     def self.convert_integer_to_reversed_array_of_integers(int)
-      int.to_s.chars.to_a.reverse.map{ |x| x.to_i }
+      int.to_s.chars.to_a.reverse.map(&:to_i)
     end
 
     def self.wan_ok?(num, wan, i)
-        (num == 1 && (10**(i) / 10_000 ** wan) != 10) || num != 1
+      (num == 1 && (10**(i) / 10_000**wan) != 10) || num != 1
     end
 
     def self.wan_level(wan, i)
@@ -210,18 +200,18 @@ module ZhongwenTools
     end
 
     def self.convert_integer(int, to)
-      NUMBERS_TABLE.find{ |x| x[:i] == int }.fetch(to){ 0 }
+      NUMBERS_TABLE.find { |x| x[:i] == int }.fetch(to) { 0 }
     end
 
     def self.convert_number(number)
-      NUMBERS_TABLE.find{ |x|  x[:zhs] == number || x[:zht] == number  || x[:pyn] == number }
+      NUMBERS_TABLE.find { |x|  x[:zhs] == number || x[:zht] == number || x[:pyn] == number }
     end
 
     def self.finalize_number(number, separator = '')
       # FIXME: is finalize_number the best name you can think of?
       # NOTE: Figuring out usage of "liang" vs. "er" is pretty
       #       difficult, so always use "er" instead.
-      number.join(separator).gsub(/零[#{ Regex.zh_number_multiple }]*/u,'')
+      number.join(separator).gsub(/零[#{ Regex.zh_number_multiple }]*/u, '')
     end
   end
 end
