@@ -10,6 +10,18 @@ module ZhongwenTools
       @py ||= /(#{pyn_regexes.map { |_k, v| v.to_s[7..-2].gsub(/[aeiouv]/, py_tones) }.join('|')}([\s\-])?)/
     end
 
+    def self.pinyin_caps
+      @pinyin_caps ||= /#{py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|#{py_syllabic_nasals}/
+    end
+
+    def self.pyn_and_pynt
+      @pyn_and_pynt ||= /(#{ Regex.pyn }|#{ Regex.pinyin_toneless })/
+    end
+
+    def self.capture_pinyin_toneless
+      @capture_pinyin_toneless ||= /(#{ Regex.pinyin_toneless })/
+    end
+
     def self.pinyin_num
       # FIXME: n?g? might need to be replaced with (ng|n)?
       /(([BPMFDTNLGKHZCSRJQXWYbpmfdtnlgkhzcsrjqxwy]?[h]?)(A[io]?|a[io]?|i[aeu]?o?|Ei?|ei?|Ou?|ou?|u[aoe]?i?|ve?)?(n?g?)(r?)([1-5])(\-+)?)/

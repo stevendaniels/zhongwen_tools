@@ -38,10 +38,15 @@ module ZhongwenTools
       end
 
       def self.split_pyn(str)
+        # NOTE: This methods is called quite frequently. Unfortunately, it was
+        #       slower than it needed to be. After looking into several
+        #       optimizations, I ended up settling on one that cached the Regexp
+        #       creation.
         # FIXME: ignore punctuation
-        regex = str[/[1-5]/].nil? ? /(#{ Regex.pinyin_toneless })/ : /(#{ Regex.pyn }|#{ Regex.pinyin_toneless })/
-        # NOTE: p[/[^\-]*/].to_s is 25% faster than gsub('-', '')
-        str.scan(regex).map { |arr| arr[0].strip[/[^\-]*/].to_s }.flatten
+        regex = str[simple_tone_numbers].nil? ? Regex.capture_pinyin_toneless : Regex.pyn_and_pynt
+        # NOTE: Fast Ruby: p[/[^\-]*/].to_s is 25% faster than gsub('-', '')
+        strip_regex = not_hyphen_regex
+        str.scan(regex).flat_map { |arr| arr[0].strip[strip_regex].to_s }
       end
 
       def self.split_py(str)
@@ -109,6 +114,14 @@ module ZhongwenTools
       end
 
       private
+
+      def self.simple_tone_numbers
+        @simple_tone_numbers ||= /[1-5]/
+      end
+
+      def self.not_hyphen_regex
+        @not_hyphen_regex ||= /[^\-]*/
+      end
 
       def self.pyn_matches_properly?(pyn_arr, normalized_str)
         pyn_arr.join('') == normalized_str
@@ -190,7 +203,7 @@ module ZhongwenTools
       end
 
       def self.capitalized?(str)
-        first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|[a-zA-Z]|#{Regex.py_syllabic_nasals}/][0]
+        first_letter = str[ZhongwenTools::Regex.pinyin_caps][0]
 
         first_letter != Caps.downcase(first_letter)
       end
