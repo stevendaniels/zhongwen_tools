@@ -24,11 +24,11 @@ module ZhongwenTools
     end
 
     def self.capital_letters
-      /(#{Regexp.union(ZhongwenTools::Caps::CAPS.keys)})/
+      @capital_letters ||=  /(#{Regexp.union(ZhongwenTools::Caps::CAPS.keys)})/
     end
 
     def self.lowercase_letters
-      /(#{Regexp.union(ZhongwenTools::Caps::CAPS.values)})/
+      @lowercase_letters ||= /(#{Regexp.union(ZhongwenTools::Caps::CAPS.values)})/
     end
 
     def self.zh
@@ -41,7 +41,7 @@ module ZhongwenTools
 
     def self.zh_punc
       # TODO: includes non-zh punctuation codes. Should only include punctuation in CJK ranges.
-      /[\u2E00-\u2E2E]|[\u2E30-\u2E3B]|[\u3001-\u3003]|[\u3008-\u3011]|[\u3014-\u301F]|[\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF]|[\uA60D-\uA60F]|[\uA673\uA67E]|[\uA6F2-\uA6F7]|[\uA874-\uA877]|[\uA8CE\uA8CF]|[\uA8F8-\uA8FA]|[\uA92E\uA92F\uA95F]|[\uA9C1-\uA9CD]|[\uA9DE\uA9DF]|[\uAA5C-\uAA5F]|[\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F]|[\uFE10-\uFE19]|[\uFE30-\uFE52]|[\uFE54-\uFE61]|[\uFE63\uFE68\uFE6A\uFE6B]|[\uFF01-\uFF03]|[\uFF05-\uFF0A]|[\uFF0C-\uFF0F]|[\uFF1A\uFF1B\uFF1F\uFF20]|[\uFF3B-\uFF3D]|[\uFF3F\uFF5B\uFF5D]|[\uFF5F-\uFF65]/
+      @zh_punc ||= /[\u2E00-\u2E2E]|[\u2E30-\u2E3B]|[\u3001-\u3003]|[\u3008-\u3011]|[\u3014-\u301F]|[\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF]|[\uA60D-\uA60F]|[\uA673\uA67E]|[\uA6F2-\uA6F7]|[\uA874-\uA877]|[\uA8CE\uA8CF]|[\uA8F8-\uA8FA]|[\uA92E\uA92F\uA95F]|[\uA9C1-\uA9CD]|[\uA9DE\uA9DF]|[\uAA5C-\uAA5F]|[\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F]|[\uFE10-\uFE19]|[\uFE30-\uFE52]|[\uFE54-\uFE61]|[\uFE63\uFE68\uFE6A\uFE6B]|[\uFF01-\uFF03]|[\uFF05-\uFF0A]|[\uFF0C-\uFF0F]|[\uFF1A\uFF1B\uFF1F\uFF20]|[\uFF3B-\uFF3D]|[\uFF3F\uFF5B\uFF5D]|[\uFF5F-\uFF65]/
     end
 
     def self.zh_numbers
