@@ -255,7 +255,7 @@ module ZhongwenTools
         #       It's like magic.
         str.gsub(regex) do
           ($3.nil? ? "#{ PYN_PY[$1] }" : ($2 == '' && %w(a e o).include?($3[0, 1])) ? "'#{ PYN_PY["#{ $3 }#{ $6 }"]}#{ $4 }#{ $5 }" : "#{ $2 }#{ PYN_PY["#{ $3 }#{ $6 }"] }#{ $4 }#{ $5 }") + (($7.to_s.length > 1) ? '-' : '')
-        end.gsub("-'", '-').sub(/^'/, '')
+        end.gsub("-'", '-').sub(/^'/, '').gsub(" '", ' ')
       end
     end
   end

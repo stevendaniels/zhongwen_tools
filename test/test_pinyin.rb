@@ -76,6 +76,10 @@ class TestPinyin < Minitest::Test
       assert_equal word[:py], ZhongwenTools::Romanization::Pinyin.to_pinyin(word[:pyn])
       assert_equal word[:py], ZhongwenTools::Romanization::Pinyin.to_py(word[:pyn])
     end
+
+    sentences.each do |s|
+      assert_equal ZhongwenTools::Romanization::Pinyin.to_py(s[:pyn]), s[:py]
+    end
   end
 
   def test_pinyin_to_pyn
@@ -101,25 +105,34 @@ class TestPinyin < Minitest::Test
     ]
 
     @split_words = [
-      { pyn: 'A1-la1-bo2',  py: 'Ālābó', split: %w(A1 la1 bo2), split_py: %w(Ā lā bó) },
-      { pyn: 'Mao2 Ze2-dong1',  py: 'Máo Zédōng', split: %w(Mao2 Ze2 dong1), split_py:  %w(Máo Zé dōng) }
+      { pyn: 'A1-la1-bo2', py: 'Ālābó', split: %w(A1 la1 bo2), split_py: %w(Ā lā bó) },
+      { pyn: 'Mao2 Ze2-dong1', py: 'Máo Zédōng', split: %w(Mao2 Ze2 dong1), split_py: %w(Máo Zé dōng) }
     ]
 
     @syllabic_nasals = [
-      { pyn: 'ng3', py: 'ňg'},
-      { pyn: 'm3', py: 'm̌'},
-      { pyn: 'n3', py: 'ň'},
-      { pyn: 'Ng3', py: 'Ňg'}
+      { pyn: 'ng3', py: 'ňg' },
+      { pyn: 'm3', py: 'm̌' },
+      { pyn: 'n3', py: 'ň' },
+      { pyn: 'Ng3', py: 'Ňg' }
     ]
 
     @words = [
       { pyn: 'A1la1bo2', py: 'Ālābó'},
       { pyn: 'ni3 hao3', py: 'nǐ hǎo' },
       { pyn: 'Zhong1guo2', py: 'Zhōngguó' },
-      { pyn: 'chui1 niu3', py: "chuī niǔ" },
+      { pyn: 'chui1 niu3', py: 'chuī niǔ' },
       { pyn: 'Mao2 Ze2dong1', py: 'Máo Zédōng' }
     ]
 
     @r =  { pyn: 'r5', py: 'r' }
+  end
+
+  def sentences
+    [
+      {
+        py: "Yóuyú èxìng tōnghuòpéngzhàng, gāi guó huòbì dàdà biǎnzhí le.",
+        pyn: 'You2yu2 e4xing4 tong1huo4peng2zhang4, gai1 guo2 huo4bi4 da4da4 bian3zhi2 le5.'
+      }
+    ]
   end
 end
