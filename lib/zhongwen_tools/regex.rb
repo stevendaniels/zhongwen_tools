@@ -36,11 +36,19 @@ module ZhongwenTools
     end
 
     def self.capital_letters
-      @capital_letters ||=  /(#{Regexp.union(ZhongwenTools::Caps::CAPS.keys)})/
+      @capital_letters ||= /(#{Regexp.union(ZhongwenTools::Caps::CAPS.keys)})/
     end
 
     def self.lowercase_letters
       @lowercase_letters ||= /(#{Regexp.union(ZhongwenTools::Caps::CAPS.values)})/
+    end
+
+    def self.capitalize
+      @capitalize ||= /#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|[a-zA-Z]/
+    end
+
+    def self.find_py_regex
+      @find_py_regex ||= /(#{Regex.py}|#{Regex.py_syllabic_nasals})/
     end
 
     def self.zh
