@@ -164,7 +164,7 @@ module ZhongwenTools
       end
 
       def self.find_py(str)
-        regex = /(#{ Regex.py }|#{ Regex.py_syllabic_nasals })/
+        regex = ZhongwenTools::Regex.find_py_regex
         str.scan(regex).map { |x| x.compact[0] }
       end
 

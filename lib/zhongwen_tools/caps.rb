@@ -3,18 +3,17 @@ module ZhongwenTools
   # Public: Module for pinyin/fullwidth capitalization
   module Caps
     def self.downcase(str)
-      regex = /(#{ZhongwenTools::Caps::CAPS.keys.join('|')})/
-      str.gsub(regex, ZhongwenTools::Caps::CAPS).downcase
+      str.gsub(ZhongwenTools::Regex.capital_letters, ZhongwenTools::Caps::CAPS).downcase
     end
 
     def self.upcase(str)
-      str.gsub(/(#{ZhongwenTools::Caps::CAPS.values.join('|')})/) do
+      str.gsub(ZhongwenTools::Regex.lowercase_letters) do
         ZhongwenTools::Caps::CAPS.find { |_, v| v == Regexp.last_match[0] }[0]
       end.upcase
     end
 
     def self.capitalize(str)
-      first_letter = str[/#{Regex.py}|[ĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒ]|[a-zA-Z]/][0]
+      first_letter = str[ZhongwenTools::Regex.capitalize][0]
       str.sub(first_letter, ZhongwenTools::Caps.upcase(first_letter))
     end
 
