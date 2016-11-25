@@ -1,7 +1,6 @@
 # encoding: utf-8
 require 'zhongwen_tools/regex'
 require 'zhongwen_tools/caps'
-require 'zhongwen_tools/romanization'
 
 module ZhongwenTools
   # Public: Romanization converts to pinyin and pyn.
