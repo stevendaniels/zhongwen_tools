@@ -95,6 +95,7 @@ module ZhongwenTools
       #
       # Returns Boolean.
       def self.pyn?(str)
+        return false if str =~ /a{2,}|e{2,}|i{2,}|o{2,}|u{2,}/
         # FIXME: use strip_punctuation method, e.g. gsub(/\p{Punct}/, '')
         normalized_str = Caps.downcase(str.gsub(Regex.punc, '').gsub(/[\s\-]/, ''))
         pyn_arr = split_pyn(normalized_str).map { |p| p }

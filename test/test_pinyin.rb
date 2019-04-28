@@ -58,6 +58,7 @@ class TestPinyin < Minitest::Test
 
     assert ZhongwenTools::Romanization::Pinyin.pyn?('ma2-fan')
     assert ZhongwenTools::Romanization::Pinyin.pyn?('yo1')
+    assert ZhongwenTools::Romanization::Pinyin.pyn?('O4')
   end
 
   def test_syllabic_nasal_pyn?

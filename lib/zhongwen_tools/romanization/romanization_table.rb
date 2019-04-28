@@ -245,6 +245,7 @@ ROMANIZATIONS_TABLE = [
   { bpmf: 'ㄋㄩㄝ', wg: 'nüeh', mps2: 'niue', yale: 'nywe', typy: 'nyue', pyn: 'nüe' },
   { bpmf: 'ㄋㄩㄝ', wg: 'nüeh', mps2: 'niue', yale: 'nywe', typy: 'nyue', pyn: 'nve' },
   { bpmf: 'ㄡ', wg: 'ou', mps2: 'ou', yale: 'ou', typy: 'ou', pyn: 'ou' },
+  { bpmf: 'ㄡ', wg: 'ou', mps2: 'ou', yale: 'ou', typy: 'ou', pyn: 'o' },
   { bpmf: 'ㄆㄚ', wg: 'p`a', mps2: 'pa', yale: 'pa', typy: 'pa', pyn: 'pa' },
   { bpmf: 'ㄆㄞ', wg: 'p`ai', mps2: 'pai', yale: 'pai', typy: 'pai', pyn: 'pai' },
   { bpmf: 'ㄆㄢ', wg: 'p`an', mps2: 'pan', yale: 'pan', typy: 'pan', pyn: 'pan' },
