@@ -22,11 +22,11 @@ Gem::Specification.new do |s|
     s.add_development_dependency('simplecov-gem-adapter', '~> 1.0', '>= 1.0.1')
     s.add_development_dependency('coveralls', '~> 0.8', '>= 0.8.1')
     s.add_development_dependency('minitest', '~> 5.5', '>= 5.5.1')
-    s.add_development_dependency('pry', '~> 0.13', '>= 0.13.0')
     s.add_development_dependency('minitest-reporters', '~> 1.0', '>= 1.0.10')
   end
 
   if RUBY_VERSION >= '2.1'
+    s.add_development_dependency('pry', '~> 0.13', '>= 0.13.0')
     s.add_development_dependency('memory_profiler', '0.0.4')
   end
 end
