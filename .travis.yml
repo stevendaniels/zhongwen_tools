@@ -7,10 +7,10 @@ rvm:
   - 2.7.0
   - ruby-head
   - jruby-19mode
-  - rbx-2
+  - rbx-4
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-19mode
-    - rvm: rbx-2
+    - rvm: rbx-4
     - rvm: 2.4
