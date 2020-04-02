@@ -211,7 +211,7 @@ module ZhongwenTools
       # FIXME: is finalize_number the best name you can think of?
       # NOTE: Figuring out usage of "liang" vs. "er" is pretty
       #       difficult, so always use "er" instead.
-      number.join(separator).gsub(/零[#{ Regex.zh_number_multiple }]*/u, '')
+      number.join(separator).gsub(/零#{ Regex.zh_number_multiple }*/u, '')
     end
   end
 end

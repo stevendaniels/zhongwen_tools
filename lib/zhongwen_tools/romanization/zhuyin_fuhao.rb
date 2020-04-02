@@ -15,7 +15,7 @@ module ZhongwenTools
       end
 
       def self.split(str)
-        regex = /([#{ZhongwenTools::Regex.bopomofo}]*)/
+        regex = /(#{ZhongwenTools::Regex.bopomofo}*)/
 
         ZhongwenTools::Romanization.split_romanization(str, regex)
       end
