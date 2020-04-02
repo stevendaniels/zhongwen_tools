@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_development_dependency('rake', '~> 10.1')
+  s.add_development_dependency "rake", ">= 12.3.3"
   if RUBY_VERSION >= '1.9'
     s.add_development_dependency('simplecov', '~> 0.16', '>= 0.16.0')
     s.add_development_dependency('simplecov-gem-adapter', '~> 1.0', '>= 1.0.1')
