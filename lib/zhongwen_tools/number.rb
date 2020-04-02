@@ -6,13 +6,20 @@ require 'zhongwen_tools/number/number_table'
 
 module ZhongwenTools
   # Number.to_pyn, to_i, to_zhs, etc.
+  if RUBY_VERSION >= "2.4.0"
+    CONVERTIBLE_OBJECTS = [String, Integer]
+    NUMBER_CLASSES = [Integer]
+  else
+    CONVERTIBLE_OBJECTS = [String, Integer, Fixnum, Bignum]
+    NUMBER_CLASSES = [Fixnum, Integer, Bignum]
+  end
   module Number
     def self.number?(obj)
       case obj
       when String
         regex = /([\d]|#{ZhongwenTools::Regex.zh_numbers}){1,}/
         "#{obj}".gsub(regex, '') == ''
-      when Integer, Fixnum, Float
+      when Integer, Float
         true
       end
     end
@@ -39,7 +46,7 @@ module ZhongwenTools
 
     def self.convert(obj, to, from, separator = '')
       fail ArgumentError unless [:zhs, :zht, :i, :pyn].include?(to.to_sym)
-      fail ArgumentError unless [String, Integer, Fixnum, Bignum].include?(obj.class)
+      fail ArgumentError unless CONVERTIBLE_OBJECTS.include?(obj.class)
 
       number =   convert_from from, to, obj
 
@@ -56,7 +63,7 @@ module ZhongwenTools
     def self.number_type(obj)
       klass = obj.class
 
-      if [Fixnum, Integer, Bignum].include?(klass)
+      if NUMBER_CLASSES.include?(klass)
         :i
       else
         if ZhongwenTools::Zhongwen.zh?(obj)

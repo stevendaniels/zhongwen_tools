@@ -72,7 +72,6 @@ class TestStringExtention < Minitest::Test
     assert_equal @rom[:pyn].romanization?, :pyn
 
     # script.rb
-    load 'zhongwen_tools/script.rb'#  unless ZhongwenTools.const_defined?(:Script)
     assert_equal @zh[:zht], @zh[:zhs].to_zht
     assert_equal @zh[:zhs], @zh[:zht].to_zhs
     assert_equal @zh[:zhcn], @zh[:zhhk].to_zhcn
