@@ -2,9 +2,10 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require './test/test_helper'
+require 'zhongwen_tools/script'
+
 class TestScript < Minitest::Test
   def setup
-    load 'zhongwen_tools/script.rb'
     @strings = [
       {
         :zhs => '干部一干人等干事不干不净',
@@ -116,5 +117,5 @@ class TestScript < Minitest::Test
       assert ZhongwenTools::Script.zht?(hash[:zhtw])
       assert ZhongwenTools::Script.zht?(hash[:zhhk])
     end
-  end  
-end 
+  end
+end

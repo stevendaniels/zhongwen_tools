@@ -153,7 +153,7 @@ module ZhongwenTools
       def self.normalize_n(pinyin)
         #       Special Case split_py("yìnián")   # => ["yì" + "nián"]
         #                    split_py("Xīní")     # => ["Xī", "ní"]
-        regex = /([#{ Regex.only_tones }])(n(#{Regex.py_tones['v']}|#{Regex.py_tones['i']}|[iu]|#{Regex.py_tones['e']}|[#{Regex.py_tones['a']}]))/
+        regex = /#{Regex.only_tones}(n(#{Regex.py_tones['v']}|#{Regex.py_tones['i']}|[iu]|#{Regex.py_tones['e']}|[#{Regex.py_tones['a']}]))/
         pinyin.gsub(regex) { "#{$1}-#{$2}" }
       end
 
