@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
     s.add_development_dependency('pry', '~> 0.13', '>= 0.13.0')
     s.add_development_dependency('memory_profiler', '0.0.4')
   else
-    s.add_development_dependency('json', '~> 2.2.0')
+    s.add_development_dependency('json', '~> 2.3.0')
     s.add_development_dependency('rake', '~> 10.1')
   end
 end
